@@ -11,13 +11,23 @@ const router = createRouter({
       path: config.pages.home,
       name: 'home',
       component: HomePage,
+      meta: {
+        title: 'Home',
+      },
     },
     {
       path: config.pages.about,
       name: 'about',
       component: AboutPage,
+      meta: {
+        title: 'About',
+      },
     },
   ],
+});
+
+router.beforeEach((to) => {
+  document.title = `${to.meta.title} | ${config.appName}`;
 });
 
 export default router;
