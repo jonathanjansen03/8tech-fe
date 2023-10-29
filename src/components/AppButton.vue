@@ -6,7 +6,7 @@ const props = defineProps({
 
 <template>
   <button
-    class="border-2 border-blue-800 px-5 py-1 rounded-full"
+    class="border-2 border-blue-800 px-5 py-1 rounded-xl duration-500 linear"
     :class="{
       'bg-blue-800': !outline,
       'bg-white': outline,
