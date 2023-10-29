@@ -14,7 +14,7 @@ const toggleNavbar = () => {
 
 <template>
   <nav
-    class="navbar sticky -top-1 w-full drop-shadow-[0_4px_5px_rgba(0,0,0,0.5)]"
+    class="navbar sticky -top-1 w-full drop-shadow-[0_4px_5px_rgba(0,0,0,0.5)] z-10"
   >
     <!-- mobile navbar -->
     <div class="bg-zinc-800 flex items-center justify-between px-5 py-5">
