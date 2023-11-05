@@ -20,7 +20,7 @@ export default {
   moduleFileExtensions: ['js', 'json', 'vue'],
   moduleNameMapper: {
     '\\.(jpg|ico|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
-      '<rootDir>/common/src/empty.js',
+      '<rootDir>/src/empty.js',
     '^@/(.*)': '<rootDir>/src/$1',
   },
   resetModules: true,

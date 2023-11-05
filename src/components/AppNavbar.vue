@@ -1,17 +1,24 @@
 <script setup>
 import { ref } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
+
 import config from '@/config';
+import logo from '@/assets/8tech-logo.png';
+import AppButton from '@/components/AppButton.vue';
 
 import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline';
-import AppButton from '@/components/AppButton.vue';
-import logo from '@/assets/8tech-logo.png';
 
 const router = useRouter();
 const isOpen = ref(false);
 
 const toggleNavbar = () => {
   isOpen.value = !isOpen.value;
+};
+
+const goToHome = () => {
+  console.log('test');
+  router.push(config.pages.home);
+  console.log('test2');
 };
 </script>
 
@@ -26,7 +33,7 @@ const toggleNavbar = () => {
           :src="logo"
           alt="Logo"
           class="cursor-pointer h-auto w-36"
-          @click="router.push(config.pages.home)"
+          @click="goToHome"
         />
         <Bars3Icon
           v-show="!isOpen"
@@ -59,7 +66,7 @@ const toggleNavbar = () => {
           :src="logo"
           alt="Logo"
           class="cursor-pointer h-auto w-36"
-          @click="router.push(config.pages.home)"
+          @click="goToHome"
         />
         <div
           class="navbar__links flex gap-x-16 lg:gap-x-40 items-center justify-center w-full"
