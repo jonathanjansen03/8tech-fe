@@ -1,6 +1,8 @@
 export default {
+  appName: '8Tech',
   pages: {
     home: '/',
-    about: '/about'
+    about: '/about',
+    login: '/login',
   },
 };
