@@ -9,7 +9,7 @@ vi.mock('vue-router', () => ({
   })),
 }));
 
-describe('AppNavbar.vue', () => {
+describe('AppNavbar', () => {
   let wrapper;
 
   const stubs = {

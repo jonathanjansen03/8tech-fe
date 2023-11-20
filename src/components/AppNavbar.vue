@@ -16,9 +16,7 @@ const toggleNavbar = () => {
 };
 
 const goToHome = () => {
-  console.log('test');
   router.push(config.pages.home);
-  console.log('test2');
 };
 </script>
 
@@ -53,7 +51,7 @@ const goToHome = () => {
         >
           <RouterLink to="/" class="mt-5">Home</RouterLink>
           <RouterLink to="/">Cari Pekerjaan</RouterLink>
-          <RouterLink to="/about">Tentang Kami</RouterLink>
+          <RouterLink :to="config.pages.about">Tentang Kami</RouterLink>
           <AppButton>Masuk</AppButton>
         </div>
       </div>
@@ -73,19 +71,19 @@ const goToHome = () => {
         >
           <RouterLink
             to="/"
-            class="text-lg transition duration-300 hover:text-blue-600 after:absolute after:content-[''] after:w-0 after:h-[1px] after:block after:transition-all after:duration-300 after:bottom-1/4 hover:after:w-[3.3rem] hover:after:h-[1px] hover:after:bg-blue-600"
+            class="text-lg transition duration-300 hover:text-blue-600 after:absolute after:content-[''] after:w-0 after:h-[3px] after:block after:transition-all after:duration-300 after:bottom-1/4 hover:after:w-[3.3rem] hover:after:h-[3px] hover:after:bg-blue-600"
           >
             Home
           </RouterLink>
           <RouterLink
             to="/"
-            class="text-lg transition duration-300 hover:text-blue-600 after:absolute after:content-[''] after:w-0 after:h-[1px] after:block after:transition-all after:duration-300 after:bottom-1/4 hover:after:w-[7.75rem] hover:after:h-[1px] hover:after:bg-blue-600"
+            class="text-lg transition duration-300 hover:text-blue-600 after:absolute after:content-[''] after:w-0 after:h-[3px] after:block after:transition-all after:duration-300 after:bottom-1/4 hover:after:w-[7.75rem] hover:after:h-[3px] hover:after:bg-blue-600"
           >
             Cari Pekerjaan
           </RouterLink>
           <RouterLink
             to="/about"
-            class="text-lg transition duration-300 hover:text-blue-600 after:absolute after:content-[''] after:w-0 after:h-[1px] after:block after:transition-all after:duration-300 after:bottom-1/4 hover:after:w-[7.35rem] hover:after:h-[1px] hover:after:bg-blue-600"
+            class="text-lg transition duration-300 hover:text-blue-600 after:absolute after:content-[''] after:w-0 after:h-[3px] after:block after:transition-all after:duration-300 after:bottom-1/4 hover:after:w-[7.35rem] hover:after:h-[3px] hover:after:bg-blue-600"
           >
             Tentang Kami
           </RouterLink>
