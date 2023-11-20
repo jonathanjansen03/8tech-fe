@@ -4,7 +4,7 @@ import JobCard from '@/components/JobCard.vue';
 </script>
 
 <template>
-  <div class="px-10 py-10 sm:px-20">
+  <div class="sm:px-20">
     <div>
       <h1 class="text-center font-bold text-white text-2xl">
         Ketika Tech Talent Bertemu dengan Peluang Tak Terbatas.

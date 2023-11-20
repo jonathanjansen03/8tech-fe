@@ -8,7 +8,7 @@ const props = defineProps({
 
 <template>
   <div
-    class="job-card cursor-pointer items-center bg-white drop-shadow flex flex-col mt-6 px-3 py-5 rounded-xl min-[420px]:gap-x-8 min-[420px]:flex-row min-[420px]:px-5 min-[420px]:py-4"
+    class="job-card cursor-pointer items-center bg-white shadow-md flex flex-col mt-6 px-3 py-5 rounded-xl min-[420px]:gap-x-8 min-[420px]:flex-row min-[420px]:px-5 min-[420px]:py-4"
   >
     <img :src="props.job.logo" alt="Company logo" class="rounded-xl h-16" />
     <div class="job-card__details mt-3 md:mt-1">

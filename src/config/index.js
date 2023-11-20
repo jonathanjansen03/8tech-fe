@@ -3,6 +3,12 @@ export default {
   pages: {
     home: '/',
     about: '/about',
-    login: '/login',
+    signUp: '/sign-up',
+  },
+  api: {
+    base: 'https://rolling-shannen-richard483.koyeb.app',
+    auth: {
+      signUp: '/auth/register',
+    },
   },
 };
