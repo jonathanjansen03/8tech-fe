@@ -3,7 +3,7 @@ import config from '@/config';
 
 const HomePage = () => import('@/pages/HomePage.vue');
 const AboutPage = () => import('@/pages/AboutPage.vue');
-const SignUp = () => import('@/pages/SignUp.vue');
+const RegisterPage = () => import('@/pages/RegisterPage.vue');
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -25,11 +25,11 @@ const router = createRouter({
       },
     },
     {
-      path: config.pages.signUp,
-      name: 'sign-up',
-      component: SignUp,
+      path: config.pages.register,
+      name: 'register',
+      component: RegisterPage,
       meta: {
-        title: 'Sign Up',
+        title: 'Register',
       },
     },
   ],

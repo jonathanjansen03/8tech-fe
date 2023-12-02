@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
 
 import config from '@/config';
-import logo from '@/assets/8tech-logo.png';
+import logo from '@/assets/images/8tech-logo.png';
 import AppButton from '@/components/AppButton.vue';
 
 import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline';
