@@ -1,10 +1,7 @@
 <script setup>
-import { computed } from 'vue';
 import { MagnifyingGlassIcon } from '@heroicons/vue/24/outline';
 
 import AppButton from '@/components/AppButton.vue';
-
-const isMobile = computed(() => window.innerWidth < 768);
 </script>
 
 <template>

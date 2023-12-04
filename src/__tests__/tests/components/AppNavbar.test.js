@@ -1,4 +1,6 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { shallowMount } from '@vue/test-utils';
+
 import AppNavbar from '@/components/AppNavbar.vue';
 
 const push = vi.fn();
@@ -9,44 +11,35 @@ vi.mock('vue-router', () => ({
   })),
 }));
 
-describe('AppNavbar.vue', () => {
-  let wrapper;
-
-  const stubs = {
-    RouterLink: true,
-  };
+describe('AppNavbar component', () => {
+  let wrapper, vm;
 
   beforeEach(() => {
     wrapper = shallowMount(AppNavbar, {
-      sync: false,
-      stubs,
       global: {
         stubs: ['router-link', 'router-view'],
       },
     });
-  });
-
-  afterEach(() => {
-    vi.resetModules();
+    vm = wrapper.vm;
   });
 
   it('initialized well', () => {
-    expect(wrapper.vm).toBeTruthy();
+    expect(vm).toBeTruthy();
   });
 
   it('should make isOpen true from false when toggleNavbar is called', () => {
-    wrapper.vm.toggleNavbar();
-    expect(wrapper.vm.isOpen).toBe(true);
+    vm.toggleNavbar();
+    expect(vm.isOpen).toBe(true);
   });
 
   it('should make isOpen false from true when toggleNavbar is called', () => {
-    wrapper.vm.isOpen = true;
-    wrapper.vm.toggleNavbar();
-    expect(wrapper.vm.isOpen).toBe(false);
+    vm.isOpen = true;
+    vm.toggleNavbar();
+    expect(vm.isOpen).toBe(false);
   });
 
   it('go to home when goToHome is called', () => {
-    wrapper.vm.goToHome();
+    vm.goToHome();
     expect(push).toHaveBeenCalledTimes(1);
   });
 });
