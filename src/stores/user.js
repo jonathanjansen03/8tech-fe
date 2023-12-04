@@ -1,20 +1,15 @@
 import { defineStore } from 'pinia';
+import { ref } from 'vue';
+
 import authApi from '@/api/auth';
-import { reactive } from 'vue';
 
 export const useUserStore = defineStore('user', () => {
-  const currentUser = reactive({});
+  const currentUser = ref({});
 
-  function register(data) {
-    return authApi
-      .register(data)
-      .then((res) => {
-        console.log('success', res);
-        currentUser = res.body.data;
-      })
-      .catch((err) => {
-        console.log(err, 'err');
-      });
+  async function register(data) {
+    const res = await authApi.register(data);
+
+    currentUser.value = res.data;
   }
 
   return {

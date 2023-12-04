@@ -6,6 +6,9 @@ export default {
       backgroundImage: {
         hero: 'url("@/assets/hero-grid-dark.png")',
       },
+      transitionProperty: {
+        'input-box': 'font-size, left, top',
+      },
     },
   },
   mode: 'jit',

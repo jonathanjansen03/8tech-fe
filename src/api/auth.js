@@ -6,7 +6,7 @@ export default {
     return apiUtil.hitApi({
       method: 'POST',
       url: config.api.auth.register,
-      data,
+      body: data,
     });
   },
 };

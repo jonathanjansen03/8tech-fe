@@ -7,39 +7,53 @@ const HEADERS = {
   accept: '*/*',
 };
 
-const isValidMethod = (method) => {
+const _isValidMethod = (method) => {
   return (
-    method !== 'GET' ||
-    method !== 'POST' ||
-    method !== 'PUT' ||
-    method !== 'DELETE'
+    method === 'GET' ||
+    method === 'POST' ||
+    method === 'PUT' ||
+    method === 'DELETE'
   );
 };
 
-const buildQuery = (params) => {
+const _buildQuery = (params) => {
   return Object.keys(params)
     .map((key) => `${key}=${params[key]}`)
     .join('&');
 };
 
+const _buildFetchOptions = (method, body) => {
+  const options = {
+    method,
+    headers: HEADERS,
+  };
+
+  if (method === 'GET') {
+    return options;
+  }
+
+  return {
+    ...options,
+    body: JSON.stringify(body),
+  };
+};
+
 export default {
-  hitApi: ({ method, url, params = {}, data = {} }) => {
-    if (!isValidMethod(method)) {
+  hitApi: async ({ method, url, params = {}, body = {} }) => {
+    if (!_isValidMethod(method)) {
       throw new Error(INVALID_METHOD_ERROR);
     }
 
-    return fetch(BASE_URL + url + buildQuery(params), {
-      method,
-      mode: 'no-cors',
-      headers: HEADERS,
-      body: JSON.stringify({
-        firstName: 'first',
-        lastName: 'last',
-        email: 'gmail@gmail.com',
-        userName: 'username',
-        password: 'password',
-        repeatPassword: 'password',
-      }),
-    });
+    const res = await fetch(
+      BASE_URL + url + _buildQuery(params),
+      _buildFetchOptions(method, body)
+    );
+    const data = await res.json();
+
+    if (data.statusCode !== 200) {
+      throw data;
+    }
+
+    return data;
   },
 };

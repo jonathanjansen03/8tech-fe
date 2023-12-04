@@ -24,45 +24,67 @@ const formData = reactive({
   firstName: '',
   lastName: '',
   email: '',
-  userName: '',
+  username: '',
   password: '',
-  repeatPassword: '',
+  confirmPassword: '',
 });
 
 const errors = reactive({
   firstName: '',
   lastName: '',
   email: '',
-  userName: '',
+  username: '',
   password: '',
-  repeatPassword: '',
+  confirmPassword: '',
 });
 
-const validateConfirmPassword = () => {
-  if (formData.password !== formData.repeatPassword) {
-    errors.repeatPassword = 'Harus sama dengan password.';
+const validateEmail = () => {
+  if (formData.email === '') {
+    return;
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!emailRegex.test(formData.email)) {
+    errors.email = 'Masukkan email yang valid.';
   } else {
-    errors.repeatPassword = '';
+    errors.email = '';
   }
 };
 
-const doRegister = () => {
-  // console.log({
-  //   ...formData,
-  //   userName: formData.username,
-  //   repeatPassword: formData.repeatPassword,
-  // });
-  register(formData).then(handleSuccessfulRegister).catch(handleFailedRegister);
+const validateConfirmPassword = () => {
+  if (!formData.confirmPassword) {
+    return;
+  }
+
+  if (formData.password !== formData.confirmPassword) {
+    errors.confirmPassword = 'Harus sama dengan password.';
+  } else {
+    errors.confirmPassword = '';
+  }
+};
+
+const doRegister = async () => {
+  try {
+    await register({ ...formData, confirmPassword: undefined });
+    handleSuccessfulRegister();
+  } catch (err) {
+    handleFailedRegister(err);
+  }
 };
 
 const handleSuccessfulRegister = () => {
-  // router.push(config.pages.home);
+  router.push(config.pages.home);
 };
 
 const handleFailedRegister = (error) => {
-  console.log(error);
-  for (key in errors) {
-    errors[key] = error[key];
+  if (error.statusCode === 500) {
+    alert('Terjadi kesalahan pada server. Silakan coba lagi nanti.');
+    return;
+  }
+
+  for (const key in error.message) {
+    errors[key] = error.message[key];
   }
 };
 </script>
@@ -99,13 +121,14 @@ const handleFailedRegister = (error) => {
           v-model="formData.email"
           :error="errors.email"
           class="mt-8"
+          @blur="validateEmail"
         />
         <InputBox
           id="username"
           type="text"
-          label="Username"
-          v-model="formData.userName"
-          :error="errors.userName"
+          label="username"
+          v-model="formData.username"
+          :error="errors.username"
           class="mt-8"
         />
         <InputBox
@@ -115,13 +138,14 @@ const handleFailedRegister = (error) => {
           v-model="formData.password"
           :error="errors.password"
           class="mt-8"
+          @blur="validateConfirmPassword"
         />
         <InputBox
           id="confirm-password"
           type="password"
           label="Konfirmasi Password"
-          v-model="formData.repeatPassword"
-          :error="errors.repeatPassword"
+          v-model="formData.confirmPassword"
+          :error="errors.confirmPassword"
           class="mt-8"
           @blur="validateConfirmPassword"
         />

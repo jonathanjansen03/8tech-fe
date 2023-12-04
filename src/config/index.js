@@ -11,4 +11,10 @@ export default {
       register: '/auth/register',
     },
   },
+  error: {
+    form: {
+      INVALID_PASSWORD:
+        'Password harus memiliki minimal 8 karakter dan 1 angka.',
+    },
+  },
 };

@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted } from 'vue';
+import { computed } from 'vue';
 
 const props = defineProps({
   id: {
@@ -19,6 +19,7 @@ defineEmits(['update:modelValue', 'blur']);
 const labelClasses = computed(() => {
   return {
     'absolute left-2 top-2': props.modelValue === '',
+    'input__label--filled': props.modelValue !== '',
     'peer-focus:text-indigo-500': !props.error,
     'text-red-500 peer-focus:text-red-500': props.error,
   };
@@ -26,7 +27,7 @@ const labelClasses = computed(() => {
 </script>
 
 <template>
-  <div class="relative">
+  <div class="input relative">
     <input
       :id="props.id"
       name="input"
@@ -42,17 +43,23 @@ const labelClasses = computed(() => {
     />
     <label
       :for="props.id"
-      class="absolute left-2 top-2 transition-all hover:cursor-text peer-focus:text-indigo-500 peer-focus:text-xs peer-focus:-top-2 peer-focus:bg-white"
-      :class="{
-        ...labelClasses,
-        'bg-white text-xs -top-[0.5rem]': props.modelValue !== '',
-      }"
+      class="absolute left-2 top-2 transition-input-box hover:cursor-text peer-focus:text-indigo-500 peer-focus:text-xs peer-focus:-top-2 peer-focus:bg-white"
+      :class="labelClasses"
       >{{ props.label }}</label
     >
-    <div class="relative">
+    <div class="error-message relative">
       <p class="absolute text-red-500 text-sm" v-if="props.error">
         {{ props.error }}
       </p>
     </div>
   </div>
 </template>
+
+<style scoped>
+.input__label--filled {
+  background: white;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  top: -0.5rem;
+}
+</style>
