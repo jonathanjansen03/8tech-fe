@@ -26,7 +26,6 @@ export default defineConfig({
     },
     environment: 'jsdom',
     include: ['src/__tests__/**/*.{test,spec}.?(c|m)[jt]s?(x)'],
-    // include: ['src/__tests__/tests/pages/RegisterPage.test.js'],
     restoreMocks: true,
   },
 });
