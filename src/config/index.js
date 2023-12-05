@@ -6,7 +6,7 @@ export default {
     register: '/register',
   },
   api: {
-    base: 'https://rolling-shannen-richard483.koyeb.app',
+    base: 'https://api-8-tech.koyeb.app/',
     auth: {
       register: '/auth/register',
     },
