@@ -8,6 +8,13 @@ describe('Auth API', () => {
     apiUtil.hitApi = vi.fn(() => Promise.resolve({}));
 
     authApi.register({});
+    expect(apiUtil.hitApi).toHaveBeenCalledOnce();
+  });
+
+  it('should login successfully', () => {
+    apiUtil.hitApi = vi.fn(() => Promise.resolve({}));
+
+    authApi.login({});
     expect(apiUtil.hitApi).toHaveBeenCalledTimes(1);
   });
 });

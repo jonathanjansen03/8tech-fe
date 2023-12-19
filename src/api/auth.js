@@ -9,4 +9,11 @@ export default {
       body: data,
     });
   },
+  login: (data) => {
+    return apiUtil.hitApi({
+      method: 'POST',
+      url: config.api.auth.login,
+      body: data,
+    });
+  },
 };

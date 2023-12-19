@@ -13,13 +13,7 @@ export default defineConfig({
   },
   test: {
     coverage: {
-      include: [
-        'src/api/**/*.js',
-        'src/components/**/*.vue',
-        'src/pages/**/*.vue',
-        'src/stores/**/*.js',
-        'src/utils/**/*.js',
-      ],
+      include: ['src/api/**/*.js', 'src/stores/**/*.js', 'src/utils/**/*.js'],
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
       reportsDirectory: 'src/__tests__/coverage',

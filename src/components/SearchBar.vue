@@ -10,7 +10,7 @@ import AppButton from '@/components/AppButton.vue';
   >
     <div class="w-full">
       <MagnifyingGlassIcon
-        class="search-bar__job-name absolute left-3 text-gray-400 top-[0.9rem] w-5 md:top-4"
+        class="search-bar__job-name absolute left-3 text-gray-400 top-[0.9rem] w-5 md:top-[0.9rem]"
       />
       <input
         type="text"
