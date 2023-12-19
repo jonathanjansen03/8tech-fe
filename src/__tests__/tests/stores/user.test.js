@@ -17,13 +17,33 @@ describe('User store', () => {
   });
 
   it('should register successfully', async () => {
-    const data = {
-      id: 1,
+    const res = {
+      data: {
+        id: 1,
+      },
     };
-    authApi.register = vi.fn(() => Promise.resolve({ data }));
+    authApi.register = vi.fn(() => Promise.resolve({ res }));
 
     await userStore.register({});
 
-    expect(userStore.currentUser).toEqual(data);
+    expect(authApi.register).toHaveBeenCalledOnce();
+  });
+
+  it('should login successfully', async () => {
+    const res = {
+      data: {
+        user: {
+          id: 1,
+        },
+        token: 'abc123',
+      },
+    };
+    authApi.login = vi.fn(() => res);
+
+    await userStore.login({});
+
+    expect(authApi.login).toHaveBeenCalledOnce();
+    expect(userStore.currentUser).toEqual(res.data.user);
+    expect(userStore.currentUserToken).toEqual(res.data.token);
   });
 });

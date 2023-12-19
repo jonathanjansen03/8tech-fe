@@ -16,7 +16,7 @@ const toggleNavbar = () => {
 };
 
 const goToHome = () => {
-  router.push(config.pages.home);
+  router.push(config.pages.home.path);
 };
 </script>
 
@@ -49,10 +49,14 @@ const goToHome = () => {
           class="navbar__links absolute bg-zinc-900 flex flex-col gap-8 min-h-screen items-end px-5 py-5 w-52 duration-500 z-10"
           :class="isOpen ? 'right-0' : '-right-52'"
         >
-          <RouterLink to="/" class="mt-5">Home</RouterLink>
+          <RouterLink :to="{ name: config.pages.home.name }" class="mt-5">
+            Home
+          </RouterLink>
           <RouterLink to="/">Cari Pekerjaan</RouterLink>
-          <RouterLink :to="config.pages.about">Tentang Kami</RouterLink>
-          <AppButton>Masuk</AppButton>
+          <RouterLink :to="{ name: config.pages.about.name }">
+            Tentang Kami
+          </RouterLink>
+          <AppButton :to="{ name: config.pages.login.name }"> Masuk </AppButton>
         </div>
       </div>
     </div>
@@ -82,13 +86,15 @@ const goToHome = () => {
             Cari Pekerjaan
           </RouterLink>
           <RouterLink
-            to="/about"
+            :to="{ name: config.pages.about.name }"
             class="text-lg transition duration-300 hover:text-blue-600 after:absolute after:content-[''] after:w-0 after:h-[3px] after:block after:transition-all after:duration-300 after:bottom-1/4 hover:after:w-[7.35rem] hover:after:h-[3px] hover:after:bg-blue-600"
           >
             Tentang Kami
           </RouterLink>
         </div>
-        <AppButton>Masuk</AppButton>
+        <RouterLink :to="{ name: config.pages.login.name }">
+          <AppButton>Masuk</AppButton>
+        </RouterLink>
       </div>
     </div>
   </nav>

@@ -2,20 +2,13 @@
 import { reactive } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
 
-import config from '@/config';
 import { useUserStore } from '@/stores/user';
+import config from '@/config';
+import validationUtil from '@/utils/validation';
 
+import AppCard from '@/components/AppCard.vue';
 import InputBox from '@/components/InputBox.vue';
 import AppButton from '@/components/AppButton.vue';
-import AppCard from '@/components/AppCard.vue';
-
-const ERROR_MESSAGES = {
-  REQUIRED: 'Harus diisi.',
-  MIN_LENGTH: 'Minimal {minLength} karakter.',
-  MAX_LENGTH: 'Maksimal {maxLength} karakter.',
-  UNIQUE: 'Sudah terdaftar.',
-  CONFIRM_PASSWORD: 'Harus sama dengan password.',
-};
 
 const { register } = useUserStore();
 const router = useRouter();
@@ -38,33 +31,58 @@ const errors = reactive({
   confirmPassword: '',
 });
 
-const validateEmail = () => {
-  if (formData.email === '') {
+const validateField = (field) => {
+  if (!formData[field]) {
     return;
   }
 
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-  if (!emailRegex.test(formData.email)) {
-    errors.email = 'Masukkan email yang valid.';
+  if (!validationUtil.validateForm(field, formData[field])) {
+    errors[field] = config.errors.form[field];
   } else {
-    errors.email = '';
+    errors[field] = '';
+  }
+
+  if (field === 'password') {
+    validateConfirmPassword();
+    return;
   }
 };
 
 const validateConfirmPassword = () => {
-  if (!formData.confirmPassword) {
+  if (!formData.password || !formData.confirmPassword) {
     return;
   }
 
   if (formData.password !== formData.confirmPassword) {
-    errors.confirmPassword = 'Harus sama dengan password.';
+    errors.confirmPassword = config.errors.form.confirmPassword;
   } else {
     errors.confirmPassword = '';
   }
 };
 
+const validateFormData = () => {
+  let isFormValid = true;
+
+  for (const key in formData) {
+    if (!formData[key]) {
+      errors[key] = config.errors.form.required;
+      isFormValid = false;
+      continue;
+    }
+
+    if (!validationUtil.validateForm(key, formData[key])) {
+      errors[key] = config.errors.form[key];
+      isFormValid = false;
+    }
+  }
+  return isFormValid;
+};
+
 const doRegister = async () => {
+  if (!validateFormData()) {
+    return;
+  }
+
   try {
     await register({ ...formData, confirmPassword: undefined });
     handleSuccessfulRegister();
@@ -74,16 +92,21 @@ const doRegister = async () => {
 };
 
 const handleSuccessfulRegister = () => {
-  router.push(config.pages.home);
+  router.push(config.pages.login.path);
 };
 
 const handleFailedRegister = (error) => {
   if (error.statusCode === 500) {
-    alert('Terjadi kesalahan pada server. Silakan coba lagi nanti.');
+    alert(config.errors.server);
     return;
   }
 
   for (const key in error.message) {
+    if (error.message === 'EMAIL_ALREADY_USEED') {
+      errors.email = config.errors.form.unique;
+      continue;
+    }
+
     errors[key] = error.message[key];
   }
 };
@@ -104,6 +127,7 @@ const handleFailedRegister = (error) => {
             v-model="formData.firstName"
             :error="errors.firstName"
             class="mt-8 w-full"
+            @blur="validateField('firstName')"
           />
           <InputBox
             id="last-name"
@@ -112,6 +136,7 @@ const handleFailedRegister = (error) => {
             v-model="formData.lastName"
             :error="errors.lastName"
             class="mt-8 w-full"
+            @blur="validateField('lastName')"
           />
         </div>
         <InputBox
@@ -121,7 +146,7 @@ const handleFailedRegister = (error) => {
           v-model="formData.email"
           :error="errors.email"
           class="mt-8"
-          @blur="validateEmail"
+          @blur="validateField('email')"
         />
         <InputBox
           id="username"
@@ -130,6 +155,7 @@ const handleFailedRegister = (error) => {
           v-model="formData.username"
           :error="errors.username"
           class="mt-8"
+          @blur="validateField('username')"
         />
         <InputBox
           id="password"
@@ -138,7 +164,7 @@ const handleFailedRegister = (error) => {
           v-model="formData.password"
           :error="errors.password"
           class="mt-8"
-          @blur="validateConfirmPassword"
+          @blur="validateField('password')"
         />
         <InputBox
           id="confirm-password"
@@ -152,9 +178,12 @@ const handleFailedRegister = (error) => {
         <AppButton @click="doRegister" class="mt-12">Daftar</AppButton>
         <p class="mt-3 text-center">
           Sudah punya akun?
-          <RouterLink to="/" class="font-semibold text-blue-800"
-            >Masuk</RouterLink
+          <RouterLink
+            :to="{ name: 'login' }"
+            class="font-semibold text-blue-800"
           >
+            Masuk
+          </RouterLink>
         </p>
       </div>
     </AppCard>

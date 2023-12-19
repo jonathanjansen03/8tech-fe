@@ -6,7 +6,7 @@ import JobCard from '@/components/JobCard.vue';
 <template>
   <div class="sm:px-20">
     <div>
-      <h1 class="text-center font-bold text-white text-2xl">
+      <h1 class="text-center font-bold mb-8 text-white text-2xl">
         Ketika Tech Talent Bertemu dengan Peluang Tak Terbatas.
       </h1>
       <SearchBar class="mt-5" />
