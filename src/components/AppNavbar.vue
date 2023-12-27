@@ -1,13 +1,15 @@
 <script setup>
 import { ref } from 'vue';
+import { storeToRefs } from 'pinia';
 import { RouterLink, useRouter } from 'vue-router';
+import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline';
 
+import { useUserStore } from '@/stores/user';
 import config from '@/config';
 import logo from '@/assets/images/8tech-logo.png';
 import AppButton from '@/components/AppButton.vue';
 
-import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline';
-
+const currentUser = storeToRefs(useUserStore());
 const router = useRouter();
 const isOpen = ref(false);
 
