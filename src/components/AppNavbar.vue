@@ -1,16 +1,26 @@
 <script setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import { RouterLink, useRouter } from 'vue-router';
-import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline';
+import {
+  ArrowLeftOnRectangleIcon,
+  Bars3Icon,
+  UserIcon,
+  XMarkIcon,
+} from '@heroicons/vue/24/outline';
+import { UserCircleIcon } from '@heroicons/vue/24/solid';
 
 import { useUserStore } from '@/stores/user';
 import config from '@/config';
 import logo from '@/assets/images/8tech-logo.png';
 import AppButton from '@/components/AppButton.vue';
+import AppCard from '@/components/AppCard.vue';
 
-const currentUser = storeToRefs(useUserStore());
+const store = useUserStore();
 const router = useRouter();
+const { currentUser, isLoggedIn, currentUserFullName } = storeToRefs(store);
+const { logout } = store;
+
 const isOpen = ref(false);
 
 const toggleNavbar = () => {
@@ -20,6 +30,13 @@ const toggleNavbar = () => {
 const goToHome = () => {
   router.push(config.pages.home.path);
 };
+
+const userFullName = computed(() => {
+  if (currentUserFullName.value.length > 12) {
+    return `${currentUserFullName.value.slice(0, 12)}...`;
+  }
+  return currentUserFullName.value;
+});
 </script>
 
 <template>
@@ -52,20 +69,22 @@ const goToHome = () => {
           :class="isOpen ? 'right-0' : '-right-52'"
         >
           <RouterLink :to="{ name: config.pages.home.name }" class="mt-5">
-            Home
+            Beranda
           </RouterLink>
           <RouterLink to="/">Cari Pekerjaan</RouterLink>
           <RouterLink :to="{ name: config.pages.about.name }">
             Tentang Kami
           </RouterLink>
-          <AppButton :to="{ name: config.pages.login.name }"> Masuk </AppButton>
+          <RouterLink :to="{ name: config.pages.login.name }">
+            <AppButton> Masuk </AppButton>
+          </RouterLink>
         </div>
       </div>
     </div>
 
     <!-- non-mobile navbar -->
-    <div class="non-mobile-navbar max-md:hidden">
-      <div class="bg-zinc-800 flex items-center px-5 py-5">
+    <div class="max-md:hidden">
+      <div class="bg-zinc-800 flex items-center justify-around py-3 w-full">
         <img
           :src="logo"
           alt="Logo"
@@ -73,30 +92,59 @@ const goToHome = () => {
           @click="goToHome"
         />
         <div
-          class="navbar__links flex gap-x-16 lg:gap-x-40 items-center justify-center w-full"
+          class="navbar__links flex gap-x-16 lg:gap-x-40 items-center justify-center w-8/12"
         >
           <RouterLink
             to="/"
-            class="text-lg transition duration-300 hover:text-blue-600 after:absolute after:content-[''] after:w-0 after:h-[3px] after:block after:transition-all after:duration-300 after:bottom-1/4 hover:after:w-[3.3rem] hover:after:h-[3px] hover:after:bg-blue-600"
+            class="text-md transition duration-300 hover:text-blue-600 after:absolute after:content-[''] after:w-0 after:h-[3px] after:block after:transition-all after:duration-300 after:bottom-1/4 hover:after:w-[4rem] hover:after:h-[3px] hover:after:bg-blue-600"
           >
-            Home
+            Beranda
           </RouterLink>
           <RouterLink
             to="/"
-            class="text-lg transition duration-300 hover:text-blue-600 after:absolute after:content-[''] after:w-0 after:h-[3px] after:block after:transition-all after:duration-300 after:bottom-1/4 hover:after:w-[7.75rem] hover:after:h-[3px] hover:after:bg-blue-600"
+            class="text-md transition duration-300 hover:text-blue-600 after:absolute after:content-[''] after:w-0 after:h-[3px] after:block after:transition-all after:duration-300 after:bottom-1/4 hover:after:w-[6.8rem] hover:after:h-[3px] hover:after:bg-blue-600"
           >
             Cari Pekerjaan
           </RouterLink>
           <RouterLink
             :to="{ name: config.pages.about.name }"
-            class="text-lg transition duration-300 hover:text-blue-600 after:absolute after:content-[''] after:w-0 after:h-[3px] after:block after:transition-all after:duration-300 after:bottom-1/4 hover:after:w-[7.35rem] hover:after:h-[3px] hover:after:bg-blue-600"
+            class="text-md transition duration-300 hover:text-blue-600 after:absolute after:content-[''] after:w-0 after:h-[3px] after:block after:transition-all after:duration-300 after:bottom-1/4 hover:after:w-[6.5rem] hover:after:h-[3px] hover:after:bg-blue-600"
           >
             Tentang Kami
           </RouterLink>
         </div>
-        <RouterLink :to="{ name: config.pages.login.name }">
-          <AppButton>Masuk</AppButton>
-        </RouterLink>
+        <div>
+          <RouterLink
+            :to="{ name: config.pages.login.name }"
+            v-if="!isLoggedIn"
+          >
+            <AppButton>Masuk</AppButton>
+          </RouterLink>
+          <div v-if="isLoggedIn" class="cursor-pointer peer relative">
+            <div class="cursor-pointer flex items-center p-4 peer">
+              <UserCircleIcon class="mr-2 w-8" />
+              <span>{{ userFullName }}</span>
+            </div>
+            <AppCard
+              class="absolute invisible duration-300 left-4 opacity-0 top-14 transition w-36 hover:opacity-100 hover:visible peer-hover:opacity-100 peer-hover:visible"
+            >
+              <RouterLink
+                :to="{ name: config.pages.profile.name }"
+                class="flex text-black hover:text-blue-800"
+              >
+                <UserIcon class="mr-2 w-5" />
+                Lihat profil
+              </RouterLink>
+              <span
+                class="flex mt-2 text-black hover:text-blue-800"
+                @click="logout"
+              >
+                <ArrowLeftOnRectangleIcon class="mr-2 w-5" />
+                Keluar
+              </span>
+            </AppCard>
+          </div>
+        </div>
       </div>
     </div>
   </nav>

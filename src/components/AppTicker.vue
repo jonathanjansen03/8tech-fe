@@ -18,7 +18,7 @@ const props = defineProps({
 
 const isSuccessType = computed(() => props.type === 'success');
 const colors = computed(() =>
-  isSuccessType
+  isSuccessType.value
     ? {
         darkBackground: { 'bg-green-700': true },
         lightBackground: { 'bg-green-50': true },

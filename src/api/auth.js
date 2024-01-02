@@ -4,15 +4,15 @@ import config from '@/config';
 export default {
   register: (data) => {
     return apiUtil.hitApi({
-      method: 'POST',
-      url: config.api.auth.register,
+      method: config.api.method.post,
+      path: config.api.auth.register,
       body: data,
     });
   },
   login: (data) => {
     return apiUtil.hitApi({
-      method: 'POST',
-      url: config.api.auth.login,
+      method: config.api.method.post,
+      path: config.api.auth.login,
       body: data,
     });
   },

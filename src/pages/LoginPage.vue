@@ -1,6 +1,6 @@
 <script setup>
-import { reactive, ref } from 'vue';
-import { RouterLink, useRouter } from 'vue-router';
+import { computed, reactive, ref } from 'vue';
+import { RouterLink, useRoute, useRouter } from 'vue-router';
 
 import { useUserStore } from '@/stores/user';
 import config from '@/config';
@@ -12,6 +12,7 @@ import InputBox from '@/components/InputBox.vue';
 
 const { login } = useUserStore();
 const router = useRouter();
+const route = useRoute();
 
 const LOGIN = 'login';
 const NOT_FOUND = 'NOT_FOUND';
@@ -26,6 +27,10 @@ const errors = reactive({
   email: '',
   password: '',
 });
+
+const redirectPath = computed(
+  () => route.query.redirect || config.pages.home.path
+);
 
 const validateField = (field) => {
   if (formData[field]) {
@@ -62,7 +67,7 @@ const doLogin = async () => {
 
 const handleSucccessfulLogin = () => {
   isError.value = false;
-  router.push(config.pages.home.path);
+  router.push(redirectPath.value);
 };
 
 const handleFailedLogin = (error) => {
