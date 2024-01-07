@@ -14,10 +14,11 @@ export const useUserStore = defineStore('user', () => {
   );
 
   async function isTokenValid (token) {
+    let tokenFlag = true;
     await userApi.getUserInfo(token).catch(() => {
-      return false;
+      tokenFlag = false;
     });
-    return true;
+    return tokenFlag;
   }
 
   async function register(data) {
