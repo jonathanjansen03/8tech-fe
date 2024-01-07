@@ -13,6 +13,13 @@ export const useUserStore = defineStore('user', () => {
     () => `${currentUser.value.firstName} ${currentUser.value.lastName}`
   );
 
+  async function isTokenValid (token) {
+    await userApi.getUserInfo(token).catch(() => {
+      return false;
+    });
+    return true;
+  }
+
   async function register(data) {
     await authApi.register(data);
   }
@@ -22,6 +29,9 @@ export const useUserStore = defineStore('user', () => {
 
     currentUser.value = res.data.user;
     currentUserToken.value = res.data.token;
+
+    localStorage.setItem('Etoken', res.data.token);
+    localStorage.setItem('userData', JSON.stringify(res.data.user));
   };
 
   const logout = () => {
@@ -35,6 +45,15 @@ export const useUserStore = defineStore('user', () => {
     currentUser.value = res.data;
   };
 
+  const actions = {
+    setCurrentUser(user) {
+      currentUser.value = user;
+    } ,
+    setUserToken(token) {
+      currentUserToken.value = token;
+    },
+  };
+
   return {
     currentUser,
     currentUserToken,
@@ -44,5 +63,7 @@ export const useUserStore = defineStore('user', () => {
     login,
     logout,
     getUserInfo,
+    actions,
+    isTokenValid
   };
 });
