@@ -62,8 +62,10 @@ router.beforeEach(async (to) => {
 
   if (to.meta.requiresAuth && !userStore.isLoggedIn) {
     if(await userStore.isTokenValid(localStorage.getItem('Etoken'))) {
-      userStore.actions.setUserToken(localStorage.getItem('Etoken'));
-      userStore.actions.setCurrentUser(JSON.parse(localStorage.getItem('userData')));
+      userStore.$patch({
+        currentUserToken: localStorage.getItem('Etoken'),
+        currentUser: JSON.parse(localStorage.getItem('userData')),
+      });
       return
     }
     return {

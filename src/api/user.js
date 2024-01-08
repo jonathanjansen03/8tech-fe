@@ -6,7 +6,9 @@ export default {
     return apiUtil.hitApi({
       method: config.api.method.get,
       path: config.api.user.info,
-      headers: config.api.authTokenHeader(token),
+      headers: {
+        Authorization: config.api.authTokenHeader(token),
+      },
     });
   },
 };

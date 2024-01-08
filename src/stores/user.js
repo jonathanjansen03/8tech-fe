@@ -27,14 +27,6 @@ export const useUserStore = defineStore('user', () => {
     await authApi.register(data);
   }
 
-  async function setCurrentUser(user) {
-    currentUser.value = user;
-  }
-
-  async function setUserToken(token) {
-    currentUserToken.value = token;
-  }
-
   const login = async (data) => {
     const res = await authApi.login(data);
 
@@ -65,8 +57,6 @@ export const useUserStore = defineStore('user', () => {
     login,
     logout,
     getUserInfo,
-    setCurrentUser,
-    setUserToken,
     isTokenValid,
   };
 });
