@@ -21,6 +21,10 @@ export default {
       name: 'profile',
       path: '/profile',
     },
+    editProfile: {
+      name: 'editProfile',
+      path: '/profile/edit',
+    },
   },
   api: {
     basePath: 'https://api-8-tech.koyeb.app',

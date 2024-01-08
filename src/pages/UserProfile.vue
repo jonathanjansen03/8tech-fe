@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted } from 'vue';
+import { computed } from 'vue';
 import { useUserStore } from '@/stores/user';
 import { storeToRefs } from 'pinia';
 import {
@@ -7,11 +7,13 @@ import {
   PencilIcon,
 } from '@heroicons/vue/24/outline';
 
+import config from '@/config';
 import DefaultUserProfilePicture from '@/assets/images/default-user-profile-picture.png';
 import AppCard from '@/components/AppCard.vue';
 import AppButton from '@/components/AppButton.vue';
 
 const NO_DESCRIPTION = 'Belum ada deskripsi.';
+const NO_PORTFOLIO = 'Belum ada portofolio.';
 
 const userStore = useUserStore();
 const { currentUser } = storeToRefs(userStore);
@@ -19,8 +21,6 @@ const { currentUser } = storeToRefs(userStore);
 const userProfilePicture = computed(
   () => currentUser.profilePicture ?? DefaultUserProfilePicture
 );
-
-onMounted(() => {});
 </script>
 
 <template>
@@ -62,6 +62,10 @@ onMounted(() => {});
         <h3>Deskripsi</h3>
         <p>{{ currentUser.description ?? NO_DESCRIPTION }}</p>
       </div>
+      <div class="flex flex-col mt-5">
+        <h3>Portofolio</h3>
+        <p>{{ currentUser.portfolio ?? NO_PORTFOLIO }}</p>
+      </div>
       <div class="flex justify-center mt-5">
         <AppButton
           outline
@@ -71,10 +75,12 @@ onMounted(() => {});
           <ArrowLeftOnRectangleIcon class="mr-2 w-5" />
           Keluar
         </AppButton>
-        <AppButton class="flex items-center ml-12 py-3">
-          <PencilIcon class="mr-2 w-5" />
-          Edit profil
-        </AppButton>
+        <RouterLink :to="{ name: config.pages.editProfile }">
+          <AppButton class="flex items-center ml-12 py-3">
+            <PencilIcon class="mr-2 w-5" />
+            Edit profil
+          </AppButton>
+        </RouterLink>
       </div>
     </AppCard>
   </div>
