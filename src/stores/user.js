@@ -13,16 +13,26 @@ export const useUserStore = defineStore('user', () => {
     () => `${currentUser.value.firstName} ${currentUser.value.lastName}`
   );
 
-  async function isTokenValid (token) {
+  async function isTokenValid(token) {
     let tokenFlag = true;
-    await userApi.getUserInfo(token).catch(() => {
+    try {
+      await userApi.getUserInfo(token);
+    } catch (e) {
       tokenFlag = false;
-    });
+    }
     return tokenFlag;
   }
 
   async function register(data) {
     await authApi.register(data);
+  }
+
+  async function setCurrentUser(user) {
+    currentUser.value = user;
+  }
+
+  async function setUserToken(token) {
+    currentUserToken.value = token;
   }
 
   const login = async (data) => {
@@ -46,15 +56,6 @@ export const useUserStore = defineStore('user', () => {
     currentUser.value = res.data;
   };
 
-  const actions = {
-    setCurrentUser(user) {
-      currentUser.value = user;
-    } ,
-    setUserToken(token) {
-      currentUserToken.value = token;
-    },
-  };
-
   return {
     currentUser,
     currentUserToken,
@@ -64,7 +65,8 @@ export const useUserStore = defineStore('user', () => {
     login,
     logout,
     getUserInfo,
-    actions,
-    isTokenValid
+    setCurrentUser,
+    setUserToken,
+    isTokenValid,
   };
 });
