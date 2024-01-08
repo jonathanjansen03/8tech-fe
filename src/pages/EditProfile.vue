@@ -27,8 +27,8 @@ const userProfilePicture = computed(
   <div
     class="mt-8 px-3 min-[420px]:px-10 sm:px-20 md:px-32 lg:px-40 xl:px-52 2xl:px-72"
   >
-    <AppCard class="user-profile px-8 py-8">
-      <h1>Profil</h1>
+    <AppCard class="edit-profile px-8 py-8">
+      <h1>Edit Profil</h1>
       <div class="flex justify-center mt-5">
         <img
           :src="userProfilePicture"
@@ -75,12 +75,10 @@ const userProfilePicture = computed(
           <ArrowLeftOnRectangleIcon class="mr-2 w-5" />
           Keluar
         </AppButton>
-        <RouterLink :to="{ name: config.pages.editProfile.name }">
-          <AppButton class="flex items-center ml-12 py-3">
-            <PencilIcon class="mr-2 w-5" />
-            Edit profil
-          </AppButton>
-        </RouterLink>
+        <AppButton class="flex items-center ml-12 py-3">
+          <PencilIcon class="mr-2 w-5" />
+          Simpan
+        </AppButton>
       </div>
     </AppCard>
   </div>
