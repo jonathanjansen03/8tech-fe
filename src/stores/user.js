@@ -13,6 +13,16 @@ export const useUserStore = defineStore('user', () => {
     () => `${currentUser.value.firstName} ${currentUser.value.lastName}`
   );
 
+  async function isTokenValid(token) {
+    let tokenFlag = true;
+    try {
+      await userApi.getUserInfo(token);
+    } catch (e) {
+      tokenFlag = false;
+    }
+    return tokenFlag;
+  }
+
   async function register(data) {
     await authApi.register(data);
   }
@@ -22,6 +32,9 @@ export const useUserStore = defineStore('user', () => {
 
     currentUser.value = res.data.user;
     currentUserToken.value = res.data.token;
+
+    localStorage.setItem('Etoken', res.data.token);
+    localStorage.setItem('userData', JSON.stringify(res.data.user));
   };
 
   const logout = () => {
@@ -44,5 +57,6 @@ export const useUserStore = defineStore('user', () => {
     login,
     logout,
     getUserInfo,
+    isTokenValid,
   };
 });

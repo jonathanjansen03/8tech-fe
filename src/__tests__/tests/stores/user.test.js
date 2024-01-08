@@ -46,6 +46,10 @@ describe('User store', () => {
     expect(authApi.login).toHaveBeenCalledOnce();
     expect(userStore.currentUser).toEqual(res.data.user);
     expect(userStore.currentUserToken).toEqual(res.data.token);
+    expect(localStorage.getItem('Etoken')).toEqual(res.data.token);
+    expect(localStorage.getItem('userData')).toEqual(
+      JSON.stringify(res.data.user)
+    );
   });
 
   it('should log out successfully', () => {
@@ -72,5 +76,22 @@ describe('User store', () => {
 
     expect(userApi.getUserInfo).toHaveBeenCalledOnce();
     expect(userStore.currentUser).toEqual(res.data);
+  });
+
+  it('should isTokenValid true successfully', async () => {
+    const res = {
+      data: {
+        id: 1,
+      },
+    };
+    userApi.getUserInfo = vi.fn().mockResolvedValue(res);
+
+    expect(await userStore.isTokenValid('token')).toBe(true);
+  });
+
+  it('should isTokenValid false successfully', async () => {
+    userApi.getUserInfo = vi.fn().mockRejectedValue({});
+
+    expect(await userStore.isTokenValid('token')).toBe(false);
   });
 });
