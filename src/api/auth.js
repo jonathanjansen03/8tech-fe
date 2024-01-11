@@ -1,4 +1,5 @@
 import apiUtil from '@/utils/api';
+
 import config from '@/config';
 
 export default {
