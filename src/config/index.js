@@ -38,6 +38,9 @@ export default {
     user: {
       info: '/user/info',
     },
+    company: {
+      create: '/company/create',
+    },
   },
   errors: {
     general: (action) => `Gagal ${action}. Silakan coba lagi nanti.`,

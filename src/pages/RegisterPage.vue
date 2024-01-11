@@ -9,6 +9,7 @@ import validationUtil from '@/utils/validation';
 import AppCard from '@/components/AppCard.vue';
 import InputBox from '@/components/InputBox.vue';
 import AppButton from '@/components/AppButton.vue';
+import companyApi from '@/api/company.js';
 
 const { register } = useUserStore();
 const router = useRouter();
@@ -20,6 +21,13 @@ const formData = reactive({
   username: '',
   password: '',
   confirmPassword: '',
+  isRecruiter: false,
+});
+
+const companyFormData = reactive({
+  profilePicture: '',
+  name: '',
+  description: '',
 });
 
 const errors = reactive({
@@ -29,6 +37,10 @@ const errors = reactive({
   username: '',
   password: '',
   confirmPassword: '',
+  isRecruiter: '',
+  profilePicture: '',
+  name: '',
+  description: '',
 });
 
 const validateField = (field) => {
@@ -83,8 +95,13 @@ const doRegister = async () => {
     return;
   }
 
+  let companyData;
   try {
-    await register({ ...formData, confirmPassword: undefined });
+    if (formData.isRecruiter) {
+      companyData = await companyApi.create(companyFormData);
+      console.log('#ricat deez company data ', companyData);
+    }
+    await register({ ...formData, confirmPassword: undefined, companyId: companyData?.data.id });
     handleSuccessfulRegister();
   } catch (err) {
     handleFailedRegister(err);
@@ -110,6 +127,11 @@ const handleFailedRegister = (error) => {
     errors[key] = error.message[key];
   }
 };
+
+const toggleRecruiter = async () => {
+  formData.isRecruiter = !formData.isRecruiter;
+};
+
 </script>
 
 <template>
@@ -119,6 +141,8 @@ const handleFailedRegister = (error) => {
     <AppCard class="px-5">
       <div class="flex flex-col">
         <h1>Daftar</h1>
+        &nbsp;
+        <h2>Profil pribadi</h2>
         <div class="md:flex md:justify-center md:gap-x-8">
           <InputBox
             id="first-name"
@@ -175,6 +199,38 @@ const handleFailedRegister = (error) => {
           class="mt-8"
           @blur="validateConfirmPassword"
         />
+        &nbsp;
+        <h2 v-if="formData.isRecruiter">Profil perusahaan</h2>
+        <div v-if="formData.isRecruiter">
+          <InputBox
+            id="company-name"
+            type="text"
+            label="Nama Perusahaan"
+            v-model="formData.email"
+            :error="errors.email"
+            class="mt-8"
+            @blur="validateField('email')"
+          />
+          <InputBox
+            id="company-profile-picture"
+            type="text"
+            label="Profile Picture (Opsional)"
+            v-model="formData.username"
+            :error="errors.username"
+            class="mt-8"
+            @blur="validateField('username')"
+          />
+          <InputBox
+            id="company-description"
+            label="Deskripsi Perusahaan"
+            text-area
+            text-area-height="h-40"
+            v-model="formData.username"
+            :error="errors.username"
+            class="mt-8"
+            @blur="validateField('username')"
+          />
+        </div>
         <AppButton @click="doRegister" class="mt-12">Daftar</AppButton>
         <p class="mt-3 text-center">
           Sudah punya akun?
@@ -185,6 +241,12 @@ const handleFailedRegister = (error) => {
             Masuk
           </RouterLink>
         </p>
+        <div class="mt-3 flex flex-row justify-center">
+          <p v-if="formData.isRecruiter">Daftar sebagai freelancer?</p>
+          <p v-else>Daftar sebagai recruiter?</p>
+          &nbsp;
+          <p @click="toggleRecruiter" class="cursor-pointer font-semibold text-blue-800">Daftar</p>
+        </div>
       </div>
     </AppCard>
   </div>
