@@ -65,12 +65,19 @@ const router = createRouter({
   ],
 });
 
-router.beforeEach((to) => {
+router.beforeEach(async (to) => {
   const userStore = useUserStore();
 
   document.title = `${to.meta.title} | ${config.appName}`;
 
   if (to.meta.requiresAuth && !userStore.isLoggedIn) {
+    if(await userStore.isTokenValid(localStorage.getItem('Etoken'))) {
+      userStore.$patch({
+        currentUserToken: localStorage.getItem('Etoken'),
+        currentUser: JSON.parse(localStorage.getItem('userData')),
+      });
+      return
+    }
     return {
       path: config.pages.login.path,
       query: { redirect: to.fullPath },
