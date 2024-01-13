@@ -43,6 +43,10 @@ const errors = reactive({
   description: '',
 });
 
+const flag = reactive({
+  isLoadingRegister: false,
+})
+
 const validateField = (field) => {
   if (!formData[field]) {
     return;
@@ -91,7 +95,13 @@ const validateFormData = () => {
 };
 
 const doRegister = async () => {
+  if(flag.isLoadingRegister) {
+    return;
+  }
+
+  flag.isLoadingRegister = true;
   if (!validateFormData()) {
+    flag.isLoadingRegister = false;
     return;
   }
 
@@ -99,12 +109,13 @@ const doRegister = async () => {
   try {
     if (formData.isRecruiter) {
       companyData = await companyApi.create(companyFormData);
-      console.log('#ricat deez company data ', companyData);
     }
     await register({ ...formData, confirmPassword: undefined, companyId: companyData?.data.id });
     handleSuccessfulRegister();
+    flag.isLoadingRegister = false;
   } catch (err) {
     handleFailedRegister(err);
+    flag.isLoadingRegister = false;
   }
 };
 
@@ -206,8 +217,8 @@ const toggleRecruiter = async () => {
             id="company-name"
             type="text"
             label="Nama Perusahaan"
-            v-model="formData.email"
-            :error="errors.email"
+            v-model="companyFormData.name"
+            :error="errors.username"
             class="mt-8"
             @blur="validateField('email')"
           />
@@ -215,8 +226,8 @@ const toggleRecruiter = async () => {
             id="company-profile-picture"
             type="text"
             label="Profile Picture (Opsional)"
-            v-model="formData.username"
-            :error="errors.username"
+            v-model="companyFormData.profilePicture"
+            :error="errors.profilePicture"
             class="mt-8"
             @blur="validateField('username')"
           />
@@ -225,13 +236,16 @@ const toggleRecruiter = async () => {
             label="Deskripsi Perusahaan"
             text-area
             text-area-height="h-40"
-            v-model="formData.username"
-            :error="errors.username"
+            v-model="companyFormData.description"
+            :error="errors.description"
             class="mt-8"
             @blur="validateField('username')"
           />
         </div>
-        <AppButton @click="doRegister" class="mt-12">Daftar</AppButton>
+        <AppButton @click="doRegister" class="mt-12">
+          <p>Daftar</p>
+          <img v-if="flag.isLoadingRegister" class="h-6" src="@/assets/images/loading.svg" alt="loading">
+        </AppButton>
         <p class="mt-3 text-center">
           Sudah punya akun?
           <RouterLink

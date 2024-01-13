@@ -16,6 +16,7 @@ const route = useRoute();
 
 const LOGIN = 'login';
 const NOT_FOUND = 'NOT_FOUND';
+const NOT_MATCH = 'NOT_MATCH';
 
 const isError = ref(false);
 const errorMessage = ref('');
@@ -27,6 +28,9 @@ const errors = reactive({
   email: '',
   password: '',
 });
+const flag = reactive({
+  isLoadingRegister: false,
+})
 
 const redirectPath = computed(
   () => route.query.redirect || config.pages.home.path
@@ -53,15 +57,23 @@ const validateFormData = () => {
 };
 
 const doLogin = async () => {
+  if(flag.isLoadingRegister) {
+    return;
+  }
+
+  flag.isLoadingRegister = true;
   if (!validateFormData()) {
+    flag.isLoadingRegister = false;
     return;
   }
 
   try {
     await login(formData);
     handleSucccessfulLogin();
+    flag.isLoadingRegister = false;
   } catch (err) {
     handleFailedLogin(err);
+    flag.isLoadingRegister = false;
   }
 };
 
@@ -77,7 +89,7 @@ const handleFailedLogin = (error) => {
   }
 
   errorMessage.value =
-    error.message.user === NOT_FOUND
+    error.message.user === NOT_FOUND || error.message.password === NOT_MATCH
       ? config.errors.invalidCredentials
       : config.errors.general(LOGIN);
   isError.value = true;
@@ -113,7 +125,10 @@ const handleFailedLogin = (error) => {
           :message="errorMessage"
           class="mt-8"
         />
-        <AppButton @click="doLogin" class="mt-8">Masuk</AppButton>
+        <AppButton @click="doLogin" class="mt-8">
+          <p>Masuk</p>
+          <img v-if="flag.isLoadingRegister" class="h-6" src="@/assets/images/loading.svg" alt="loading">
+        </AppButton>
         <p class="mt-3 text-center">
           Belum punya akun?
           <RouterLink
