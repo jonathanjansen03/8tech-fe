@@ -17,13 +17,29 @@ export default {
       name: 'login',
       path: '/login',
     },
+    profile: {
+      name: 'profile',
+      path: '/profile',
+    },
   },
   api: {
-    base: 'https://api-8-tech.koyeb.app',
-    token_header: (token) => `Bearer ${token}`,
+    basePath: 'https://api-8-tech.koyeb.app',
+    method: {
+      get: 'GET',
+      post: 'POST',
+      put: 'PUT',
+      delete: 'DELETE',
+    },
+    authTokenHeader: (token) => `Bearer ${token}`,
     auth: {
       register: '/auth/register',
       login: '/auth/login',
+    },
+    user: {
+      info: '/user/info',
+    },
+    company: {
+      create: '/company/create',
     },
   },
   errors: {

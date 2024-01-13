@@ -1,7 +1,7 @@
 import config from '@/config';
 
 const INVALID_METHOD_ERROR = 'Method must be GET, POST, PUT or DELETE';
-const BASE_URL = config.api.base;
+const BASE_PATH = config.api.basePath;
 const BASE_HEADERS = {
   'Content-Type': 'application/json',
 };
@@ -38,13 +38,13 @@ const _buildFetchOptions = (method, body, headers) => {
 };
 
 export default {
-  hitApi: async ({ method, url, params = {}, body = {}, headers = {} }) => {
+  hitApi: async ({ method, path, params = {}, body = {}, headers = {} }) => {
     if (!_isValidMethod(method)) {
       throw new Error(INVALID_METHOD_ERROR);
     }
 
     const res = await fetch(
-      BASE_URL + url + _buildQuery(params),
+      BASE_PATH + path + _buildQuery(params),
       _buildFetchOptions(method, body, headers)
     );
     const data = await res.json();

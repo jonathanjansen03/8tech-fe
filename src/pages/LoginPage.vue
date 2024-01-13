@@ -1,29 +1,40 @@
 <script setup>
-import { reactive } from 'vue';
-import { RouterLink, useRouter } from 'vue-router';
+import { computed, reactive, ref } from 'vue';
+import { RouterLink, useRoute, useRouter } from 'vue-router';
 
 import { useUserStore } from '@/stores/user';
 import config from '@/config';
 
 import AppCard from '@/components/AppCard.vue';
-import InputBox from '@/components/InputBox.vue';
 import AppButton from '@/components/AppButton.vue';
+import AppTicker from '@/components/AppTicker.vue';
+import InputBox from '@/components/InputBox.vue';
 
 const { login } = useUserStore();
 const router = useRouter();
+const route = useRoute();
 
 const LOGIN = 'login';
 const NOT_FOUND = 'NOT_FOUND';
+const NOT_MATCH = 'NOT_MATCH';
 
+const isError = ref(false);
+const errorMessage = ref('');
 const formData = reactive({
   email: '',
   password: '',
 });
-
 const errors = reactive({
   email: '',
   password: '',
 });
+const flag = reactive({
+  isLoadingRegister: false,
+})
+
+const redirectPath = computed(
+  () => route.query.redirect || config.pages.home.path
+);
 
 const validateField = (field) => {
   if (formData[field]) {
@@ -46,20 +57,29 @@ const validateFormData = () => {
 };
 
 const doLogin = async () => {
+  if(flag.isLoadingRegister) {
+    return;
+  }
+
+  flag.isLoadingRegister = true;
   if (!validateFormData()) {
+    flag.isLoadingRegister = false;
     return;
   }
 
   try {
     await login(formData);
     handleSucccessfulLogin();
+    flag.isLoadingRegister = false;
   } catch (err) {
     handleFailedLogin(err);
+    flag.isLoadingRegister = false;
   }
 };
 
 const handleSucccessfulLogin = () => {
-  router.push(config.pages.home.path);
+  isError.value = false;
+  router.push(redirectPath.value);
 };
 
 const handleFailedLogin = (error) => {
@@ -68,11 +88,11 @@ const handleFailedLogin = (error) => {
     return;
   }
 
-  const alertMessage =
-    error.message.user === NOT_FOUND
+  errorMessage.value =
+    error.message.user === NOT_FOUND || error.message.password === NOT_MATCH
       ? config.errors.invalidCredentials
       : config.errors.general(LOGIN);
-  alert(alertMessage);
+  isError.value = true;
 };
 </script>
 
@@ -88,7 +108,6 @@ const handleFailedLogin = (error) => {
           type="text"
           label="Email"
           v-model="formData.email"
-          :error="errors.email"
           class="mt-8"
           @blur="validateField('email')"
         />
@@ -97,11 +116,19 @@ const handleFailedLogin = (error) => {
           type="password"
           label="Password"
           v-model="formData.password"
-          :error="errors.password"
           class="mt-8"
           @blur="validateField('password')"
         />
-        <AppButton @click="doLogin" class="mt-12">Masuk</AppButton>
+        <AppTicker
+          v-if="isError"
+          type="error"
+          :message="errorMessage"
+          class="mt-8"
+        />
+        <AppButton @click="doLogin" class="mt-8">
+          <p>Masuk</p>
+          <img v-if="flag.isLoadingRegister" class="h-6" src="@/assets/images/loading.svg" alt="loading">
+        </AppButton>
         <p class="mt-3 text-center">
           Belum punya akun?
           <RouterLink

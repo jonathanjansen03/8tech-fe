@@ -1,6 +1,7 @@
 <script setup>
-import AppCard from '@/components/AppCard.vue';
 import { MapPinIcon } from '@heroicons/vue/24/outline';
+
+import AppCard from '@/components/AppCard.vue';
 
 const props = defineProps({
   job: Object,
