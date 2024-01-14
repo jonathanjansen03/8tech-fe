@@ -150,7 +150,7 @@ const toggleRecruiter = async () => {
     class="mt-8 px-3 min-[420px]:px-10 sm:px-20 md:px-32 lg:px-40 xl:px-52 2xl:px-72"
   >
     <AppCard class="px-5">
-      <div class="flex flex-col">
+      <div @keydown.enter="doRegister" class="flex flex-col">
         <h1>Daftar</h1>
         &nbsp;
         <h2>Profil pribadi</h2>

@@ -21,6 +21,10 @@ export default {
       name: 'profile',
       path: '/profile',
     },
+    recruiterPortal: {
+      name: 'recruiter-portal',
+      path: '/portal',
+    },
   },
   api: {
     basePath: 'https://api-8-tech.koyeb.app',

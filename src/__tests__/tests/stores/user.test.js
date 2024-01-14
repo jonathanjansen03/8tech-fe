@@ -82,16 +82,37 @@ describe('User store', () => {
     const res = {
       data: {
         id: 1,
+        roles: ['recruiter'],
       },
     };
     userApi.getUserInfo = vi.fn().mockResolvedValue(res);
 
-    expect(await userStore.isTokenValid('token')).toBe(true);
+    expect(await userStore.isTokenValid('token')).toStrictEqual({
+      valid: true,
+      roles: ['recruiter'],
+    });
   });
 
   it('should isTokenValid false successfully', async () => {
     userApi.getUserInfo = vi.fn().mockRejectedValue({});
 
-    expect(await userStore.isTokenValid('token')).toBe(false);
+    expect(await userStore.isTokenValid('token')).toStrictEqual({
+      valid: false,
+      roles: undefined,
+    });
+  });
+
+  it('should set current user successfully', async () => {
+    const token = 'deezToken';
+    const userData = { id: 1 };
+    localStorage.setItem('Etoken', token);
+    localStorage.setItem('userData', JSON.stringify(userData));
+
+    await userStore.setCurrentUser();
+
+    expect(localStorage.getItem('Etoken')).toEqual(token);
+    expect(localStorage.getItem('userData')).toEqual(
+      JSON.stringify(userData)
+    );
   });
 });
