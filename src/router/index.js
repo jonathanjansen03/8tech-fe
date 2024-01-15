@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import { useUserStore } from '@/stores/user';
 import config from '@/config';
 import CraeteJob from '@/pages/CraeteJob.vue';
+// import NProgress from 'nprogress';
 
 const HomePage = () => import('@/pages/HomePage.vue');
 const AboutUs = () => import('@/pages/AboutUs.vue');
@@ -76,6 +77,24 @@ const router = createRouter({
     },
   ],
 });
+
+router.beforeEach((to, from, next) => {
+  if (to.name) {
+    NProgress.start()
+  }
+  next()
+})
+
+router.beforeResolve((to, from, next) => {
+  if (to.name) {
+    NProgress.start()
+  }
+  next()
+})
+
+router.afterEach(() => {
+  NProgress.done()
+})
 
 router.beforeEach(async (to) => {
   const userStore = useUserStore();
