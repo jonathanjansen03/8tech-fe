@@ -76,7 +76,7 @@ router.beforeEach(async (to) => {
 
   document.title = `${to.meta.title} | ${config.appName}`;
 
-  if (to.meta.recruiterRole || to.meta.requiresAuth && !userStore.isLoggedIn) {
+  if ((to.meta.requiresAuth && !userStore.isLoggedIn) || to.meta.recruiterRole) {
     const token = localStorage.getItem('Etoken');
     if (!token) {
       return loginPage;
