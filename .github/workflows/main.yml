@@ -1,13 +1,12 @@
 name: 8Tech FE Repo Workflow
-on: 
+on:
   pull_request_target:
     branches:
-    - master
-    - main
+      - master
+      - main
 jobs:
   build:
     permissions: write-all
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - uses: ArtiomTr/jest-coverage-report-action@v2
+      - uses: actions/checkout@v3

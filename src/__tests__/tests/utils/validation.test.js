@@ -11,7 +11,7 @@ describe('Validation util', () => {
   });
 
   it('should validate password', () => {
-    expect(validationUtil.password('password123')).toBe(true);
+    expect(validationUtil.password('Password123')).toBe(true);
   });
 
   it('should validate first name from form data', () => {

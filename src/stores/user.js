@@ -1,8 +1,12 @@
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
+import config from '@/config';
 import authApi from '@/api/auth';
 import userApi from '@/api/user';
+
+const router = useRouter();
 
 export const useUserStore = defineStore('user', () => {
   const currentUser = ref({});
@@ -12,8 +16,13 @@ export const useUserStore = defineStore('user', () => {
   const currentUserFullName = computed(
     () => `${currentUser.value.firstName} ${currentUser.value.lastName}`
   );
+  const isUserPortfolioEmpty = computed(
+    () =>
+      !currentUser.value.portfolio.length ||
+      currentUser.value.portfolio[0] === ''
+  );
 
-  async function isTokenValid(token) {
+  const isTokenValid = async (token) => {
     let tokenFlag = true;
     let userInfo = {};
     try {
@@ -35,9 +44,9 @@ export const useUserStore = defineStore('user', () => {
     currentUserToken.value = token;
   };
 
-  async function register(data) {
+  const register = async (data) => {
     await authApi.register(data);
-  }
+  };
 
   const login = async (data) => {
     const res = await authApi.login(data);
@@ -52,13 +61,36 @@ export const useUserStore = defineStore('user', () => {
   const logout = () => {
     currentUser.value = {};
     currentUserToken.value = '';
+    localStorage.removeItem('Etoken');
+    localStorage.removeItem('userData');
+    router.push('/');
   };
 
   const getUserInfo = async () => {
-    const res = await userApi.getUserInfo(currentUserToken.value);
+    const res = await userApi.getUserInfo(
+      JSON.stringify(currentUserToken.value)
+    );
 
-    currentUser.value = res.data;
+    currentUser.value = { ...res.data };
+    localStorage.setItem('userData', JSON.stringify(currentUserToken.value));
     return res.data;
+  };
+
+  const updateUserData = async (data) => {
+    if (typeof data.profilePicture !== 'string') {
+      const formData = new FormData();
+      formData.append('file', data.profilePicture);
+
+      const imageLink = await userApi.uploadProfilePicture(
+        currentUserToken.value,
+        formData
+      );
+      data.profilePicture = imageLink.data.profilePicture;
+    }
+
+    const res = await userApi.updateUserData(currentUserToken.value, data);
+    currentUser.value = { ...res.data };
+    localStorage.setItem('userData', JSON.stringify(currentUserToken.value));
   };
 
   return {
@@ -66,11 +98,13 @@ export const useUserStore = defineStore('user', () => {
     currentUserToken,
     isLoggedIn,
     currentUserFullName,
+    isUserPortfolioEmpty,
     register,
     login,
     logout,
     getUserInfo,
     isTokenValid,
+    updateUserData,
     setCurrentUser
   };
 });

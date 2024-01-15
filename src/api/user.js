@@ -6,9 +6,24 @@ export default {
     return apiUtil.hitApi({
       method: config.api.method.get,
       path: config.api.user.info,
-      headers: {
-        Authorization: config.api.authTokenHeader(token),
-      },
+      headers: config.api.authTokenHeader(token),
+    });
+  },
+  updateUserData: (token, data) => {
+    return apiUtil.hitApi({
+      method: config.api.method.post,
+      path: config.api.user.updateData,
+      body: data,
+      headers: config.api.authTokenHeader(token),
+    });
+  },
+  uploadProfilePicture: (token, data) => {
+    return apiUtil.hitApi({
+      method: config.api.method.post,
+      path: config.api.user.uploadProfilePicture,
+      body: data,
+      headers: config.api.authTokenHeader(token),
+      isUploadingFile: true,
     });
   },
 };
