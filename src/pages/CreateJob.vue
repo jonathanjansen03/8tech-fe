@@ -21,6 +21,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   mainStore.setRecruiterPortal(false);
+  mainStore.closePortalNavbar();
 })
 
 const formData = reactive({

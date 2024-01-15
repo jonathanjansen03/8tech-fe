@@ -16,10 +16,15 @@ export const useMainStore = defineStore('main', () => {
     portalNavbar.value = !portalNavbar.value;
   }
 
+  function closePortalNavbar() {
+    portalNavbar.value = false;
+  }
+
   return {
     isRecruiterPortal,
     setRecruiterPortal,
     togglePortalNavbar,
     showPortalNavbar,
+    closePortalNavbar
   };
 });

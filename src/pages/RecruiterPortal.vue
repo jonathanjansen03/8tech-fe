@@ -13,6 +13,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   mainStore.setRecruiterPortal(false);
+  mainStore.closePortalNavbar();
 })
 
 </script>

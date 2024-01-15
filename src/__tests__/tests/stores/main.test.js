@@ -23,10 +23,14 @@ describe('Main store', () => {
     expect(mainStore.isRecruiterPortal).toEqual(true);
   });
 
-  it('should togglePortalNavbar successfully', () => {
+  it('should togglePortalNavbar & close it successfully', () => {
 
     mainStore.togglePortalNavbar();
 
     expect(mainStore.showPortalNavbar).toEqual(true);
+
+    mainStore.closePortalNavbar();
+
+    expect(mainStore.showPortalNavbar).toEqual(false);
   });
 });
