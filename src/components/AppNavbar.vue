@@ -15,8 +15,10 @@ import config from '@/config';
 import logo from '@/assets/images/8tech-logo.png';
 import AppButton from '@/components/AppButton.vue';
 import AppCard from '@/components/AppCard.vue';
+import { useMainStore } from '@/stores/main.js';
 
 const store = useUserStore();
+const mainStore = useMainStore();
 const router = useRouter();
 const { currentUser, isLoggedIn, currentUserFullName } = storeToRefs(store);
 const { logout } = store;
@@ -85,6 +87,11 @@ const userFullName = computed(() => {
     <!-- non-mobile navbar -->
     <div class="max-md:hidden">
       <div class="bg-zinc-800 flex items-center justify-around py-3 w-full">
+        <Bars3Icon
+          v-if="mainStore.isRecruiterPortal"
+          @click="mainStore.togglePortalNavbar()"
+          class="cursor-pointer w-10"
+        />
         <img
           :src="logo"
           alt="Logo"

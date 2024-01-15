@@ -2,11 +2,24 @@
 import SearchBar from '@/components/SearchBar.vue';
 import JobCard from '@/components/JobCard.vue';
 import SideBar from '@/components/SideBar.vue';
+import { onBeforeUnmount, onMounted } from 'vue';
+import { useMainStore } from '@/stores/main.js';
+
+const mainStore = useMainStore();
+
+onMounted(() => {
+  mainStore.setRecruiterPortal(true);
+})
+
+onBeforeUnmount(() => {
+  mainStore.setRecruiterPortal(false);
+})
+
 </script>
 
 <template>
   <div class="sm:px-20">
-    <SideBar />
+    <SideBar class="sidebar" v-if="mainStore.showPortalNavbar"/>
     <div>
       <h1 class="text-center font-bold mb-8 text-white text-2xl">
         Ketika Tech Talent Bertemu dengan Peluang Tak Terbatas.
@@ -45,3 +58,9 @@ import SideBar from '@/components/SideBar.vue';
     </div>
   </div>
 </template>
+
+<style>
+.sidebar{
+  transition: .2s ease-in-out;
+}
+</style>

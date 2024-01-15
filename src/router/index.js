@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { useUserStore } from '@/stores/user';
 import config from '@/config';
+import CraeteJob from '@/pages/CraeteJob.vue';
 
 const HomePage = () => import('@/pages/HomePage.vue');
 const AboutUs = () => import('@/pages/AboutUs.vue');
@@ -59,6 +60,16 @@ const router = createRouter({
       component: RecruiterPortal,
       meta: {
         title: 'Recruiter Portal',
+        requiresAuth: true,
+        recruiterRole: true,
+      },
+    },
+    {
+      path: config.pages.createJob.path,
+      name: config.pages.createJob.name,
+      component: CraeteJob,
+      meta: {
+        title: 'Create Job',
         requiresAuth: true,
         recruiterRole: true,
       },
