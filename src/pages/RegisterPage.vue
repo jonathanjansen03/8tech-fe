@@ -60,7 +60,6 @@ const validateField = (field) => {
 
   if (field === 'password') {
     validateConfirmPassword();
-    return;
   }
 };
 
@@ -239,7 +238,7 @@ const toggleRecruiter = async () => {
             v-model="companyFormData.description"
             :error="errors.description"
             class="mt-8"
-            @blur="validateField('username')"
+            @blur="validateField('description')"
           />
         </div>
         <AppButton @click="doRegister" class="mt-12">

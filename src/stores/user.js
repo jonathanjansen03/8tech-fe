@@ -58,6 +58,7 @@ export const useUserStore = defineStore('user', () => {
     const res = await userApi.getUserInfo(currentUserToken.value);
 
     currentUser.value = res.data;
+    return res.data;
   };
 
   return {

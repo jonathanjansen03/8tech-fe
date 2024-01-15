@@ -25,6 +25,10 @@ export default {
       name: 'recruiter-portal',
       path: '/portal',
     },
+    createJob: {
+      name: 'create-job',
+      path: '/create-job',
+    },
   },
   api: {
     basePath: 'https://api-8-tech.koyeb.app',
@@ -44,6 +48,9 @@ export default {
     },
     company: {
       create: '/company/create',
+    },
+    job: {
+      create: '/job/create',
     },
   },
   errors: {
