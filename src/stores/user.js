@@ -12,7 +12,7 @@ export const useUserStore = defineStore('user', () => {
   const currentUser = ref({});
   const currentUserToken = ref('');
 
-  const isLoggedIn = computed(() => !!currentUser.value.id);
+  const isLoggedIn = computed(() => !!currentUser.value?.id);
   const currentUserFullName = computed(
     () => `${currentUser.value.firstName} ${currentUser.value.lastName}`
   );
@@ -24,12 +24,24 @@ export const useUserStore = defineStore('user', () => {
 
   const isTokenValid = async (token) => {
     let tokenFlag = true;
+    let userInfo = {};
     try {
-      await userApi.getUserInfo(token);
+      userInfo = await userApi.getUserInfo(token);
     } catch (e) {
       tokenFlag = false;
     }
-    return tokenFlag;
+    return {
+      valid: tokenFlag,
+      roles: userInfo?.data?.roles,
+    };
+  }
+
+  const setCurrentUser = () => {
+    const token = localStorage.getItem('Etoken');
+    const userData = localStorage.getItem('userData');
+
+    currentUser.value = JSON.parse(userData);
+    currentUserToken.value = token;
   };
 
   const register = async (data) => {
@@ -61,6 +73,7 @@ export const useUserStore = defineStore('user', () => {
 
     currentUser.value = { ...res.data };
     localStorage.setItem('userData', JSON.stringify(currentUserToken.value));
+    return res.data;
   };
 
   const updateUserData = async (data) => {
@@ -92,5 +105,6 @@ export const useUserStore = defineStore('user', () => {
     getUserInfo,
     isTokenValid,
     updateUserData,
+    setCurrentUser
   };
 });

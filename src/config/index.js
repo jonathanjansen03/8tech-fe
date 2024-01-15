@@ -25,6 +25,14 @@ export default {
       name: 'editProfile',
       path: '/profile/edit',
     },
+    recruiterPortal: {
+      name: 'recruiter-portal',
+      path: '/portal',
+    },
+    createJob: {
+      name: 'create-job',
+      path: '/create-job',
+    },
   },
   api: {
     basePath: 'https://api-8-tech.koyeb.app',
@@ -45,6 +53,12 @@ export default {
       info: '/user/info',
       updateData: '/user/update/me',
       uploadProfilePicture: '/user/uploadProfilePicture',
+    },
+    company: {
+      create: '/company/create',
+    },
+    job: {
+      create: '/job/create',
     },
   },
   errors: {
