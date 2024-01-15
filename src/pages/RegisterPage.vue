@@ -146,8 +146,7 @@ const toggleRecruiter = async () => {
 
 <template>
   <div
-    class="mt-8 px-3 min-[420px]:px-10 sm:px-20 md:px-32 lg:px-40 xl:px-52 2xl:px-72"
-  >
+    class="mt-8 px-3 min-[420px]:px-10 sm:px-20 md:px-32 lg:px-40 xl:px-52 2xl:px-72">
     <AppCard class="px-5">
       <div @keydown.enter="doRegister" class="flex flex-col">
         <h1>Daftar</h1>
@@ -156,41 +155,33 @@ const toggleRecruiter = async () => {
         <div class="md:flex md:justify-center md:gap-x-8">
           <InputBox
             id="first-name"
-            type="text"
             label="Nama Depan"
             v-model="formData.firstName"
             :error="errors.firstName"
             class="mt-8 w-full"
-            @blur="validateField('firstName')"
-          />
+            @blur="validateField('firstName')" />
           <InputBox
             id="last-name"
-            type="text"
             label="Nama Belakang"
             v-model="formData.lastName"
             :error="errors.lastName"
             class="mt-8 w-full"
-            @blur="validateField('lastName')"
-          />
+            @blur="validateField('lastName')" />
         </div>
         <InputBox
           id="email"
-          type="text"
           label="Email"
           v-model="formData.email"
           :error="errors.email"
           class="mt-8"
-          @blur="validateField('email')"
-        />
+          @blur="validateField('email')" />
         <InputBox
           id="username"
-          type="text"
-          label="username"
+          label="Username"
           v-model="formData.username"
           :error="errors.username"
           class="mt-8"
-          @blur="validateField('username')"
-        />
+          @blur="validateField('username')" />
         <InputBox
           id="password"
           type="password"
@@ -198,8 +189,7 @@ const toggleRecruiter = async () => {
           v-model="formData.password"
           :error="errors.password"
           class="mt-8"
-          @blur="validateField('password')"
-        />
+          @blur="validateField('password')" />
         <InputBox
           id="confirm-password"
           type="password"
@@ -249,8 +239,7 @@ const toggleRecruiter = async () => {
           Sudah punya akun?
           <RouterLink
             :to="{ name: 'login' }"
-            class="font-semibold text-blue-800"
-          >
+            class="font-semibold text-blue-800">
             Masuk
           </RouterLink>
         </p>

@@ -21,6 +21,10 @@ export default {
       name: 'profile',
       path: '/profile',
     },
+    editProfile: {
+      name: 'editProfile',
+      path: '/profile/edit',
+    },
     recruiterPortal: {
       name: 'recruiter-portal',
       path: '/portal',
@@ -38,13 +42,17 @@ export default {
       put: 'PUT',
       delete: 'DELETE',
     },
-    authTokenHeader: (token) => `Bearer ${token}`,
+    authTokenHeader: (token) => ({
+      Authorization: `Bearer ${token}`,
+    }),
     auth: {
       register: '/auth/register',
       login: '/auth/login',
     },
     user: {
       info: '/user/info',
+      updateData: '/user/update/me',
+      uploadProfilePicture: '/user/uploadProfilePicture',
     },
     company: {
       create: '/company/create',

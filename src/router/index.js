@@ -9,6 +9,7 @@ const AboutUs = () => import('@/pages/AboutUs.vue');
 const RegisterPage = () => import('@/pages/RegisterPage.vue');
 const LoginPage = () => import('@/pages/LoginPage.vue');
 const UserProfile = () => import('@/pages/UserProfile.vue');
+const EditProfile = () => import('@/pages/EditProfile.vue');
 const RecruiterPortal = () => import('@/pages/RecruiterPortal.vue');
 
 const router = createRouter({
@@ -19,7 +20,7 @@ const router = createRouter({
       name: config.pages.home.name,
       component: HomePage,
       meta: {
-        title: 'Home',
+        title: 'Beranda',
       },
     },
     {
@@ -27,7 +28,7 @@ const router = createRouter({
       name: config.pages.about.name,
       component: AboutUs,
       meta: {
-        title: 'About Us',
+        title: 'Tentang Kami',
       },
     },
     {
@@ -35,7 +36,7 @@ const router = createRouter({
       name: config.pages.register.name,
       component: RegisterPage,
       meta: {
-        title: 'Register',
+        title: 'Daftar',
       },
     },
     {
@@ -43,7 +44,7 @@ const router = createRouter({
       name: config.pages.login.name,
       component: LoginPage,
       meta: {
-        title: 'Log In',
+        title: 'Masuk',
       },
     },
     {
@@ -51,7 +52,16 @@ const router = createRouter({
       name: config.pages.profile.name,
       component: UserProfile,
       meta: {
-        title: 'Profile',
+        title: 'Profil',
+        requiresAuth: true,
+      },
+    },
+    {
+      path: config.pages.editProfile.path,
+      name: config.pages.editProfile.name,
+      component: EditProfile,
+      meta: {
+        title: 'Edit Profil',
         requiresAuth: true,
       },
     },

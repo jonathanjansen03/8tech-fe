@@ -21,7 +21,7 @@ const _buildQuery = (params) => {
     .join('&');
 };
 
-const _buildFetchOptions = (method, body, headers) => {
+const _buildFetchOptions = (method, body, headers, isUploadingFile) => {
   const options = {
     method,
     headers: { ...BASE_HEADERS, ...headers },
@@ -31,21 +31,35 @@ const _buildFetchOptions = (method, body, headers) => {
     return options;
   }
 
+  let requestBody = JSON.stringify(body);
+
+  if (isUploadingFile) {
+    delete options.headers['Content-Type'];
+    requestBody = body;
+  }
+
   return {
     ...options,
-    body: JSON.stringify(body),
+    body: requestBody,
   };
 };
 
 export default {
-  hitApi: async ({ method, path, params = {}, body = {}, headers = {} }) => {
+  hitApi: async ({
+    method,
+    path,
+    params = {},
+    body = {},
+    headers = {},
+    isUploadingFile = false,
+  }) => {
     if (!_isValidMethod(method)) {
       throw new Error(INVALID_METHOD_ERROR);
     }
 
     const res = await fetch(
       BASE_PATH + path + _buildQuery(params),
-      _buildFetchOptions(method, body, headers)
+      _buildFetchOptions(method, body, headers, isUploadingFile)
     );
     const data = await res.json();
 

@@ -4,7 +4,8 @@ const LAST_NAME = 'lastName';
 const validators = {
   name: (value) => value.length > 1,
   email: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
-  password: (value) => /^(?=.*\d).{8,}$/.test(value),
+  password: (value) =>
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(value),
 };
 
 const validateForm = (field, value) => {
