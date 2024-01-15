@@ -39,14 +39,13 @@ const labelClasses = computed(() => {
       :class="{
         'border-gray-500 focus:outline-indigo-500': !props.error,
         'border-red-500 focus:outline-red-500': props.error,
-      }"
-    />
+      }" />
     <label
       :for="props.id"
       class="absolute left-2 top-2 transition-input-box hover:cursor-text peer-focus:text-indigo-500 peer-focus:text-xs peer-focus:-top-2 peer-focus:bg-white"
-      :class="labelClasses"
-      >{{ props.label }}</label
-    >
+      :class="labelClasses">
+      {{ props.label }}
+    </label>
     <div class="error-message relative">
       <p class="absolute text-red-500 text-sm" v-if="props.error">
         {{ props.error }}

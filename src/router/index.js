@@ -71,12 +71,12 @@ router.beforeEach(async (to) => {
   document.title = `${to.meta.title} | ${config.appName}`;
 
   if (to.meta.requiresAuth && !userStore.isLoggedIn) {
-    if(await userStore.isTokenValid(localStorage.getItem('Etoken'))) {
+    if (await userStore.isTokenValid(localStorage.getItem('Etoken'))) {
       userStore.$patch({
         currentUserToken: localStorage.getItem('Etoken'),
         currentUser: JSON.parse(localStorage.getItem('userData')),
       });
-      return
+      return;
     }
     return {
       path: config.pages.login.path,

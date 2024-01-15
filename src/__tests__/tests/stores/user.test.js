@@ -5,6 +5,12 @@ import { useUserStore } from '@/stores/user';
 import authApi from '@/api/auth';
 import userApi from '@/api/user';
 
+vi.mock('vue-router', () => ({
+  useRouter: () => ({
+    push: vi.fn(),
+  }),
+}));
+
 describe('User store', () => {
   let userStore;
 
@@ -93,5 +99,48 @@ describe('User store', () => {
     userApi.getUserInfo = vi.fn().mockRejectedValue({});
 
     expect(await userStore.isTokenValid('token')).toBe(false);
+  });
+
+  it('should update user data successfully without updating profile picture', async () => {
+    const res = {
+      data: {
+        id: 1,
+      },
+    };
+    userApi.updateUserData = vi.fn(() => res);
+    userApi.uploadProfilePicture = vi.fn();
+
+    await userStore.updateUserData({ profilePicture: 'profilePicture' });
+
+    expect(userApi.uploadProfilePicture).not.toHaveBeenCalledOnce();
+    expect(userApi.updateUserData).toHaveBeenCalledOnce();
+    expect(userStore.currentUser).toEqual(res.data);
+  });
+
+  it('should update user data successfully', async () => {
+    const res = {
+      data: {
+        id: 1,
+        profilePicture: 'profilePicture',
+      },
+    };
+    userApi.updateUserData = vi.fn(() => res);
+    userApi.uploadProfilePicture = vi.fn(() => ({
+      data: 'profilePicture',
+    }));
+
+    await userStore.updateUserData({});
+
+    expect(userApi.uploadProfilePicture).toHaveBeenCalledOnce();
+    expect(userApi.updateUserData).toHaveBeenCalledOnce();
+    expect(userStore.currentUser).toEqual(res.data);
+  });
+
+  it('should show that user portfolio is not empty', () => {
+    userStore.currentUser = {
+      portfolio: ['test'],
+    };
+
+    expect(userStore.isUserPortfolioEmpty).toBe(false);
   });
 });

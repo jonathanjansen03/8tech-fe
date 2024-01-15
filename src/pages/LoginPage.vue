@@ -70,16 +70,15 @@ const handleSucccessfulLogin = () => {
   router.push(redirectPath.value);
 };
 
-const handleFailedLogin = (error) => {
-  if (error.statusCode === 500) {
-    alert(config.errors.server);
-    return;
+const handleFailedLogin = (err) => {
+  if (err.statusCode === 500) {
+    errorMessage.value = config.errors.server;
+  } else {
+    errorMessage.value =
+      err.message.user === NOT_FOUND
+        ? config.errors.invalidCredentials
+        : config.errors.general(LOGIN);
   }
-
-  errorMessage.value =
-    error.message.user === NOT_FOUND
-      ? config.errors.invalidCredentials
-      : config.errors.general(LOGIN);
   isError.value = true;
 };
 </script>
@@ -93,7 +92,6 @@ const handleFailedLogin = (error) => {
         <h1>Masuk</h1>
         <InputBox
           id="email"
-          type="text"
           label="Email"
           v-model="formData.email"
           class="mt-8"
