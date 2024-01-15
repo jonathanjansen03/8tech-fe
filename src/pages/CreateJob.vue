@@ -113,8 +113,9 @@ const doCreateJob = async () => {
     <div>
       <AppCard class="px-5">
         <div @keydown.enter="doCreateJob" class="flex flex-col items-center">
+          <h1>Buat Lowongan Pekerjaan</h1>
           <InputBox
-            id="craete-job-title"
+            id="create-job-title"
             type="text"
             label="Judul Pekerjaan"
             v-model="formData.title"

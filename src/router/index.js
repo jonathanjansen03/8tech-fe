@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { useUserStore } from '@/stores/user';
 import config from '@/config';
-import CraeteJob from '@/pages/CraeteJob.vue';
+import CreateJob from '@/pages/CreateJob.vue';
 // import NProgress from 'nprogress';
 
 const HomePage = () => import('@/pages/HomePage.vue');
@@ -68,7 +68,7 @@ const router = createRouter({
     {
       path: config.pages.createJob.path,
       name: config.pages.createJob.name,
-      component: CraeteJob,
+      component: CreateJob,
       meta: {
         title: 'Create Job',
         requiresAuth: true,
