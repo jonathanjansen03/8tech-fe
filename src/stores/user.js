@@ -15,13 +15,25 @@ export const useUserStore = defineStore('user', () => {
 
   async function isTokenValid(token) {
     let tokenFlag = true;
+    let userInfo = {};
     try {
-      await userApi.getUserInfo(token);
+      userInfo = await userApi.getUserInfo(token);
     } catch (e) {
       tokenFlag = false;
     }
-    return tokenFlag;
+    return {
+      valid: tokenFlag,
+      roles: userInfo?.data?.roles,
+    };
   }
+
+  const setCurrentUser = () => {
+    const token = localStorage.getItem('Etoken');
+    const userData = localStorage.getItem('userData');
+
+    currentUser.value = JSON.parse(userData);
+    currentUserToken.value = token;
+  };
 
   async function register(data) {
     await authApi.register(data);
@@ -58,5 +70,6 @@ export const useUserStore = defineStore('user', () => {
     logout,
     getUserInfo,
     isTokenValid,
+    setCurrentUser
   };
 });
