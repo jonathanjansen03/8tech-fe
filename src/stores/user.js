@@ -8,7 +8,7 @@ export const useUserStore = defineStore('user', () => {
   const currentUser = ref({});
   const currentUserToken = ref('');
 
-  const isLoggedIn = computed(() => !!currentUser.value.id);
+  const isLoggedIn = computed(() => !!currentUser.value?.id);
   const currentUserFullName = computed(
     () => `${currentUser.value.firstName} ${currentUser.value.lastName}`
   );
