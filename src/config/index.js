@@ -59,6 +59,7 @@ export default {
     },
     job: {
       create: '/job/create',
+      list: '/job/filter',
     },
   },
   errors: {
