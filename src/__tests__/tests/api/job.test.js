@@ -12,4 +12,9 @@ describe('Job API', () => {
     jobApi.create({});
     expect(apiUtil.hitApi).toHaveBeenCalledOnce();
   });
+
+  it('should get job list successfully', () => {
+    jobApi.list({});
+    expect(apiUtil.hitApi).toHaveBeenCalledOnce();
+  });
 });
