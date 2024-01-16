@@ -30,7 +30,7 @@ const errors = reactive({
 });
 const flag = reactive({
   isLoadingRegister: false,
-})
+});
 
 const redirectPath = computed(
   () => route.query.redirect || config.pages.home.path
@@ -57,7 +57,7 @@ const validateFormData = () => {
 };
 
 const doLogin = async () => {
-  if(flag.isLoadingRegister) {
+  if (flag.isLoadingRegister) {
     return;
   }
 
@@ -68,6 +68,7 @@ const doLogin = async () => {
   }
 
   try {
+    formData.email = formData.email.toLowerCase();
     await login(formData);
     handleSucccessfulLogin();
     flag.isLoadingRegister = false;
@@ -97,8 +98,7 @@ const handleFailedLogin = (err) => {
 
 <template>
   <div
-    class="mt-8 px-3 min-[420px]:px-10 sm:px-20 md:px-32 lg:px-40 xl:px-52 2xl:px-72"
-  >
+    class="mt-8 px-3 min-[420px]:px-10 sm:px-20 md:px-32 lg:px-40 xl:px-52 2xl:px-72">
     <AppCard class="px-5">
       <div @keydown.enter="doLogin" class="flex flex-col">
         <h1>Masuk</h1>
@@ -107,32 +107,32 @@ const handleFailedLogin = (err) => {
           label="Email"
           v-model="formData.email"
           class="mt-8"
-          @blur="validateField('email')"
-        />
+          @blur="validateField('email')" />
         <InputBox
           id="password"
           type="password"
           label="Password"
           v-model="formData.password"
           class="mt-8"
-          @blur="validateField('password')"
-        />
+          @blur="validateField('password')" />
         <AppTicker
           v-if="isError"
           type="error"
           :message="errorMessage"
-          class="mt-8"
-        />
+          class="mt-8" />
         <AppButton @click="doLogin" class="mt-8">
           <p>Masuk</p>
-          <img v-if="flag.isLoadingRegister" class="h-6" src="@/assets/images/loading.svg" alt="loading">
+          <img
+            v-if="flag.isLoadingRegister"
+            class="h-6"
+            src="@/assets/images/loading.svg"
+            alt="loading" />
         </AppButton>
         <p class="mt-3 text-center">
           Belum punya akun?
           <RouterLink
             :to="{ name: 'register' }"
-            class="font-semibold text-blue-800"
-          >
+            class="font-semibold text-blue-800">
             Daftar
           </RouterLink>
         </p>

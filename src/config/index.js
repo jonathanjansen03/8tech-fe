@@ -45,6 +45,8 @@ export default {
     authTokenHeader: (token) => ({
       Authorization: `Bearer ${token}`,
     }),
+    defaultPageSize: 12,
+    jobFilterFields: { Judul: 'title', Deskripsi: 'description' },
     auth: {
       register: '/auth/register',
       login: '/auth/login',
@@ -59,7 +61,7 @@ export default {
     },
     job: {
       create: '/job/create',
-      list: '/job/filter',
+      filter: '/job/filter',
     },
   },
   errors: {
