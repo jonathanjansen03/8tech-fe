@@ -1,11 +1,8 @@
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
-import { useRouter } from 'vue-router';
 
 import authApi from '@/api/auth';
 import userApi from '@/api/user';
-
-const router = useRouter();
 
 export const useUserStore = defineStore('user', () => {
   const currentUser = ref({});
@@ -33,7 +30,7 @@ export const useUserStore = defineStore('user', () => {
       valid: tokenFlag,
       roles: userInfo?.data?.roles,
     };
-  }
+  };
 
   const setCurrentUser = () => {
     const token = localStorage.getItem('Etoken');
@@ -57,12 +54,12 @@ export const useUserStore = defineStore('user', () => {
     localStorage.setItem('userData', JSON.stringify(res.data.user));
   };
 
-  const logout = () => {
+  const logout = function () {
     currentUser.value = {};
     currentUserToken.value = '';
     localStorage.removeItem('Etoken');
     localStorage.removeItem('userData');
-    router.push('/');
+    this.router.push('/');
   };
 
   const getUserInfo = async () => {
@@ -102,6 +99,6 @@ export const useUserStore = defineStore('user', () => {
     getUserInfo,
     isTokenValid,
     updateUserData,
-    setCurrentUser
+    setCurrentUser,
   };
 });
