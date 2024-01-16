@@ -86,7 +86,6 @@ const decrementPortfolio = () => {
 onMounted(() => {
   formData.value = {
     ...currentUser.value,
-    // description: currentUser.value.description ?? '',
   };
 
   if (!formData.value.portfolio?.length) {

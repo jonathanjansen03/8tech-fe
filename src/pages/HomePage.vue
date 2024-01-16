@@ -1,6 +1,27 @@
 <script setup>
+import { onBeforeMount } from 'vue';
+import { storeToRefs } from 'pinia';
+
+import { useUserStore } from '@/stores/user';
+import { useJobStore } from '@/stores/job';
+import config from '@/config';
 import SearchBar from '@/components/SearchBar.vue';
 import JobCard from '@/components/JobCard.vue';
+
+const { currentUserToken } = storeToRefs(useUserStore());
+const jobStore = useJobStore();
+const { jobList } = storeToRefs(jobStore);
+const { searchJobs } = jobStore;
+
+onBeforeMount(async () => {
+  await searchJobs(
+    {
+      page: 1,
+      size: config.api.defaultPageSize,
+    },
+    currentUserToken.value
+  );
+});
 </script>
 
 <template>
@@ -12,33 +33,13 @@ import JobCard from '@/components/JobCard.vue';
       <SearchBar class="mt-5" />
       <p class="text-xl mt-10 text-white">Lowongan kerja terbaru:</p>
       <div
-        class="home__job-cards md:grid md:grid-cols-2 md:gap-x-8 xl:grid-cols-3 2xl:grid-cols-4"
-      >
-        <JobCard
-          :job="{
-            title: 'Software Engineer',
-            company: 'Google',
-            logo: 'https://banner2.cleanpng.com/20180324/iww/kisspng-google-logo-g-suite-google-5ab6f1cee66464.5739288415219388949437.jpg',
-            location: 'California, United States',
-          }"
-        />
-        <JobCard
-          :job="{
-            title: 'UI/UX Designer',
-            company: 'Spotify',
-            logo: 'https://i.pinimg.com/originals/1d/f4/6e/1df46e5b59ceaf54b63302e95644fd80.png',
-            location: 'Stockholm, Sweden',
-          }"
-        />
-
-        <JobCard
-          :job="{
-            title: 'Senior Data Scientist',
-            company: 'Amazon',
-            logo: 'https://i.pinimg.com/originals/01/ca/da/01cada77a0a7d326d85b7969fe26a728.jpg',
-            location: 'Washington, United States',
-          }"
-        />
+        class="home__job-cards md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-3 xl:grid-cols-3 2xl:grid-cols-4">
+        <div v-for="i in jobList">
+          <JobCard :job="i" />
+        </div>
+        <div v-if="!jobList.length">
+          <p class="mt-8 text-white">Belum ada pekerjaan.</p>
+        </div>
       </div>
     </div>
   </div>

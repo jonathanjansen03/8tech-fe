@@ -7,9 +7,15 @@ export default {
       method: config.api.method.post,
       path: config.api.job.create,
       body: data,
-      headers: {
-        Authorization: config.api.authTokenHeader(token),
-      },
+      headers: config.api.authTokenHeader(token),
+    });
+  },
+  search: (data, token) => {
+    return apiUtil.hitApi({
+      method: config.api.method.post,
+      path: config.api.job.filter,
+      body: data,
+      headers: config.api.authTokenHeader(token),
     });
   },
 };
