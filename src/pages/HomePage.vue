@@ -1,6 +1,14 @@
 <script setup>
 import SearchBar from '@/components/SearchBar.vue';
 import JobCard from '@/components/JobCard.vue';
+import { onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+onMounted(() => {
+  JSON.parse(localStorage.getItem('userData'))?.roles?.includes('RECRUITER') && router.push('/portal');
+});
 </script>
 
 <template>

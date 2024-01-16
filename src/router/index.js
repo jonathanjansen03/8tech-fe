@@ -2,7 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router';
 import { useUserStore } from '@/stores/user';
 import config from '@/config';
 import CreateJob from '@/pages/CreateJob.vue';
-// import NProgress from 'nprogress';
+import EditJob from '@/pages/EditJob.vue';
+import ApplicantList from '@/pages/ApplicantList.vue';
 
 const HomePage = () => import('@/pages/HomePage.vue');
 const AboutUs = () => import('@/pages/AboutUs.vue');
@@ -57,6 +58,14 @@ const router = createRouter({
       },
     },
     {
+      path: config.pages.userProfile.path,
+      name: config.pages.userProfile.name,
+      component: UserProfile,
+      meta: {
+        title: 'Profil',
+      },
+    },
+    {
       path: config.pages.editProfile.path,
       name: config.pages.editProfile.name,
       component: EditProfile,
@@ -83,6 +92,24 @@ const router = createRouter({
         title: 'Create Job',
         requiresAuth: true,
         recruiterRole: true,
+      },
+    },
+    {
+      path: config.pages.jobDetail.path,
+      name: config.pages.jobDetail.name,
+      component: EditJob,
+      meta: {
+        title: 'Job Detail',
+        requiresAuth: true,
+      },
+    },
+    {
+      path: config.pages.applicantList.path,
+      name: config.pages.applicantList.name,
+      component: ApplicantList,
+      meta: {
+        title: 'Job Applicant List',
+        requiresAuth: true,
       },
     },
   ],

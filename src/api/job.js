@@ -10,10 +10,33 @@ export default {
       headers: config.api.authTokenHeader(token),
     });
   },
+  update: (data, token) => {
+    return apiUtil.hitApi({
+      method: config.api.method.post,
+      path: config.api.job.update,
+      body: data,
+      headers: config.api.authTokenHeader(token),
+    });
+  },
   list: (data, token) => {
     return apiUtil.hitApi({
       method: config.api.method.post,
       path: config.api.job.list,
+      body: data,
+      headers: config.api.authTokenHeader(token),
+    });
+  },
+  info: (id, token) => {
+    return apiUtil.hitApi({
+      method: config.api.method.get,
+      path: config.api.job.info + '/' + id,
+      headers: config.api.authTokenHeader(token),
+    });
+  },
+  applicant: (data, id, token) => {
+    return apiUtil.hitApi({
+      method: config.api.method.post,
+      path: config.api.job.applicant + '/' + id,
       body: data,
       headers: config.api.authTokenHeader(token),
     });

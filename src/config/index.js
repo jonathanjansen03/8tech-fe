@@ -21,6 +21,10 @@ export default {
       name: 'profile',
       path: '/profile',
     },
+    userProfile: {
+      name: 'user-profile',
+      path: '/user/:id',
+    },
     editProfile: {
       name: 'editProfile',
       path: '/profile/edit',
@@ -32,6 +36,14 @@ export default {
     createJob: {
       name: 'create-job',
       path: '/create-job',
+    },
+    jobDetail: {
+      name: 'job-detail',
+      path: '/job-detail/:id',
+    },
+    applicantList: {
+      name: 'job-applicant',
+      path: '/job-applicant/:id',
     },
   },
   api: {
@@ -59,7 +71,10 @@ export default {
     },
     job: {
       create: '/job/create',
+      update: '/job/update',
       list: '/job/filter',
+      info: '/job',
+      applicant: '/job/applicants',
     },
   },
   errors: {

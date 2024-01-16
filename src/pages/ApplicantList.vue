@@ -1,6 +1,6 @@
 <script setup>
 import SideBar from '@/components/SideBar.vue';
-import { onBeforeMount, onBeforeUnmount, reactive, watch } from 'vue';
+import { onBeforeMount, onBeforeUnmount, reactive, ref, watch } from 'vue';
 import {
   ChevronDoubleLeftIcon,
   ChevronDoubleRightIcon
@@ -9,13 +9,14 @@ import { useMainStore } from '@/stores/main.js';
 import { useUserStore } from '@/stores/user.js';
 import jobApi from '@/api/job.js';
 import router from '@/router/index.js';
-import config from '@/config/index.js';
-import { PlusCircleIcon } from '@heroicons/vue/24/outline/index.js';
+import AppButton from '@/components/AppButton.vue';
+import { useRoute } from 'vue-router';
 
 const mainStore = useMainStore();
 const userStore = useUserStore();
+const route = useRoute();
 
-const jobList = reactive([]);
+const applicantList = reactive([]);
 
 const pagination = reactive({
   page: 1,
@@ -29,19 +30,20 @@ const flag = reactive({
   isLoadingFetchApi: false
 });
 
+const jobInfo = ref();
+
 onBeforeMount(async () => {
   mainStore.setRecruiterPortal(true);
   flag.isLoadingFetchApi = true;
-  const jobListResponse = await jobApi.list({
-    field: "companyId",
-    keyword: userStore.currentUser?.companyId,
-    sort: "craetedAt",
+  const applicantListResponse = await jobApi.applicant({
     page: pagination.page,
     size: pagination.size
-  }, userStore.currentUserToken);
-  jobList.push(...jobListResponse.data.data);
-  pagination.totalPages = jobListResponse.data.totalPages;
+  }, route.params.id, userStore.currentUserToken);
+  applicantList.push(...applicantListResponse.data.data);
+  pagination.totalPages = applicantListResponse.data.totalPages;
   flag.isLoadingFetchApi = false;
+
+  jobInfo.value = await jobApi.info(route.params.id, userStore.currentUserToken);
 })
 
 onBeforeUnmount(() => {
@@ -59,25 +61,22 @@ watch (pagination, async (newPagination) => {
     return;
   }
   flag.isLoadingFetchApi = true;
-  const jobListResponse = await jobApi.list({
-    field: "companyId",
-    keyword: userStore.currentUser?.companyId,
-    sort: "craetedAt",
+  const applicantListResponse = await jobApi.applicant({
     page: pagination.page,
     size: pagination.size
-  }, userStore.currentUserToken);
+  }, route.params.id, userStore.currentUserToken);
 
-  if(jobListResponse.data.data.length === 0) {
+  if(applicantListResponse.data.data.length === 0) {
     flag.isLoadingFetchApi = false;
     return;
   }
 
-  pagination.totalPages = jobListResponse.data.totalPages;
-  pagination.isLastPage = !jobListResponse.data["hasNext"];
-  pagination.isFirstPage = !jobListResponse.data["hasPrevious"];
+  pagination.totalPages = applicantListResponse.data.totalPages;
+  pagination.isLastPage = !applicantListResponse.data["hasNext"];
+  pagination.isFirstPage = !applicantListResponse.data["hasPrevious"];
 
-  jobList.splice(0, jobList.length);
-  jobList.push(...jobListResponse.data.data);
+  applicantList.splice(0, applicantList.length);
+  applicantList.push(...applicantListResponse.data.data);
   flag.isLoadingFetchApi = false;
 })
 
@@ -87,18 +86,9 @@ watch (pagination, async (newPagination) => {
   <div class="sm:px-20">
     <SideBar class="sidebar" v-if="mainStore.showPortalNavbar"/>
     <div>
-      <div class="flex justify-between">
-
-        <h1 class="text-center font-bold mb-8 text-white text-2xl">
-          Lowongan pekerjaanmu
-        </h1>
-        <h1 class="text-center font-bold mb-8 text-white text-base" title="Tambahkan lowongan pekerjaan baru">
-          <a @click="router.push(config.pages.createJob.path)" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-            <PlusCircleIcon
-              class="cursor-pointer w-10 text-gray-500"/>
-          </a>
-        </h1>
-      </div>
+      <h1 class="text-center font-bold mb-8 text-white text-2xl">
+        Daftar Pelamar untuk lowongan pekerjaan
+      </h1>
 
       <div class="relative overflow-x-auto">
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -107,24 +97,26 @@ watch (pagination, async (newPagination) => {
             <th class="px-6 py-3 w-20">
               No.
             </th>
-            <th class="px-6 py-3 text-center">
-              Judul
+            <th class="px-6 py-3">
+              Nama Pelamar
             </th>
-            <th class="px-6 py-3 text-center">
-              Tanggal dibuat
+            <th class="px-6 py-3 text-center w-48">
+              Action
             </th>
           </tr>
           </thead>
           <tbody>
-          <tr v-for="(item, index) in jobList" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-blue-950" @click="router.push(`/job-detail/${item.id}`)">
+          <tr v-for="(item, index) in applicantList" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-blue-950" @click="router.push(`/user/${item.id}`)">
             <td class="px-6 py-4">
               {{ (( pagination.page - 1 ) * pagination.size ) + index + 1 }}
             </td>
             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-              {{ item.title }}
+              {{ item.firstName + ' ' + item.lastName }}
             </th>
-            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-              {{ new Date(item.createdAt).toLocaleDateString() + " " + new Date(item.createdAt).toLocaleTimeString() }}
+            <th scope="row" class="px-6 py-4 flex flex-row-reverse">
+              <AppButton class="mr-3">
+                <p>Lihat Detail</p>
+              </AppButton>
             </th>
           </tr>
           </tbody>
