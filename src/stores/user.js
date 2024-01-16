@@ -63,12 +63,10 @@ export const useUserStore = defineStore('user', () => {
   };
 
   const getUserInfo = async () => {
-    const res = await userApi.getUserInfo(
-      JSON.stringify(currentUserToken.value)
-    );
+    const res = await userApi.getUserInfo(currentUserToken.value);
 
-    currentUser.value = { ...res.data };
-    localStorage.setItem('userData', JSON.stringify(currentUserToken.value));
+    currentUser.value = res.data;
+    localStorage.setItem('userData', JSON.stringify(currentUser.value));
     return res.data;
   };
 
@@ -86,7 +84,7 @@ export const useUserStore = defineStore('user', () => {
 
     const res = await userApi.updateUserData(currentUserToken.value, data);
     currentUser.value = { ...res.data };
-    localStorage.setItem('userData', JSON.stringify(currentUserToken.value));
+    localStorage.setItem('userData', JSON.stringify(currentUser.value));
   };
 
   return {
