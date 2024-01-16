@@ -8,10 +8,10 @@ import validationUtil from '@/utils/validation.js';
 import config from '@/config/index.js';
 import AppButton from '@/components/AppButton.vue';
 import jobApi from '@/api/job.js';
-import { useRouter } from 'vue-router';
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/user.js';
-const { currentUserToken } = useUserStore();
+
+const {currentUserToken} = useUserStore();
 
 const router = useRouter();
 const route = useRoute();
@@ -32,26 +32,26 @@ const flag = reactive({
 });
 
 onMounted(async () => {
-  NProgress.start()
+  NProgress.start();
   mainStore.setRecruiterPortal(true);
-  const res  = await jobApi.info(route.params.id, currentUserToken);
+  const res = await jobApi.info(route.params.id, currentUserToken);
   jobData.title = res.data.title;
   jobData.description = res.data.description;
-  NProgress.done()
-})
+  NProgress.done();
+});
 
 onBeforeUnmount(() => {
   mainStore.setRecruiterPortal(false);
   mainStore.closePortalNavbar();
-})
+});
 
-watch (
+watch(
   () => route.params.id,
   async newId => {
-    const res  = await jobApi.info(newId, currentUserToken);
+    const res = await jobApi.info(newId, currentUserToken);
     jobData.value = res.data;
   }
-)
+);
 
 const validateField = (field) => {
   if (!jobData[field]) {
@@ -99,7 +99,7 @@ const handleFail = (error) => {
 };
 
 const doUpdateJob = async () => {
-  if(flag.isLoadingFetchApi) {
+  if (flag.isLoadingFetchApi) {
     return;
   }
 
@@ -112,7 +112,7 @@ const doUpdateJob = async () => {
   try {
     await jobApi.update({
       ...jobData,
-      'id': route.params.id,
+      'id': route.params.id
     }, currentUserToken);
     handleSuccess();
     flag.isLoadingFetchApi = false;
@@ -126,36 +126,36 @@ const doUpdateJob = async () => {
 
 <template>
   <div class="sm:px-20">
-    <SideBar class="sidebar" v-if="mainStore.showPortalNavbar"/>
+    <SideBar v-if="mainStore.showPortalNavbar" class="sidebar"/>
     <div>
       <AppCard class="px-5">
-        <div @keydown.enter="doUpdateJob" class="flex flex-col items-center">
+        <div class="flex flex-col items-center" @keydown.enter="doUpdateJob">
           <h1>Detail Lowongan Pekerjaan</h1>
           <InputBox
             id="create-job-title"
-            type="text"
-            label="Judul Pekerjaan"
             v-model="jobData.title"
             :error="errors.title"
             class="mt-8 w-full"
+            label="Judul Pekerjaan"
+            type="text"
             @blur="validateField('title')"
           />
           <InputBox
             id="create-job-description"
-            label="Deskripsi Pekerjaan"
-            text-area
-            text-area-height="h-40"
             v-model="jobData.description"
             :error="errors.description"
             class="mt-8 w-full"
+            label="Deskripsi Pekerjaan"
+            text-area
+            text-area-height="h-40"
             @blur="validateField('description')"
           />
           <div class="flex flex-row justify-around w-full">
-            <AppButton @click="doUpdateJob" class="mt-12 w-1/2 m-5">
+            <AppButton class="mt-12 w-1/2 m-5" @click="doUpdateJob">
               <p>Simpan perubahan informasi</p>
-              <img v-if="flag.isLoadingFetchApi" class="h-6" src="@/assets/images/loading.svg" alt="loading">
+              <img v-if="flag.isLoadingFetchApi" alt="loading" class="h-6" src="@/assets/images/loading.svg">
             </AppButton>
-            <AppButton @click="router.push(`/job-applicant/${route.params.id}`)" class="mt-12 w-1/2 m-5">
+            <AppButton class="mt-12 w-1/2 m-5" @click="router.push(`/job-applicant/${route.params.id}`)">
               <p>Lihat pelamar</p>
             </AppButton>
           </div>
@@ -166,7 +166,7 @@ const doUpdateJob = async () => {
 </template>
 
 <style>
-.sidebar{
+.sidebar {
   transition: .2s ease-in-out;
 }
 </style>
