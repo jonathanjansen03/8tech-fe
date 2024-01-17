@@ -116,7 +116,9 @@ const userFullName = computed(() => {
             <AppButton>Masuk</AppButton>
           </RouterLink>
           <div v-if="isLoggedIn" class="cursor-pointer peer relative">
-            <div class="cursor-pointer flex items-center p-4 peer">
+            <div
+              class="cursor-pointer flex items-center p-4 peer"
+              @click="router.push({ name: config.pages.profile.name })">
               <UserCircleIcon class="mr-2 w-8" />
               <span>{{ userFullName }}</span>
             </div>
