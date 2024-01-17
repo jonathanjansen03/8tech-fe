@@ -73,7 +73,6 @@ export default {
     },
     job: {
       create: '/job/create',
-      list: '/job/filter',
       filter: '/job/filter',
       update: '/job/update',
       info: '/job',

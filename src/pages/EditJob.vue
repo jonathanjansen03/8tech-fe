@@ -1,6 +1,6 @@
 <script setup>
 import SideBar from '@/components/SideBar.vue';
-import { onBeforeUnmount, onMounted, reactive, watch } from 'vue';
+import { onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue';
 import { useMainStore } from '@/stores/main.js';
 import AppCard from '@/components/AppCard.vue';
 import InputBox from '@/components/InputBox.vue';
@@ -27,9 +27,7 @@ const errors = reactive({
   description: ''
 });
 
-const flag = reactive({
-  isLoadingFetchApi: false
-});
+const isLoadingFetchApi = ref(false);
 
 onMounted(async () => {
   NProgress.start();
@@ -99,13 +97,13 @@ const handleFail = (error) => {
 };
 
 const doUpdateJob = async () => {
-  if (flag.isLoadingFetchApi) {
+  if (isLoadingFetchApi.value) {
     return;
   }
 
-  flag.isLoadingFetchApi = true;
+  isLoadingFetchApi.value = true;
   if (!validateFormData()) {
-    flag.isLoadingFetchApi = false;
+    isLoadingFetchApi.value = false;
     return;
   }
 
@@ -115,10 +113,10 @@ const doUpdateJob = async () => {
       'id': route.params.id
     }, currentUserToken);
     handleSuccess();
-    flag.isLoadingFetchApi = false;
+    isLoadingFetchApi.value = false;
   } catch (err) {
     handleFail(err);
-    flag.isLoadingFetchApi = false;
+    isLoadingFetchApi.value = false;
   }
 };
 
@@ -153,7 +151,7 @@ const doUpdateJob = async () => {
           <div class="flex flex-row justify-around w-full">
             <AppButton class="mt-12 w-1/2 m-5" @click="doUpdateJob">
               <p>Simpan perubahan informasi</p>
-              <img v-if="flag.isLoadingFetchApi" alt="loading" class="h-6" src="@/assets/images/loading.svg">
+              <img v-if="isLoadingFetchApi" alt="loading" class="h-6" src="@/assets/images/loading.svg">
             </AppButton>
             <AppButton class="mt-12 w-1/2 m-5" @click="router.push(`/job-applicant/${route.params.id}`)">
               <p>Lihat pelamar</p>

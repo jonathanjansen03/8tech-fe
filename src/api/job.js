@@ -18,7 +18,7 @@ export default {
       headers: config.api.authTokenHeader(token),
     });
   },
-  list: (data, token) => {
+  filter: (data, token) => {
     return apiUtil.hitApi({
       method: config.api.method.post,
       path: config.api.job.filter,
