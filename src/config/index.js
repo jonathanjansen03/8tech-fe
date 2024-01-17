@@ -76,6 +76,7 @@ export default {
       filter: '/job/filter',
       update: '/job/update',
       findOne: (id) => `/job/${id}`,
+      apply: (id) => `/job/apply/${id}`,
       applicant: '/job/applicants',
     },
   },
@@ -92,5 +93,6 @@ export default {
       unique: 'Email sudah terdaftar. Silakan gunakan email lain.',
       required: 'Harus diisi.',
     },
+    USER_ALREADY_APPLIED: 'Anda sudah melamar pekerjaan ini.',
   },
 };

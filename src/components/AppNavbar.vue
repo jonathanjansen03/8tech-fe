@@ -73,7 +73,7 @@ const userFullName = computed(() => {
             Tentang Kami
           </RouterLink>
           <RouterLink :to="{ name: config.pages.login.name }">
-            <AppButton> Masuk </AppButton>
+            <AppButton>Masuk</AppButton>
           </RouterLink>
         </div>
       </div>
