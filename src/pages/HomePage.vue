@@ -16,7 +16,8 @@ const { searchJobs } = jobStore;
 const router = useRouter();
 
 onBeforeMount(async () => {
-  JSON.parse(localStorage.getItem('userData'))?.roles?.includes('RECRUITER') && router.push('/portal');
+  JSON.parse(localStorage.getItem('userData'))?.roles?.includes('RECRUITER') &&
+    router.push('/portal');
   await searchJobs(
     {
       page: 1,
@@ -36,8 +37,8 @@ onBeforeMount(async () => {
       <SearchBar class="mt-5" />
       <p class="text-xl mt-10 text-white">Lowongan kerja terbaru:</p>
       <div
-        class="home__job-cards md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-3 xl:grid-cols-3 2xl:grid-cols-4">
-        <div v-for="i in jobList">
+        class="home__job-cards md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-3 xl:grid-cols-3">
+        <div v-for="(i, index) in jobList" :key="index">
           <JobCard :job="i" />
         </div>
         <div v-if="!jobList.length">
