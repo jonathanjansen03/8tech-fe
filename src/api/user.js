@@ -9,6 +9,13 @@ export default {
       headers: config.api.authTokenHeader(token),
     });
   },
+  getUserInfoWithId: (token, id) => {
+    return apiUtil.hitApi({
+      method: config.api.method.get,
+      path: config.api.user.info + `/${id}`,
+      headers: config.api.authTokenHeader(token),
+    });
+  },
   updateUserData: (token, data) => {
     return apiUtil.hitApi({
       method: config.api.method.post,

@@ -2,7 +2,8 @@
   "root": true,
   "plugins": ["prettier"],
   "env": {
-    "jest/globals": true
+    "node": true,
+    "jest": true
   },
   "extends": [
     "plugin:vue/vue3-essential",

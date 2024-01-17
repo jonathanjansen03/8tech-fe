@@ -7,13 +7,16 @@ import { useJobStore } from '@/stores/job';
 import config from '@/config';
 import SearchBar from '@/components/SearchBar.vue';
 import JobCard from '@/components/JobCard.vue';
-
+import { useRouter } from 'vue-router';
 const { currentUserToken } = storeToRefs(useUserStore());
 const jobStore = useJobStore();
 const { jobList } = storeToRefs(jobStore);
 const { searchJobs } = jobStore;
 
+const router = useRouter();
+
 onBeforeMount(async () => {
+  JSON.parse(localStorage.getItem('userData'))?.roles?.includes('RECRUITER') && router.push('/portal');
   await searchJobs(
     {
       page: 1,
