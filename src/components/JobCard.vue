@@ -17,8 +17,7 @@ const jobTitle = computed(() => {
 
 <template>
   <AppCard
-    class="items-center h-44 mt-6 min-[420px]:px-5 min-[420px]:py-4 flex"
-    @click="console.log(props.job)">
+    class="items-center h-44 mt-6 min-[420px]:px-5 min-[420px]:py-4 flex">
     <div
       class="job-card cursor-pointer items-center flex flex-col min-[420px]:gap-x-8 min-[420px]:flex-row">
       <img

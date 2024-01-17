@@ -75,7 +75,7 @@ export default {
       create: '/job/create',
       filter: '/job/filter',
       update: '/job/update',
-      info: '/job',
+      findOne: (id) => `/job/${id}`,
       applicant: '/job/applicants',
     },
   },
