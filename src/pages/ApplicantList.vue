@@ -11,6 +11,7 @@ import jobApi from '@/api/job.js';
 import router from '@/router/index.js';
 import AppButton from '@/components/AppButton.vue';
 import { useRoute } from 'vue-router';
+import PaginationComponent from '@/components/PaginationComponent.vue';
 
 const mainStore = useMainStore();
 const userStore = useUserStore();
@@ -135,31 +136,10 @@ watch(pagination, async (newPagination) => {
         </table>
       </div>
 
-      <div class="flex flex-col items-center mt-5">
-        <img
-          v-if="flag.isLoadingFetchApi"
-          class="h-8 mb-2"
-          src="@/assets/images/loading.svg"
-          alt="loading" />
-        <div class="flex flex-row">
-          <button
-            @click="pagination.page--"
-            class="flex items-center justify-center px-3 font-medium text-white bg-gray-800 rounded-s hover:bg-gray-900">
-            <ChevronDoubleLeftIcon class="cursor-pointer w-5" />
-            Prev
-          </button>
-          <p
-            class="flex items-center justify-center px-3 font-medium text-white bg-gray-800 rounded-s hover:bg-gray-900">
-            Page {{ pagination.page }} of {{ pagination.totalPages }}
-          </p>
-          <button
-            @click="pagination.page++"
-            class="flex items-center justify-center px-3 font-medium text-white bg-gray-800 rounded-e hover:bg-gray-900">
-            Next
-            <ChevronDoubleRightIcon class="cursor-pointer w-5" />
-          </button>
-        </div>
-      </div>
+      <PaginationComponent @goNext="pagination.page++" @goPrevious="pagination.page--" :page="pagination.page" :totalPages="pagination.totalPages">
+        <img v-if="flag.isLoadingFetchApi" alt="loading" class="h-8 mb-2" src="@/assets/images/loading.svg">
+      </PaginationComponent>
+
     </div>
   </div>
 </template>
