@@ -1,13 +1,15 @@
 <script setup>
 import { computed, onBeforeMount, reactive, ref, watch } from 'vue';
-import userApi from '@/api/user';
-import { useUserStore } from '@/stores/user';
-import { useMainStore } from '@/stores/main';
 import { storeToRefs } from 'pinia';
 import {
   ArrowLeftOnRectangleIcon,
   PencilSquareIcon,
 } from '@heroicons/vue/24/outline';
+import NProgress from 'nprogress';
+
+import userApi from '@/api/user';
+import { useUserStore } from '@/stores/user';
+import { useMainStore } from '@/stores/main';
 
 import config from '@/config';
 import DefaultUserProfilePicture from '@/assets/images/default-user-profile-picture.png';
@@ -30,16 +32,19 @@ const publicUserProfile = reactive({
   email: '',
   description: '',
   portfolio: [],
-  profilePicture: ''
+  profilePicture: '',
 });
 
 onBeforeMount(async () => {
   isPrivateProfile.value = route.params.id === undefined;
   mainStore.setRecruiterPortal(currentUser.value.roles.includes('RECRUITER'));
-  if(!isPrivateProfile.value) {
-    NProgress.start()
-    const res = await userApi.getUserInfoWithId(userStore.currentUserToken, route.params.id);
-    NProgress.done()
+  if (!isPrivateProfile.value) {
+    NProgress.start();
+    const res = await userApi.getUserInfoWithId(
+      userStore.currentUserToken,
+      route.params.id
+    );
+    NProgress.done();
     publicUserProfile.firstName = res.data.firstName;
     publicUserProfile.lastName = res.data.lastName;
     publicUserProfile.username = res.data.username;
@@ -55,15 +60,13 @@ watch(route, () => {
   mainStore.setRecruiterPortal(currentUser.value.roles.includes('RECRUITER'));
 });
 
-const userProfilePicture = computed(
-  () => {
-    if(isPrivateProfile.value) {
-      return currentUser.value.profilePicture ?? DefaultUserProfilePicture;
-    } else {
-      return publicUserProfile.profilePicture ?? DefaultUserProfilePicture;
-    }
+const userProfilePicture = computed(() => {
+  if (isPrivateProfile.value) {
+    return currentUser.value.profilePicture ?? DefaultUserProfilePicture;
+  } else {
+    return publicUserProfile.profilePicture ?? DefaultUserProfilePicture;
   }
-);
+});
 </script>
 
 <template>
@@ -75,21 +78,27 @@ const userProfilePicture = computed(
         <img
           :src="userProfilePicture"
           alt="User profile picture."
-          class="rounded-full drop-shadow w-36" />
+          class="rounded-full drop-shadow-md w-36" />
       </div>
       <div class="flex justify-between mt-5">
         <div class="flex flex-col">
           <h3>Nama Depan</h3>
-          <p>{{ (isPrivateProfile ? currentUser : publicUserProfile).firstName }}</p>
+          <p>
+            {{ (isPrivateProfile ? currentUser : publicUserProfile).firstName }}
+          </p>
         </div>
         <div class="flex flex-col">
           <h3>Nama Belakang</h3>
-          <p>{{ (isPrivateProfile ? currentUser : publicUserProfile).lastName }}</p>
+          <p>
+            {{ (isPrivateProfile ? currentUser : publicUserProfile).lastName }}
+          </p>
         </div>
       </div>
       <div class="flex flex-col mt-5">
         <h3>Username</h3>
-        <p>{{ (isPrivateProfile ? currentUser : publicUserProfile).username }}</p>
+        <p>
+          {{ (isPrivateProfile ? currentUser : publicUserProfile).username }}
+        </p>
       </div>
       <div class="flex flex-col mt-5">
         <h3>Email</h3>
@@ -101,11 +110,23 @@ const userProfilePicture = computed(
       </div>
       <div class="flex flex-col mt-5">
         <h3>Deskripsi</h3>
-        <p>{{ (isPrivateProfile ? currentUser : publicUserProfile).description ?? NO_DESCRIPTION }}</p>
+        <p>
+          {{
+            (isPrivateProfile ? currentUser : publicUserProfile).description ??
+            NO_DESCRIPTION
+          }}
+        </p>
       </div>
       <div class="flex flex-col mt-5">
         <h3>Portofolio</h3>
-        <p v-for="i in (isPrivateProfile ? currentUser : publicUserProfile).portfolio">{{ i }}</p>
+        <p
+          v-for="(i, index) in (isPrivateProfile
+            ? currentUser
+            : publicUserProfile
+          ).portfolio"
+          :key="index">
+          {{ i }}
+        </p>
         <p v-if="isUserPortfolioEmpty">
           {{ NO_PORTFOLIO }}
         </p>

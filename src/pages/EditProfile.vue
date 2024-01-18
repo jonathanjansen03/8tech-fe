@@ -132,7 +132,10 @@ onMounted(() => {
           v-model="formData.description" />
       </div>
       <div>
-        <div class="flex mt-5" v-for="i in formData.portfolio.length">
+        <div
+          class="flex mt-5"
+          v-for="(i, index) in formData.portfolio.length"
+          :key="index">
           <InputBox
             :id="`portfolio${i}`"
             class="w-full"

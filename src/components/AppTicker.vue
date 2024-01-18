@@ -42,8 +42,7 @@ const colors = computed(() =>
     </div>
     <div
       class="flex items-center pl-4 rounded-md w-full"
-      :class="{ ...colors.text, ...colors.lightBackground }"
-    >
+      :class="{ ...colors.text, ...colors.lightBackground }">
       {{ props.message }}
     </div>
   </div>

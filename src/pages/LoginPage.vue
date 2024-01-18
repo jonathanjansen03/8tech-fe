@@ -16,7 +16,6 @@ const route = useRoute();
 
 const LOGIN = 'login';
 const NOT_FOUND = 'NOT_FOUND';
-const NOT_MATCH = 'NOT_MATCH';
 
 const isError = ref(false);
 const errorMessage = ref('');

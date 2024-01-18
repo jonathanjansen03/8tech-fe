@@ -17,23 +17,23 @@ const mainStore = useMainStore();
 
 onMounted(() => {
   mainStore.setRecruiterPortal(true);
-})
+});
 
 onBeforeUnmount(() => {
   mainStore.setRecruiterPortal(false);
   mainStore.closePortalNavbar();
-})
+});
 
 const formData = reactive({
   title: '',
-  description: ''
+  description: '',
 });
 const errors = reactive({
   title: '',
-  description: ''
+  description: '',
 });
 const flag = reactive({
-  isLoadingCreateJob: false
+  isLoadingCreateJob: false,
 });
 
 const validateField = (field) => {
@@ -82,7 +82,7 @@ const handleFail = (error) => {
 };
 
 const doCreateJob = async () => {
-  if(flag.isLoadingCreateJob) {
+  if (flag.isLoadingCreateJob) {
     return;
   }
 
@@ -94,10 +94,13 @@ const doCreateJob = async () => {
 
   try {
     const userInfo = await getUserInfo();
-    await jobApi.create({
-      ...formData,
-      companyId: userInfo.companyId
-    }, currentUserToken);
+    await jobApi.create(
+      {
+        ...formData,
+        companyId: userInfo.companyId,
+      },
+      currentUserToken
+    );
     handleSuccess();
     flag.isLoadingCreateJob = false;
   } catch (err) {
@@ -105,12 +108,11 @@ const doCreateJob = async () => {
     flag.isLoadingCreateJob = false;
   }
 };
-
 </script>
 
 <template>
   <div class="sm:px-20">
-    <SideBar class="sidebar" v-if="mainStore.showPortalNavbar"/>
+    <SideBar class="sidebar" v-if="mainStore.showPortalNavbar" />
     <div>
       <AppCard class="px-5">
         <div @keydown.enter="doCreateJob" class="flex flex-col items-center">
@@ -122,8 +124,7 @@ const doCreateJob = async () => {
             v-model="formData.title"
             :error="errors.title"
             class="mt-8 w-full"
-            @blur="validateField('title')"
-          />
+            @blur="validateField('title')" />
           <InputBox
             id="create-job-description"
             label="Deskripsi Pekerjaan"
@@ -132,11 +133,14 @@ const doCreateJob = async () => {
             v-model="formData.description"
             :error="errors.description"
             class="mt-8 w-full"
-            @blur="validateField('description')"
-          />
+            @blur="validateField('description')" />
           <AppButton @click="doCreateJob" class="mt-12 w-1/2">
             <p>Buat Lowongan Pekerjaan</p>
-            <img v-if="flag.isLoadingCreateJob" class="h-6" src="@/assets/images/loading.svg" alt="loading">
+            <img
+              v-if="flag.isLoadingCreateJob"
+              class="h-6"
+              src="@/assets/images/loading.svg"
+              alt="loading" />
           </AppButton>
         </div>
       </AppCard>
@@ -145,7 +149,7 @@ const doCreateJob = async () => {
 </template>
 
 <style>
-.sidebar{
-  transition: .2s ease-in-out;
+.sidebar {
+  transition: 0.2s ease-in-out;
 }
 </style>

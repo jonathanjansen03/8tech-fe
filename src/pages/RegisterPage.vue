@@ -45,7 +45,7 @@ const errors = reactive({
 
 const flag = reactive({
   isLoadingRegister: false,
-})
+});
 
 const validateField = (field) => {
   if (!formData[field]) {
@@ -94,7 +94,7 @@ const validateFormData = () => {
 };
 
 const doRegister = async () => {
-  if(flag.isLoadingRegister) {
+  if (flag.isLoadingRegister) {
     return;
   }
 
@@ -109,7 +109,11 @@ const doRegister = async () => {
     if (formData.isRecruiter) {
       companyData = await companyApi.create(companyFormData);
     }
-    await register({ ...formData, confirmPassword: undefined, companyId: companyData?.data.id });
+    await register({
+      ...formData,
+      confirmPassword: undefined,
+      companyId: companyData?.data.id,
+    });
     handleSuccessfulRegister();
     flag.isLoadingRegister = false;
   } catch (err) {
@@ -141,7 +145,6 @@ const handleFailedRegister = (error) => {
 const toggleRecruiter = async () => {
   formData.isRecruiter = !formData.isRecruiter;
 };
-
 </script>
 
 <template>
@@ -197,8 +200,7 @@ const toggleRecruiter = async () => {
           v-model="formData.confirmPassword"
           :error="errors.confirmPassword"
           class="mt-8"
-          @blur="validateConfirmPassword"
-        />
+          @blur="validateConfirmPassword" />
         &nbsp;
         <h2 v-if="formData.isRecruiter">Profil perusahaan</h2>
         <div v-if="formData.isRecruiter">
@@ -209,8 +211,7 @@ const toggleRecruiter = async () => {
             v-model="companyFormData.name"
             :error="errors.username"
             class="mt-8"
-            @blur="validateField('email')"
-          />
+            @blur="validateField('email')" />
           <InputBox
             id="company-profile-picture"
             type="text"
@@ -218,8 +219,7 @@ const toggleRecruiter = async () => {
             v-model="companyFormData.profilePicture"
             :error="errors.profilePicture"
             class="mt-8"
-            @blur="validateField('username')"
-          />
+            @blur="validateField('username')" />
           <InputBox
             id="company-description"
             label="Deskripsi Perusahaan"
@@ -228,12 +228,15 @@ const toggleRecruiter = async () => {
             v-model="companyFormData.description"
             :error="errors.description"
             class="mt-8"
-            @blur="validateField('description')"
-          />
+            @blur="validateField('description')" />
         </div>
         <AppButton @click="doRegister" class="mt-12">
           <p>Daftar</p>
-          <img v-if="flag.isLoadingRegister" class="h-6" src="@/assets/images/loading.svg" alt="loading">
+          <img
+            v-if="flag.isLoadingRegister"
+            class="h-6"
+            src="@/assets/images/loading.svg"
+            alt="loading" />
         </AppButton>
         <p class="mt-3 text-center">
           Sudah punya akun?
@@ -247,7 +250,11 @@ const toggleRecruiter = async () => {
           <p v-if="formData.isRecruiter">Daftar sebagai freelancer?</p>
           <p v-else>Daftar sebagai recruiter?</p>
           &nbsp;
-          <p @click="toggleRecruiter" class="cursor-pointer font-semibold text-blue-800">Daftar</p>
+          <p
+            @click="toggleRecruiter"
+            class="cursor-pointer font-semibold text-blue-800">
+            Daftar
+          </p>
         </div>
       </div>
     </AppCard>
