@@ -1,10 +1,6 @@
 <script setup>
 import SideBar from '@/components/SideBar.vue';
 import { onBeforeMount, onBeforeUnmount, reactive, watch } from 'vue';
-import {
-  ChevronDoubleLeftIcon,
-  ChevronDoubleRightIcon,
-} from '@heroicons/vue/24/outline';
 import { useMainStore } from '@/stores/main.js';
 import { useUserStore } from '@/stores/user.js';
 import jobApi from '@/api/job.js';
@@ -148,10 +144,17 @@ watch(pagination, async (newPagination) => {
         </table>
       </div>
 
-      <PaginationComponent @goNext="pagination.page++" @goPrevious="pagination.page--" :page="pagination.page" :totalPages="pagination.totalPages">
-        <img v-if="flag.isLoadingFetchApi" alt="loading" class="h-8 mb-2" src="@/assets/images/loading.svg">
+      <PaginationComponent
+        @goNext="pagination.page++"
+        @goPrevious="pagination.page--"
+        :page="pagination.page"
+        :totalPages="pagination.totalPages">
+        <img
+          v-if="flag.isLoadingFetchApi"
+          alt="loading"
+          class="h-8 mb-2"
+          src="@/assets/images/loading.svg" />
       </PaginationComponent>
-
     </div>
   </div>
 </template>
