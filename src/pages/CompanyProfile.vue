@@ -1,11 +1,20 @@
 <script setup>
-import { computed, onBeforeMount, onBeforeUnmount, reactive, ref, watch } from 'vue';
+import {
+  computed,
+  onBeforeMount,
+  onBeforeUnmount,
+  reactive,
+  ref,
+  watch,
+} from 'vue';
+import { storeToRefs } from 'pinia';
+import NProgress from 'nprogress';
+import { PencilSquareIcon } from '@heroicons/vue/24/outline';
+
 import { useJobStore } from '@/stores/job';
 import { useUserStore } from '@/stores/user';
 import { useMainStore } from '@/stores/main';
 import { useCompanyStore } from '@/stores/company';
-import { storeToRefs } from 'pinia';
-import { PencilSquareIcon } from '@heroicons/vue/24/outline';
 
 import config from '@/config';
 import DefaultUserProfilePicture from '@/assets/images/default-user-profile-picture.png';
@@ -20,14 +29,14 @@ const userStore = useUserStore();
 const companyStore = useCompanyStore();
 const jobStore = useJobStore();
 
-const {currentUser, currentUserToken} = storeToRefs(userStore);
+const { currentUser, currentUserToken } = storeToRefs(userStore);
 const isPrivateProfile = ref(true);
 const companyId = ref();
 const companyJobList = ref();
 const companyProfile = reactive({
   name: '',
   description: '',
-  profilePicture: ''
+  profilePicture: '',
 });
 
 const initPage = async () => {
@@ -37,13 +46,16 @@ const initPage = async () => {
 
   NProgress.start();
   const companyRes = await companyStore.getCompanyInfo(companyId.value);
-  await jobStore.searchJobs({
-    field: 'companyId',
-    keyword: companyId.value,
-    sort: 'createdAt',
-    page: 0,
-    size: 100
-  }, currentUserToken.value);
+  await jobStore.searchJobs(
+    {
+      field: 'companyId',
+      keyword: companyId.value,
+      sort: 'createdAt',
+      page: 0,
+      size: 100,
+    },
+    currentUserToken.value
+  );
   companyJobList.value = jobStore.jobList;
   NProgress.done();
   companyProfile.name = companyRes.data.name;
@@ -64,11 +76,9 @@ watch(route, () => {
   mainStore.setRecruiterPortal(currentUser.value?.roles.includes('RECRUITER'));
 });
 
-const userProfilePicture = computed(
-  () => {
-    return companyProfile.profilePicture || DefaultUserProfilePicture;
-  }
-);
+const userProfilePicture = computed(() => {
+  return companyProfile.profilePicture || DefaultUserProfilePicture;
+});
 </script>
 
 <template>
@@ -80,7 +90,7 @@ const userProfilePicture = computed(
         <img
           :src="userProfilePicture"
           alt="User profile picture."
-          class="rounded-full drop-shadow w-36"/>
+          class="rounded-full drop-shadow w-36" />
       </div>
       <div class="flex justify-between mt-5">
         <div class="flex flex-col">
@@ -94,8 +104,8 @@ const userProfilePicture = computed(
       </div>
       <div v-if="isPrivateProfile" class="flex justify-center mt-5">
         <RouterLink :to="{ name: config.pages.companyProfileEdit.name }">
-          <AppButton class="flex items-center  py-3">
-            <PencilSquareIcon class="w-5"/>
+          <AppButton class="flex items-center py-3">
+            <PencilSquareIcon class="w-5" />
             Edit Company Profile
           </AppButton>
         </RouterLink>
@@ -104,7 +114,7 @@ const userProfilePicture = computed(
       <div
         class="home__job-cards md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-3 xl:grid-cols-3 2xl:grid-cols-3">
         <div v-for="i in companyJobList" :key="i">
-          <JobCard :job="i"/>
+          <JobCard :job="i" />
         </div>
         <div v-if="!companyJobList?.length">
           <p class="mt-8">Belum ada pekerjaan.</p>

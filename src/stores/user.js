@@ -7,6 +7,7 @@ import userApi from '@/api/user';
 export const useUserStore = defineStore('user', () => {
   const currentUser = ref({});
   const currentUserToken = ref('');
+  const userProfile = ref({});
 
   const isLoggedIn = computed(() => !!currentUser.value?.id);
   const currentUserFullName = computed(
@@ -70,6 +71,12 @@ export const useUserStore = defineStore('user', () => {
     return res.data;
   };
 
+  const getUserInfoById = async (id) => {
+    const res = await userApi.getUserInfoById(id, currentUserToken.value);
+
+    userProfile.value = Object.assign({}, res.data);
+  };
+
   const updateUserData = async (data) => {
     if (typeof data.profilePicture !== 'string') {
       const formData = new FormData();
@@ -90,6 +97,7 @@ export const useUserStore = defineStore('user', () => {
   return {
     currentUser,
     currentUserToken,
+    userProfile,
     isLoggedIn,
     currentUserFullName,
     isUserPortfolioEmpty,
@@ -97,6 +105,7 @@ export const useUserStore = defineStore('user', () => {
     login,
     logout,
     getUserInfo,
+    getUserInfoById,
     isTokenValid,
     updateUserData,
     setCurrentUser,
