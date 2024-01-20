@@ -22,7 +22,7 @@ const router = useRouter();
 const userStore = useUserStore();
 const jobStore = useJobStore();
 const contractStore = useContractStore();
-const { currentUserToken } = storeToRefs(userStore);
+const { currentUserToken, isLoggedIn } = storeToRefs(userStore);
 const { findJob, applyJob } = jobStore;
 const { job } = storeToRefs(jobStore);
 const { setContract } = contractStore;
@@ -31,6 +31,11 @@ const isError = ref(false);
 const errorMessage = ref('');
 
 const doApplyJob = async () => {
+  if (!isLoggedIn.value) {
+    goToLoginPage();
+    return;
+  }
+
   try {
     const contract = await applyJob(route.params.id, currentUserToken.value);
     handleSuccessfulApplyJob(contract);
@@ -54,6 +59,17 @@ const handleFailedApplyJob = (err) => {
   } else {
     errorMessage.value = config.errors.general(APPLY_JOB);
   }
+};
+
+const goToCompanyProfile = () => {
+  router.push({
+    name: config.pages.companyProfile.name,
+    params: { id: job.value.company.id },
+  });
+};
+
+const goToLoginPage = () => {
+  router.push(config.pages.login.path);
 };
 
 const initPage = async () => {
@@ -81,7 +97,11 @@ onBeforeMount(initPage);
               class="drop-shadow-md rounded-full w-36" />
             <div class="ml-10">
               <h2>{{ job.title }}</h2>
-              <p class="mt-3 text-gray-500">{{ job.company?.name }}</p>
+              <p
+                class="cursor-pointer mt-3 text-gray-500 w-fit hover:text-blue-800"
+                @click="goToCompanyProfile">
+                {{ job.company?.name }}
+              </p>
             </div>
           </div>
           <h2 class="mt-10">Deskripsi pekerjaan:</h2>
