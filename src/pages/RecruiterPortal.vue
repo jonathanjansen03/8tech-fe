@@ -32,7 +32,7 @@ onBeforeMount(async () => {
   const jobListResponse = await jobApi.filter({
     field: 'companyId',
     keyword: userStore.currentUser?.companyId,
-    sort: 'craetedAt',
+    sort: 'createdAt',
     page: pagination.page,
     size: pagination.size
   }, userStore.currentUserToken);
@@ -59,7 +59,7 @@ watch(pagination, async (newPagination) => {
   const jobListResponse = await jobApi.filter({
     field: 'companyId',
     keyword: userStore.currentUser?.companyId,
-    sort: 'craetedAt',
+    sort: 'createdAt',
     page: pagination.page,
     size: pagination.size
   }, userStore.currentUserToken);
@@ -91,8 +91,9 @@ watch(pagination, async (newPagination) => {
           Lowongan pekerjaanmu
         </h1>
         <h1 class="text-center font-bold mb-8 text-white text-base" title="Tambahkan lowongan pekerjaan baru">
-          <a class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-             @click="router.push(config.pages.createJob.path)">
+          <a
+            class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+            @click="router.push(config.pages.createJob.path)">
             <PlusCircleIcon
               class="cursor-pointer w-10 text-gray-500"/>
           </a>
@@ -117,7 +118,7 @@ watch(pagination, async (newPagination) => {
           <tbody>
           <tr v-for="(item, index) in jobList"
               class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-blue-950"
-              @click="router.push(`/job-detail/${item.id}`)">
+              @click="router.push(`/job-detail/${item.id}`)" :key="index">
             <td class="px-6 py-4">
               {{ ((pagination.page - 1) * pagination.size) + index + 1 }}
             </td>
@@ -132,7 +133,8 @@ watch(pagination, async (newPagination) => {
         </table>
       </div>
 
-      <PaginationComponent @goNext="pagination.page++" @goPrevious="pagination.page--" :page="pagination.page" :totalPages="pagination.totalPages">
+      <PaginationComponent :page="pagination.page" :totalPages="pagination.totalPages" @goNext="pagination.page++"
+                           @goPrevious="pagination.page--">
         <img v-if="flag.isLoadingFetchApi" alt="loading" class="h-8 mb-2" src="@/assets/images/loading.svg">
       </PaginationComponent>
 

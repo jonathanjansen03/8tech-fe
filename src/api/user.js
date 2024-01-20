@@ -33,4 +33,13 @@ export default {
       isUploadingFile: true,
     });
   },
+  uploadCompanyProfilePicture: (token, data) => {
+    return apiUtil.hitApi({
+      method: config.api.method.post,
+      path: config.api.user.uploadCompanyProfilePicture,
+      body: data,
+      headers: config.api.authTokenHeader(token),
+      isUploadingFile: true,
+    });
+  },
 };

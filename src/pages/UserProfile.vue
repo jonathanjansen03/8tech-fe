@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onBeforeMount, reactive, ref, watch } from 'vue';
+import { computed, onBeforeMount, onBeforeUnmount, reactive, ref, watch } from 'vue';
 import userApi from '@/api/user';
 import { useUserStore } from '@/stores/user';
 import { useMainStore } from '@/stores/main';
@@ -14,6 +14,7 @@ import DefaultUserProfilePicture from '@/assets/images/default-user-profile-pict
 import AppCard from '@/components/AppCard.vue';
 import AppButton from '@/components/AppButton.vue';
 import { useRoute } from 'vue-router';
+import router from '@/router/index.js';
 
 const route = useRoute();
 const mainStore = useMainStore();
@@ -37,9 +38,9 @@ onBeforeMount(async () => {
   isPrivateProfile.value = route.params.id === undefined;
   mainStore.setRecruiterPortal(currentUser.value.roles.includes('RECRUITER'));
   if(!isPrivateProfile.value) {
-    NProgress.start()
+    NProgress.start();
     const res = await userApi.getUserInfoWithId(userStore.currentUserToken, route.params.id);
-    NProgress.done()
+    NProgress.done();
     publicUserProfile.firstName = res.data.firstName;
     publicUserProfile.lastName = res.data.lastName;
     publicUserProfile.username = res.data.username;
@@ -48,6 +49,10 @@ onBeforeMount(async () => {
     publicUserProfile.portfolio = res.data.portfolio;
     publicUserProfile.profilePicture = res.data.profilePicture;
   }
+});
+
+onBeforeUnmount(() => {
+  mainStore.setRecruiterPortal(false);
 });
 
 watch(route, () => {
@@ -70,7 +75,12 @@ const userProfilePicture = computed(
   <div
     class="mt-8 px-3 min-[420px]:px-10 sm:px-20 md:px-32 lg:px-40 xl:px-52 2xl:px-72">
     <AppCard class="user-profile px-8 py-8">
-      <h1>Profil</h1>
+
+      <div class="flex flex-row justify-between mb-2">
+        <h1>Profil</h1>
+        <h3 @click="router.push(`/company/${currentUser.companyId}`)" class="cursor-pointer text-blue-700 hover:text-blue-500" >Lihat profil perusahaan</h3>
+      </div>
+
       <div class="flex justify-center mt-5">
         <img
           :src="userProfilePicture"
@@ -105,7 +115,7 @@ const userProfilePicture = computed(
       </div>
       <div class="flex flex-col mt-5">
         <h3>Portofolio</h3>
-        <p v-for="i in (isPrivateProfile ? currentUser : publicUserProfile).portfolio">{{ i }}</p>
+        <p v-for="i in (isPrivateProfile ? currentUser : publicUserProfile).portfolio" :key="i">{{ i }}</p>
         <p v-if="isUserPortfolioEmpty">
           {{ NO_PORTFOLIO }}
         </p>

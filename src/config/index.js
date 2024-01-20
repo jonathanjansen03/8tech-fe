@@ -25,6 +25,14 @@ export default {
       name: 'user-profile',
       path: '/user/:id',
     },
+    companyProfile: {
+      name: 'company-profile',
+      path: '/company/:id',
+    },
+    companyProfileEdit: {
+      name: 'company-edit',
+      path: '/company/edit',
+    },
     editProfile: {
       name: 'editProfile',
       path: '/profile/edit',
@@ -67,9 +75,12 @@ export default {
       info: '/user/info',
       updateData: '/user/update/me',
       uploadProfilePicture: '/user/uploadProfilePicture',
+      uploadCompanyProfilePicture: '/user/uploadCompanyProfilePicture',
     },
     company: {
       create: '/company/create',
+      info: '/company/info',
+      update: '/company/update',
     },
     job: {
       create: '/job/create',

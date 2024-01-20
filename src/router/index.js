@@ -12,6 +12,8 @@ const LoginPage = () => import('@/pages/LoginPage.vue');
 const UserProfile = () => import('@/pages/UserProfile.vue');
 const EditProfile = () => import('@/pages/EditProfile.vue');
 const RecruiterPortal = () => import('@/pages/RecruiterPortal.vue');
+const CompanyProfile = () => import ('@/pages/CompanyProfile.vue');
+const EditCompanyProfile = () => import('@/pages/EditCompanyProfile.vue');
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -21,32 +23,32 @@ const router = createRouter({
       name: config.pages.home.name,
       component: HomePage,
       meta: {
-        title: 'Beranda',
-      },
+        title: 'Beranda'
+      }
     },
     {
       path: config.pages.about.path,
       name: config.pages.about.name,
       component: AboutUs,
       meta: {
-        title: 'Tentang Kami',
-      },
+        title: 'Tentang Kami'
+      }
     },
     {
       path: config.pages.register.path,
       name: config.pages.register.name,
       component: RegisterPage,
       meta: {
-        title: 'Daftar',
-      },
+        title: 'Daftar'
+      }
     },
     {
       path: config.pages.login.path,
       name: config.pages.login.name,
       component: LoginPage,
       meta: {
-        title: 'Masuk',
-      },
+        title: 'Masuk'
+      }
     },
     {
       path: config.pages.profile.path,
@@ -54,16 +56,34 @@ const router = createRouter({
       component: UserProfile,
       meta: {
         title: 'Profil',
-        requiresAuth: true,
-      },
+        requiresAuth: true
+      }
     },
     {
       path: config.pages.userProfile.path,
       name: config.pages.userProfile.name,
       component: UserProfile,
       meta: {
-        title: 'Profil',
-      },
+        title: 'Profil'
+      }
+    },
+    {
+      path: config.pages.companyProfile.path,
+      name: config.pages.companyProfile.name,
+      component: CompanyProfile,
+      meta: {
+        title: 'Profil Perusahaan'
+      }
+    },
+    {
+      path: config.pages.companyProfileEdit.path,
+      name: config.pages.companyProfileEdit.name,
+      component: EditCompanyProfile,
+      meta: {
+        title: 'Ubah Profil Perusahaan',
+        requiresAuth: true,
+        recruiterRole: true
+      }
     },
     {
       path: config.pages.editProfile.path,
@@ -71,8 +91,8 @@ const router = createRouter({
       component: EditProfile,
       meta: {
         title: 'Edit Profil',
-        requiresAuth: true,
-      },
+        requiresAuth: true
+      }
     },
     {
       path: config.pages.recruiterPortal.path,
@@ -81,8 +101,8 @@ const router = createRouter({
       meta: {
         title: 'Recruiter Portal',
         requiresAuth: true,
-        recruiterRole: true,
-      },
+        recruiterRole: true
+      }
     },
     {
       path: config.pages.createJob.path,
@@ -91,8 +111,8 @@ const router = createRouter({
       meta: {
         title: 'Create Job',
         requiresAuth: true,
-        recruiterRole: true,
-      },
+        recruiterRole: true
+      }
     },
     {
       path: config.pages.jobDetail.path,
@@ -100,8 +120,8 @@ const router = createRouter({
       component: EditJob,
       meta: {
         title: 'Job Detail',
-        requiresAuth: true,
-      },
+        requiresAuth: true
+      }
     },
     {
       path: config.pages.applicantList.path,
@@ -109,36 +129,36 @@ const router = createRouter({
       component: ApplicantList,
       meta: {
         title: 'Job Applicant List',
-        requiresAuth: true,
-      },
-    },
-  ],
+        requiresAuth: true
+      }
+    }
+  ]
 });
 
 router.beforeEach((to, from, next) => {
   if (to.name) {
-    NProgress.start()
+    NProgress.start();
   }
-  next()
-})
+  next();
+});
 
 router.beforeResolve((to, from, next) => {
   if (to.name) {
-    NProgress.start()
+    NProgress.start();
   }
-  next()
-})
+  next();
+});
 
 router.afterEach(() => {
-  NProgress.done()
-})
+  NProgress.done();
+});
 
 router.beforeEach(async (to) => {
   const userStore = useUserStore();
   userStore.setCurrentUser();
   const loginPage = {
     path: config.pages.login.path,
-    query: { redirect: to.fullPath },
+    query: {redirect: to.fullPath}
   };
 
   document.title = `${to.meta.title} | ${config.appName}`;
@@ -148,19 +168,19 @@ router.beforeEach(async (to) => {
     if (!token) {
       return loginPage;
     }
-    const {valid, roles} = await userStore.isTokenValid(token)
+    const {valid, roles} = await userStore.isTokenValid(token);
 
-    if(!valid) {
+    if (!valid) {
       return loginPage;
     }
 
     userStore.$patch({
       currentUserToken: localStorage.getItem('Etoken'),
-      currentUser: JSON.parse(localStorage.getItem('userData')),
+      currentUser: JSON.parse(localStorage.getItem('userData'))
     });
-    if(to.meta.recruiterRole && !roles.includes('RECRUITER')) {
+    if (to.meta.recruiterRole && !roles.includes('RECRUITER')) {
       return {
-        path: config.pages.home.path,
+        path: config.pages.home.path
       };
     }
   }
