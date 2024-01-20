@@ -122,7 +122,7 @@ watch(pagination, async (newPagination) => {
               v-for="(item, index) in jobList"
               :key="index"
               class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-blue-950"
-              @click="router.push(`/job-detail/${item.id}`)">
+              @click="router.push(`/job-edit/${item.id}`)">
               <td class="px-6 py-4">
                 {{ (pagination.page - 1) * pagination.size + index + 1 }}
               </td>

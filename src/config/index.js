@@ -49,6 +49,10 @@ export default {
       name: 'job-detail',
       path: '/job-detail/:id',
     },
+    jobEditDetail: {
+      name: 'job-edit',
+      path: '/job-edit/:id',
+    },
     applicantList: {
       name: 'job-applicant',
       path: '/job-applicant/:id',

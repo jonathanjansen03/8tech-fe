@@ -12,7 +12,7 @@ const UserProfile = () => import('@/pages/UserProfile.vue');
 const EditProfile = () => import('@/pages/EditProfile.vue');
 const RecruiterPortal = () => import('@/pages/RecruiterPortal.vue');
 const CreateJob = () => import('@/pages/CreateJob.vue');
-// const EditJob = () => import('@/pages/EditJob.vue');
+const EditJob = () => import('@/pages/EditJob.vue');
 const JobDetail = () => import('@/pages/JobDetail.vue');
 const ApplicantList = () => import('@/pages/ApplicantList.vue');
 const CompanyProfile = () => import ('@/pages/CompanyProfile.vue');
@@ -123,6 +123,14 @@ const router = createRouter({
       component: JobDetail,
       meta: {
         title: 'Detil Pekerjaan',
+      },
+    },
+    {
+      path: config.pages.jobEditDetail.path,
+      name: config.pages.jobEditDetail.name,
+      component: EditJob,
+      meta: {
+        title: 'Ubah Detail Pekerjaan',
       },
     },
     {
