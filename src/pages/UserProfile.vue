@@ -32,9 +32,11 @@ const router = useRouter();
 const mainStore = useMainStore();
 const userStore = useUserStore();
 
+const { setRecruiterPortal } = mainStore;
+
 const { currentUser, currentUserToken, userProfile, isUserPortfolioEmpty } =
   storeToRefs(userStore);
-const { getUserInfoById } = userStore;
+const { logout, getUserInfoById } = userStore;
 
 const isPrivateProfile = ref(true);
 const publicUserProfile = reactive({
@@ -56,7 +58,7 @@ const userProfilePicture = computed(() => {
 
 const initPage = async () => {
   isPrivateProfile.value = route.params.id === undefined;
-  mainStore.setRecruiterPortal(currentUser.value.roles.includes('RECRUITER'));
+  setRecruiterPortal(currentUser.value.roles.includes('RECRUITER'));
   if (!isPrivateProfile.value) {
     NProgress.start();
 
@@ -78,12 +80,12 @@ const initPage = async () => {
 onBeforeMount(initPage);
 
 onBeforeUnmount(() => {
-  mainStore.setRecruiterPortal(false);
+  setRecruiterPortal(false);
 });
 
 watch(route, () => {
   isPrivateProfile.value = route.params.id === undefined;
-  mainStore.setRecruiterPortal(currentUser.value.roles.includes('RECRUITER'));
+  setRecruiterPortal(currentUser.value.roles.includes('RECRUITER'));
 });
 </script>
 
@@ -158,10 +160,7 @@ watch(route, () => {
         </p>
       </div>
       <div v-if="isPrivateProfile" class="flex justify-center mt-5">
-        <AppButton
-          outline
-          class="flex items-center py-3"
-          @click="userStore.logout">
+        <AppButton outline class="flex items-center py-3" @click="logout">
           <ArrowLeftOnRectangleIcon class="mr-2 w-5" />
           Keluar
         </AppButton>

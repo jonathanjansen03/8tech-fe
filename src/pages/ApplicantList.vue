@@ -35,11 +35,11 @@ const initPage = async () => {
 
   try {
     await getApplicants(
+      route.params.id,
       {
         page: pagination.page,
         size: pagination.size,
       },
-      route.params.id,
       currentUserToken.value
     );
   } catch (err) {
@@ -92,11 +92,12 @@ watch(pagination, async (newPagination) => {
     <SideBar class="sidebar" v-if="mainStore.showPortalNavbar" />
     <div>
       <h1 class="text-center font-bold mb-8 text-white text-2xl">
-        Daftar Pelamar untuk lowongan pekerjaan
+        Daftar Pelamar untuk Lowongan Pekerjaan
       </h1>
 
       <div class="relative overflow-x-auto">
         <table
+          v-if="jobApplicants.length"
           class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead
             class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -128,9 +129,13 @@ watch(pagination, async (newPagination) => {
             </tr>
           </tbody>
         </table>
+        <h3 v-if="!jobApplicants.length" class="text-center text-white">
+          Belum ada pelamar untuk lowongan pekerjaan ini.
+        </h3>
       </div>
 
       <PaginationComponent
+        v-if="jobApplicantsPagination.totalPages > 1"
         @goNext="pagination.page++"
         @goPrevious="pagination.page--"
         :page="pagination.page"

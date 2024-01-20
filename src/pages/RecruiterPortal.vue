@@ -26,13 +26,12 @@ const { setRecruiterPortal, closePortalNavbar } = mainStore;
 
 const { currentUser, currentUserToken } = storeToRefs(userStore);
 
-const { jobListPagination } = storeToRefs(jobStore);
+const { jobList, jobListPagination } = storeToRefs(jobStore);
 const { searchJobs } = jobStore;
 
-const jobList = reactive([]);
 const pagination = reactive({
   page: 1,
-  size: 5
+  size: 5,
 });
 const isLoadingFetchApi = ref(false);
 
@@ -117,6 +116,7 @@ watch(pagination, async (newPagination) => {
 
       <div class="relative overflow-x-auto">
         <table
+          v-if="jobList.length"
           class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead
             class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -130,7 +130,7 @@ watch(pagination, async (newPagination) => {
             <tr
               v-for="(item, index) in jobList"
               :key="index"
-              class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-blue-950"
+              class="bg-white border-b cursor-pointer dark:bg-gray-800 dark:border-gray-700 hover:bg-blue-950"
               @click="router.push(`/job-edit/${item.id}`)">
               <td class="px-6 py-4">
                 {{ (pagination.page - 1) * pagination.size + index + 1 }}
@@ -152,9 +152,13 @@ watch(pagination, async (newPagination) => {
             </tr>
           </tbody>
         </table>
+        <h3 v-if="!jobList.length" class="text-white">
+          Belum ada lowongan pekerjaan. Silakan buat lowongan pekerjaan baru.
+        </h3>
       </div>
 
       <PaginationComponent
+        v-if="jobListPagination.totalPages > 1"
         @goNext="pagination.page++"
         @goPrevious="pagination.page--"
         :page="pagination.page"

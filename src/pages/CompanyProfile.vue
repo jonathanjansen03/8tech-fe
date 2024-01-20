@@ -105,7 +105,7 @@ const userProfilePicture = computed(() => {
       <div v-if="isPrivateProfile" class="flex justify-center mt-5">
         <RouterLink :to="{ name: config.pages.companyProfileEdit.name }">
           <AppButton class="flex items-center py-3">
-            <PencilSquareIcon class="w-5" />
+            <PencilSquareIcon class="w-5 mr-3" />
             Edit Company Profile
           </AppButton>
         </RouterLink>
