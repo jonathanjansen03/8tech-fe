@@ -38,7 +38,7 @@ const select = (value) => {
           :key="index"
           @click="select(i)"
           class="cursor-pointer text-left hover:bg-gray-200 px-3"
-          :class="{ 'mt-1': index === 0 ? false : true }">
+          :class="{ 'mt-1': index!==0 }">
           {{ i }}
         </div>
       </div>
