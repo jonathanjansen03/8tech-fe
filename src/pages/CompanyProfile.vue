@@ -29,7 +29,7 @@ const userStore = useUserStore();
 const companyStore = useCompanyStore();
 const jobStore = useJobStore();
 
-const { currentUser, currentUserToken } = storeToRefs(userStore);
+const { currentUser, currentUserToken, isRecruiter } = storeToRefs(userStore);
 const isPrivateProfile = ref(true);
 const companyId = ref();
 const companyJobList = ref();
@@ -42,7 +42,7 @@ const companyProfile = reactive({
 const initPage = async () => {
   companyId.value = route.params.id;
   isPrivateProfile.value = companyId.value === currentUser.value?.companyId;
-  mainStore.setRecruiterPortal(currentUser.value?.roles.includes('RECRUITER'));
+  mainStore.setRecruiterPortal(isRecruiter.value);
 
   NProgress.start();
   const companyRes = await companyStore.getCompanyInfo(companyId.value);
@@ -73,7 +73,7 @@ onBeforeUnmount(() => {
 
 watch(route, () => {
   isPrivateProfile.value = route.params.id === currentUser.value?.companyId;
-  mainStore.setRecruiterPortal(currentUser.value?.roles.includes('RECRUITER'));
+  mainStore.setRecruiterPortal(isRecruiter.value);
 });
 
 const userProfilePicture = computed(() => {

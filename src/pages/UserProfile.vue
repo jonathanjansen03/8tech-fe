@@ -34,8 +34,13 @@ const userStore = useUserStore();
 
 const { setRecruiterPortal } = mainStore;
 
-const { currentUser, currentUserToken, userProfile, isUserPortfolioEmpty } =
-  storeToRefs(userStore);
+const {
+  currentUser,
+  currentUserToken,
+  userProfile,
+  isRecruiter,
+  isUserPortfolioEmpty,
+} = storeToRefs(userStore);
 const { logout, getUserInfoById } = userStore;
 
 const isPrivateProfile = ref(true);
@@ -65,7 +70,7 @@ const goToCompanyProfile = () => {
 
 const initPage = async () => {
   isPrivateProfile.value = route.params.id === undefined;
-  setRecruiterPortal(currentUser.value.roles.includes('RECRUITER'));
+  setRecruiterPortal(isRecruiter.value);
   if (!isPrivateProfile.value) {
     NProgress.start();
 
@@ -92,7 +97,7 @@ onBeforeUnmount(() => {
 
 watch(route, () => {
   isPrivateProfile.value = route.params.id === undefined;
-  setRecruiterPortal(currentUser.value.roles.includes('RECRUITER'));
+  setRecruiterPortal(isRecruiter.value);
 });
 </script>
 

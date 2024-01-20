@@ -10,6 +10,9 @@ export const useUserStore = defineStore('user', () => {
   const userProfile = ref({});
 
   const isLoggedIn = computed(() => !!currentUser.value?.id);
+  const isRecruiter = computed(() =>
+    currentUser.value?.roles.includes('RECRUITER')
+  );
   const currentUserFullName = computed(
     () => `${currentUser.value.firstName} ${currentUser.value.lastName}`
   );
@@ -99,6 +102,7 @@ export const useUserStore = defineStore('user', () => {
     currentUserToken,
     userProfile,
     isLoggedIn,
+    isRecruiter,
     currentUserFullName,
     isUserPortfolioEmpty,
     register,
