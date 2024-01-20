@@ -166,10 +166,18 @@ router.afterEach(() => {
 router.beforeEach(async (to) => {
   const userStore = useUserStore();
   userStore.setCurrentUser();
+  const token = localStorage.getItem('Etoken');
+  const { valid, roles } = await userStore.isTokenValid(token);
   const loginPage = {
     path: config.pages.login.path,
     query: { redirect: to.fullPath },
   };
+
+  if (to.path === config.pages.home.path && roles.includes('RECRUITER')) {
+    return {
+      path: config.pages.recruiterPortal.path,
+    };
+  }
 
   document.title = `${to.meta.title} | ${config.appName}`;
 
@@ -177,11 +185,9 @@ router.beforeEach(async (to) => {
     (to.meta.requiresAuth && !userStore.isLoggedIn) ||
     to.meta.recruiterRole
   ) {
-    const token = localStorage.getItem('Etoken');
     if (!token) {
       return loginPage;
     }
-    const { valid, roles } = await userStore.isTokenValid(token);
 
     if (!valid) {
       return loginPage;
@@ -191,6 +197,7 @@ router.beforeEach(async (to) => {
       currentUserToken: localStorage.getItem('Etoken'),
       currentUser: JSON.parse(localStorage.getItem('userData')),
     });
+
     if (to.meta.recruiterRole && !roles.includes('RECRUITER')) {
       return {
         path: config.pages.home.path,
