@@ -23,7 +23,6 @@ const formData = reactive({
   username: '',
   password: '',
   confirmPassword: '',
-  isRecruiter: false,
 });
 const companyFormData = reactive({
   profilePicture: '',
@@ -37,11 +36,11 @@ const errors = reactive({
   username: '',
   password: '',
   confirmPassword: '',
-  isRecruiter: '',
   profilePicture: '',
   name: '',
   description: '',
 });
+const isRecruiter = false;
 const isLoadingRegister = ref(false);
 
 const validateField = (field) => {
@@ -103,7 +102,7 @@ const doRegister = async () => {
 
   let companyData;
   try {
-    if (formData.isRecruiter) {
+    if (isRecruiter.value) {
       companyData = await companyApi.create(companyFormData);
     }
     await register({
@@ -139,8 +138,8 @@ const handleFailedRegister = (error) => {
   }
 };
 
-const toggleRecruiter = async () => {
-  formData.isRecruiter = !formData.isRecruiter;
+const toggleIsRecruiter = async () => {
+  isRecruiter.value = !isRecruiter.value;
 };
 </script>
 
@@ -199,8 +198,8 @@ const toggleRecruiter = async () => {
           class="mt-8"
           @blur="validateConfirmPassword" />
         &nbsp;
-        <h2 v-if="formData.isRecruiter">Profil perusahaan</h2>
-        <div v-if="formData.isRecruiter">
+        <h2 v-if="isRecruiter">Profil perusahaan</h2>
+        <div v-if="isRecruiter">
           <InputBox
             id="company-name"
             type="text"
@@ -244,11 +243,11 @@ const toggleRecruiter = async () => {
           </RouterLink>
         </p>
         <div class="mt-3 flex flex-row justify-center">
-          <p v-if="formData.isRecruiter">Daftar sebagai freelancer?</p>
+          <p v-if="isRecruiter">Daftar sebagai freelancer?</p>
           <p v-else>Daftar sebagai recruiter?</p>
           &nbsp;
           <p
-            @click="toggleRecruiter"
+            @click="toggleIsRecruiter"
             class="cursor-pointer font-semibold text-blue-800">
             Daftar
           </p>
