@@ -1,23 +1,31 @@
 <script setup>
 import { onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { storeToRefs } from 'vue3-stores';
 import NProgress from 'nprogress';
 
-import { useMainStore } from '@/stores/main.js';
-import { useUserStore } from '@/stores/user.js';
-import jobApi from '@/api/job.js';
-import config from '@/config/index.js';
-import validationUtil from '@/utils/validation.js';
+import { useMainStore } from '@/stores/main';
+import { useUserStore } from '@/stores/user';
+import { useJobStore } from '@/stores/job';
+import config from '@/config';
+import validationUtil from '@/utils/validation';
+
 import SideBar from '@/components/SideBar.vue';
 import AppCard from '@/components/AppCard.vue';
 import InputBox from '@/components/InputBox.vue';
 import AppButton from '@/components/AppButton.vue';
 
-const { currentUserToken } = useUserStore();
+const GET_JOB_DATA = 'mendapatkan data pekerjaan';
 
 const route = useRoute();
 const router = useRouter();
 const mainStore = useMainStore();
+const userStore = useUserStore();
+const jobStore = useJobStore();
+
+const { currentUserToken } = storeToRefs(userStore);
+const { job } = storeToRefs(jobStore);
+const { findJob, updateJob } = jobStore;
 
 const jobData = reactive({
   title: '',
@@ -34,26 +42,18 @@ const isLoadingFetchApi = ref(false);
 const initPage = async () => {
   NProgress.start();
   mainStore.setRecruiterPortal(true);
-  const res = await jobApi.info(route.params.id, currentUserToken);
-  jobData.title = res.data.title;
-  jobData.description = res.data.description;
+
+  try {
+    await findJob(route.params.id);
+    jobData.title = job.value.title;
+    jobData.description = job.value.description;
+  } catch (err) {
+    console.log(err);
+    alert(config.errors.general(GET_JOB_DATA));
+  }
+
   NProgress.done();
 };
-
-onMounted(initPage);
-
-onBeforeUnmount(() => {
-  mainStore.setRecruiterPortal(false);
-  mainStore.closePortalNavbar();
-});
-
-watch(
-  () => route.params.id,
-  async (newId) => {
-    const res = await jobApi.info(newId, currentUserToken);
-    jobData.value = res.data;
-  }
-);
 
 const validateField = (field) => {
   if (!jobData[field]) {
@@ -106,26 +106,47 @@ const doUpdateJob = async () => {
   }
 
   isLoadingFetchApi.value = true;
+
   if (!validateFormData()) {
     isLoadingFetchApi.value = false;
     return;
   }
 
   try {
-    await jobApi.update(
+    await updateJob(
       {
         ...jobData,
         id: route.params.id,
       },
-      currentUserToken
+      currentUserToken.value
     );
     handleSuccess();
-    isLoadingFetchApi.value = false;
   } catch (err) {
     handleFail(err);
-    isLoadingFetchApi.value = false;
   }
+  isLoadingFetchApi.value = false;
 };
+
+onMounted(initPage);
+
+onBeforeUnmount(() => {
+  mainStore.setRecruiterPortal(false);
+  mainStore.closePortalNavbar();
+});
+
+watch(
+  () => route.params.id,
+  async (newId) => {
+    try {
+      await findJob(newId);
+      jobData.title = job.value.title;
+      jobData.description = job.value.description;
+    } catch (err) {
+      console.log(err);
+      alert(config.errors.general(GET_JOB_DATA));
+    }
+  }
+);
 </script>
 
 <template>

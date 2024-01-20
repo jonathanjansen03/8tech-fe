@@ -9,20 +9,24 @@ export const useJobStore = defineStore('job', () => {
   const jobApplicants = ref([]);
   const jobApplicantsTotalPages = ref(0);
 
+  const findJob = async (id) => {
+    const res = await jobApi.findOne(id);
+
+    job.value = Object.assign({}, res.data);
+  };
+
   const createJob = async (data, token) => {
     await jobApi.create(data, token);
+  };
+
+  const updateJob = async (data, token) => {
+    await jobApi.update(data, token);
   };
 
   const searchJobs = async (data, token) => {
     const res = await jobApi.search(data, token);
 
     jobList.value = res.data.data.slice(0);
-  };
-
-  const findJob = async (id) => {
-    const res = await jobApi.findOne(id);
-
-    job.value = Object.assign({}, res.data);
   };
 
   const applyJob = async (id, token) => {
@@ -49,9 +53,10 @@ export const useJobStore = defineStore('job', () => {
     job,
     jobApplicants,
     jobApplicantsTotalPages,
-    createJob,
-    searchJobs,
     findJob,
+    createJob,
+    updateJob,
+    searchJobs,
     applyJob,
     getApplicants,
   };

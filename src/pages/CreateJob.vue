@@ -6,8 +6,8 @@ import { storeToRefs } from 'pinia';
 import { useMainStore } from '@/stores/main';
 import { useUserStore } from '@/stores/user';
 import { useJobStore } from '@/stores/job';
-import config from '@/config/index.js';
-import validationUtil from '@/utils/validation.js';
+import config from '@/config';
+import validationUtil from '@/utils/validation';
 
 import SideBar from '@/components/SideBar.vue';
 import AppCard from '@/components/AppCard.vue';
