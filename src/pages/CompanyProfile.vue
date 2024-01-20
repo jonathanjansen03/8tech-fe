@@ -92,12 +92,12 @@ const userProfilePicture = computed(() => {
           alt="User profile picture."
           class="rounded-full drop-shadow w-36" />
       </div>
-      <div class="flex justify-between mt-5">
+      <div class="flex flex-col mt-5">
         <div class="flex flex-col">
           <h3>Nama Perusahaan</h3>
           <p>{{ companyProfile.name }}</p>
         </div>
-        <div class="flex flex-col">
+        <div class="flex flex-col mt-10">
           <h3>Deskripsi Perusahaan</h3>
           <p>{{ companyProfile.description }}</p>
         </div>
@@ -110,7 +110,7 @@ const userProfilePicture = computed(() => {
           </AppButton>
         </RouterLink>
       </div>
-      <h2 class="mt-10">Lowongan pekerjaan saat ini</h2>
+      <h3 class="mt-10">Lowongan pekerjaan saat ini:</h3>
       <div
         class="home__job-cards md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-3 xl:grid-cols-3 2xl:grid-cols-3">
         <div v-for="i in companyJobList" :key="i">
