@@ -1,15 +1,17 @@
 <script setup>
-import SideBar from '@/components/SideBar.vue';
-import { onBeforeUnmount, onMounted, reactive } from 'vue';
+import { onBeforeUnmount, onMounted, reactive, ref } from 'vue';
+import { useRouter } from 'vue-router';
+
 import { useMainStore } from '@/stores/main.js';
+import { useUserStore } from '@/stores/user.js';
+import jobApi from '@/api/job.js';
+import config from '@/config/index.js';
+import validationUtil from '@/utils/validation.js';
+import SideBar from '@/components/SideBar.vue';
 import AppCard from '@/components/AppCard.vue';
 import InputBox from '@/components/InputBox.vue';
-import validationUtil from '@/utils/validation.js';
-import config from '@/config/index.js';
 import AppButton from '@/components/AppButton.vue';
-import jobApi from '@/api/job.js';
-import { useRouter } from 'vue-router';
-import { useUserStore } from '@/stores/user.js';
+
 const { getUserInfo, currentUserToken } = useUserStore();
 
 const router = useRouter();
@@ -32,9 +34,7 @@ const errors = reactive({
   title: '',
   description: '',
 });
-const flag = reactive({
-  isLoadingCreateJob: false,
-});
+const isLoadingCreateJob = ref(false);
 
 const validateField = (field) => {
   if (!formData[field]) {
@@ -82,13 +82,13 @@ const handleFail = (error) => {
 };
 
 const doCreateJob = async () => {
-  if (flag.isLoadingCreateJob) {
+  if (isLoadingCreateJob.value) {
     return;
   }
 
-  flag.isLoadingCreateJob = true;
+  isLoadingCreateJob.value = true;
   if (!validateFormData()) {
-    flag.isLoadingCreateJob = false;
+    isLoadingCreateJob.value = false;
     return;
   }
 
@@ -102,10 +102,10 @@ const doCreateJob = async () => {
       currentUserToken
     );
     handleSuccess();
-    flag.isLoadingCreateJob = false;
+    isLoadingCreateJob.value = false;
   } catch (err) {
     handleFail(err);
-    flag.isLoadingCreateJob = false;
+    isLoadingCreateJob.value = false;
   }
 };
 </script>
@@ -137,7 +137,7 @@ const doCreateJob = async () => {
           <AppButton @click="doCreateJob" class="mt-12 w-1/2">
             <p>Buat Lowongan Pekerjaan</p>
             <img
-              v-if="flag.isLoadingCreateJob"
+              v-if="isLoadingCreateJob"
               class="h-6"
               src="@/assets/images/loading.svg"
               alt="loading" />

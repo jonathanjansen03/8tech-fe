@@ -22,7 +22,7 @@ const props = defineProps({
     default: 'h-32',
   },
 });
-defineEmits(['update:modelValue', 'blur']);
+const emit = defineEmits(['update:modelValue', 'blur']);
 
 const labelClasses = computed(() => {
   return {
@@ -42,8 +42,8 @@ const labelClasses = computed(() => {
       name="input"
       :type="props.type"
       :value="props.modelValue"
-      @input="$emit('update:modelValue', $event.target.value)"
-      @blur="$emit('blur')"
+      @input="emit('update:modelValue', $event.target.value)"
+      @blur="emit('blur')"
       class="border p-2 peer rounded-md w-full"
       :class="{
         'border-gray-500 focus:outline-indigo-500': !props.error,
@@ -56,8 +56,8 @@ const labelClasses = computed(() => {
       name="input"
       :type="props.type"
       :value="props.modelValue"
-      @input="$emit('update:modelValue', $event.target.value)"
-      @blur="$emit('blur')"
+      @input="emit('update:modelValue', $event.target.value)"
+      @blur="emit('blur')"
       class="border p-2 peer rounded-md w-full {{props.textAreaHeight}}"
       :class="{
         'border-gray-500 focus:outline-indigo-500': !props.error,

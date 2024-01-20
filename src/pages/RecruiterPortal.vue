@@ -1,14 +1,17 @@
 <script setup>
-import SideBar from '@/components/SideBar.vue';
-import { onBeforeMount, onBeforeUnmount, reactive, watch } from 'vue';
+import { onBeforeMount, onBeforeUnmount, reactive, ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
+import { PlusCircleIcon } from '@heroicons/vue/24/outline/index.js';
+
 import { useMainStore } from '@/stores/main.js';
 import { useUserStore } from '@/stores/user.js';
 import jobApi from '@/api/job.js';
-import router from '@/router/index.js';
 import config from '@/config/index.js';
-import { PlusCircleIcon } from '@heroicons/vue/24/outline/index.js';
+
+import SideBar from '@/components/SideBar.vue';
 import PaginationComponent from '@/components/PaginationComponent.vue';
 
+const router = useRouter();
 const mainStore = useMainStore();
 const userStore = useUserStore();
 
@@ -22,13 +25,11 @@ const pagination = reactive({
   totalPages: 0,
 });
 
-const flag = reactive({
-  isLoadingFetchApi: false,
-});
+const isLoadingFetchApi = ref(false);
 
 onBeforeMount(async () => {
   mainStore.setRecruiterPortal(true);
-  flag.isLoadingFetchApi = true;
+  isLoadingFetchApi.value = true;
   const jobListResponse = await jobApi.filter(
     {
       field: 'companyId',
@@ -41,7 +42,7 @@ onBeforeMount(async () => {
   );
   jobList.push(...jobListResponse.data.data);
   pagination.totalPages = jobListResponse.data.totalPages;
-  flag.isLoadingFetchApi = false;
+  isLoadingFetchApi.value = false;
 });
 
 onBeforeUnmount(() => {
@@ -58,7 +59,7 @@ watch(pagination, async (newPagination) => {
     pagination.page = pagination.totalPages;
     return;
   }
-  flag.isLoadingFetchApi = true;
+  isLoadingFetchApi.value = true;
   const jobListResponse = await jobApi.filter(
     {
       field: 'companyId',
@@ -71,7 +72,7 @@ watch(pagination, async (newPagination) => {
   );
 
   if (jobListResponse.data.data.length === 0) {
-    flag.isLoadingFetchApi = false;
+    isLoadingFetchApi.value = false;
     return;
   }
 
@@ -82,7 +83,7 @@ watch(pagination, async (newPagination) => {
   pagination.isLastPage = !jobListResponse.data['hasNext'];
   pagination.isFirstPage = !jobListResponse.data['hasPrevious'];
 
-  flag.isLoadingFetchApi = false;
+  isLoadingFetchApi.value = false;
 });
 </script>
 
@@ -150,7 +151,7 @@ watch(pagination, async (newPagination) => {
         :page="pagination.page"
         :totalPages="pagination.totalPages">
         <img
-          v-if="flag.isLoadingFetchApi"
+          v-if="isLoadingFetchApi"
           alt="loading"
           class="h-8 mb-2"
           src="@/assets/images/loading.svg" />

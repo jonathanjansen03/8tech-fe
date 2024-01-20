@@ -1,18 +1,20 @@
 <script setup>
-import { reactive } from 'vue';
+import { reactive, ref } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
 
 import { useUserStore } from '@/stores/user';
+import companyApi from '@/api/company.js';
 import config from '@/config';
 import validationUtil from '@/utils/validation';
 
 import AppCard from '@/components/AppCard.vue';
 import InputBox from '@/components/InputBox.vue';
 import AppButton from '@/components/AppButton.vue';
-import companyApi from '@/api/company.js';
 
-const { register } = useUserStore();
 const router = useRouter();
+const userStore = useUserStore();
+
+const { register } = userStore;
 
 const formData = reactive({
   firstName: '',
@@ -21,15 +23,12 @@ const formData = reactive({
   username: '',
   password: '',
   confirmPassword: '',
-  isRecruiter: false,
 });
-
 const companyFormData = reactive({
   profilePicture: '',
   name: '',
   description: '',
 });
-
 const errors = reactive({
   firstName: '',
   lastName: '',
@@ -37,15 +36,12 @@ const errors = reactive({
   username: '',
   password: '',
   confirmPassword: '',
-  isRecruiter: '',
   profilePicture: '',
   name: '',
   description: '',
 });
-
-const flag = reactive({
-  isLoadingRegister: false,
-});
+const isRecruiter = false;
+const isLoadingRegister = ref(false);
 
 const validateField = (field) => {
   if (!formData[field]) {
@@ -94,19 +90,19 @@ const validateFormData = () => {
 };
 
 const doRegister = async () => {
-  if (flag.isLoadingRegister) {
+  if (isLoadingRegister.value) {
     return;
   }
 
-  flag.isLoadingRegister = true;
+  isLoadingRegister.value = true;
   if (!validateFormData()) {
-    flag.isLoadingRegister = false;
+    isLoadingRegister.value = false;
     return;
   }
 
   let companyData;
   try {
-    if (formData.isRecruiter) {
+    if (isRecruiter.value) {
       companyData = await companyApi.create(companyFormData);
     }
     await register({
@@ -115,10 +111,10 @@ const doRegister = async () => {
       companyId: companyData?.data.id,
     });
     handleSuccessfulRegister();
-    flag.isLoadingRegister = false;
+    isLoadingRegister.value = false;
   } catch (err) {
     handleFailedRegister(err);
-    flag.isLoadingRegister = false;
+    isLoadingRegister.value = false;
   }
 };
 
@@ -142,8 +138,8 @@ const handleFailedRegister = (error) => {
   }
 };
 
-const toggleRecruiter = async () => {
-  formData.isRecruiter = !formData.isRecruiter;
+const toggleIsRecruiter = async () => {
+  isRecruiter.value = !isRecruiter.value;
 };
 </script>
 
@@ -202,8 +198,8 @@ const toggleRecruiter = async () => {
           class="mt-8"
           @blur="validateConfirmPassword" />
         &nbsp;
-        <h2 v-if="formData.isRecruiter">Profil perusahaan</h2>
-        <div v-if="formData.isRecruiter">
+        <h2 v-if="isRecruiter">Profil perusahaan</h2>
+        <div v-if="isRecruiter">
           <InputBox
             id="company-name"
             type="text"
@@ -233,7 +229,7 @@ const toggleRecruiter = async () => {
         <AppButton @click="doRegister" class="mt-12">
           <p>Daftar</p>
           <img
-            v-if="flag.isLoadingRegister"
+            v-if="isLoadingRegister"
             class="h-6"
             src="@/assets/images/loading.svg"
             alt="loading" />
@@ -247,11 +243,11 @@ const toggleRecruiter = async () => {
           </RouterLink>
         </p>
         <div class="mt-3 flex flex-row justify-center">
-          <p v-if="formData.isRecruiter">Daftar sebagai freelancer?</p>
+          <p v-if="isRecruiter">Daftar sebagai freelancer?</p>
           <p v-else>Daftar sebagai recruiter?</p>
           &nbsp;
           <p
-            @click="toggleRecruiter"
+            @click="toggleIsRecruiter"
             class="cursor-pointer font-semibold text-blue-800">
             Daftar
           </p>
