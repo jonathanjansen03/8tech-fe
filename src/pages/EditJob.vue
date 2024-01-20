@@ -31,14 +31,16 @@ const errors = reactive({
 
 const isLoadingFetchApi = ref(false);
 
-onMounted(async () => {
+const initPage = async () => {
   NProgress.start();
   mainStore.setRecruiterPortal(true);
   const res = await jobApi.info(route.params.id, currentUserToken);
   jobData.title = res.data.title;
   jobData.description = res.data.description;
   NProgress.done();
-});
+};
+
+onMounted(initPage);
 
 onBeforeUnmount(() => {
   mainStore.setRecruiterPortal(false);

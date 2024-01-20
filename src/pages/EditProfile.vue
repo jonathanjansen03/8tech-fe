@@ -83,7 +83,7 @@ const decrementPortfolio = () => {
   formData.value.portfolio.pop();
 };
 
-onMounted(() => {
+const initPage = () => {
   formData.value = {
     ...currentUser.value,
   };
@@ -91,7 +91,9 @@ onMounted(() => {
   if (!formData.value.portfolio?.length) {
     formData.value.portfolio = [''];
   }
-});
+};
+
+onMounted(initPage);
 </script>
 
 <template>

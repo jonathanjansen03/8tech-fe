@@ -27,7 +27,7 @@ const pagination = reactive({
 
 const isLoadingFetchApi = ref(false);
 
-onBeforeMount(async () => {
+const initPage = async () => {
   mainStore.setRecruiterPortal(true);
   isLoadingFetchApi.value = true;
   const jobListResponse = await jobApi.filter(
@@ -43,7 +43,9 @@ onBeforeMount(async () => {
   jobList.push(...jobListResponse.data.data);
   pagination.totalPages = jobListResponse.data.totalPages;
   isLoadingFetchApi.value = false;
-});
+};
+
+onBeforeMount(initPage);
 
 onBeforeUnmount(() => {
   mainStore.setRecruiterPortal(false);

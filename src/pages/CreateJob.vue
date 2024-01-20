@@ -17,15 +17,6 @@ const { getUserInfo, currentUserToken } = useUserStore();
 const router = useRouter();
 const mainStore = useMainStore();
 
-onMounted(() => {
-  mainStore.setRecruiterPortal(true);
-});
-
-onBeforeUnmount(() => {
-  mainStore.setRecruiterPortal(false);
-  mainStore.closePortalNavbar();
-});
-
 const formData = reactive({
   title: '',
   description: '',
@@ -108,6 +99,17 @@ const doCreateJob = async () => {
     isLoadingCreateJob.value = false;
   }
 };
+
+const initPage = () => {
+  mainStore.setRecruiterPortal(true);
+};
+
+onMounted(initPage);
+
+onBeforeUnmount(() => {
+  mainStore.setRecruiterPortal(false);
+  mainStore.closePortalNavbar();
+});
 </script>
 
 <template>

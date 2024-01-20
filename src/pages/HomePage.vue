@@ -24,7 +24,7 @@ const goToJobDetail = (id) => {
   });
 };
 
-onBeforeMount(async () => {
+const initPage = async () => {
   JSON.parse(localStorage.getItem('userData'))?.roles?.includes('RECRUITER') &&
     router.push('/portal');
   await searchJobs(
@@ -34,7 +34,9 @@ onBeforeMount(async () => {
     },
     currentUserToken.value
   );
-});
+};
+
+onBeforeMount(initPage);
 </script>
 
 <template>

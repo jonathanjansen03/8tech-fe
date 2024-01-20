@@ -44,7 +44,7 @@ const userProfilePicture = computed(() => {
   return publicUserProfile.profilePicture ?? defaultUserProfilePicture;
 });
 
-onBeforeMount(async () => {
+const initPage = async () => {
   isPrivateProfile.value = route.params.id === undefined;
   mainStore.setRecruiterPortal(currentUser.value.roles.includes('RECRUITER'));
   if (!isPrivateProfile.value) {
@@ -62,7 +62,9 @@ onBeforeMount(async () => {
     publicUserProfile.portfolio = res.data.portfolio;
     publicUserProfile.profilePicture = res.data.profilePicture;
   }
-});
+};
+
+onBeforeMount(initPage);
 
 watch(route, () => {
   isPrivateProfile.value = route.params.id === undefined;
