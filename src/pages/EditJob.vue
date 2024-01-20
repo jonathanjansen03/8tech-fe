@@ -48,7 +48,7 @@ const initPage = async () => {
     jobData.title = job.value.title;
     jobData.description = job.value.description;
   } catch (err) {
-    console.log(err);
+    console.error(err);
     alert(config.errors.general(GET_JOB_DATA));
   }
 
@@ -142,7 +142,7 @@ watch(
       jobData.title = job.value.title;
       jobData.description = job.value.description;
     } catch (err) {
-      console.log(err);
+      console.error(err);
       alert(config.errors.general(GET_JOB_DATA));
     }
   }

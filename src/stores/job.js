@@ -6,8 +6,9 @@ import jobApi from '@/api/job';
 export const useJobStore = defineStore('job', () => {
   const job = ref({});
   const jobList = ref([]);
+  const jobListPagination = ref({});
   const jobApplicants = ref([]);
-  const jobApplicantsTotalPages = ref(0);
+  const jobApplicantsPagination = ref({});
 
   const findJob = async (id) => {
     const res = await jobApi.findOne(id);
@@ -27,6 +28,11 @@ export const useJobStore = defineStore('job', () => {
     const res = await jobApi.search(data, token);
 
     jobList.value = res.data.data.slice(0);
+    jobListPagination.value = {
+      totalPage: res.data.totalPages,
+      hasNext: res.data.hasNext,
+      hasPrevious: res.data.hasPrevious,
+    };
   };
 
   const applyJob = async (id, token) => {
@@ -39,20 +45,19 @@ export const useJobStore = defineStore('job', () => {
     const res = await jobApi.applicant(id, data, token);
 
     jobApplicants.value = res.data.data.slice(0);
-    jobApplicantsTotalPages.value = res.data.totalPages;
-
-    return {
-      data: res.data.data,
+    jobApplicantsPagination.value = {
+      totalPages: res.data.totalPages,
       hasNext: res.data.hasNext,
-      hasPrev: res.data.hasPrevious,
+      hasPrevious: res.data.hasPrevious,
     };
   };
 
   return {
-    jobList,
     job,
+    jobList,
+    jobListPagination,
     jobApplicants,
-    jobApplicantsTotalPages,
+    jobApplicantsPagination,
     findJob,
     createJob,
     updateJob,

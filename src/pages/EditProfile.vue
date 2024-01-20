@@ -11,6 +11,7 @@ import {
 import { useUserStore } from '@/stores/user';
 import config from '@/config';
 import defaultUserProfilePicture from '@/assets/images/default-user-profile-picture.png';
+
 import AppCard from '@/components/AppCard.vue';
 import AppTicker from '@/components/AppTicker.vue';
 import AppButton from '@/components/AppButton.vue';
