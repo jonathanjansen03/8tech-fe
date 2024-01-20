@@ -34,14 +34,20 @@ export default {
       headers: config.api.authTokenHeader(token),
     });
   },
-  info: (id, token) => {
+  findOne: (id) => {
     return apiUtil.hitApi({
       method: config.api.method.get,
-      path: config.api.job.info + '/' + id,
+      path: config.api.job.findOne(id),
+    });
+  },
+  apply: (id, token) => {
+    return apiUtil.hitApi({
+      method: config.api.method.get,
+      path: config.api.job.apply(id),
       headers: config.api.authTokenHeader(token),
     });
   },
-  applicant: (data, id, token) => {
+  applicant: (id, data, token) => {
     return apiUtil.hitApi({
       method: config.api.method.post,
       path: config.api.job.applicant + '/' + id,

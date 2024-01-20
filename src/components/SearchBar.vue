@@ -9,8 +9,10 @@ import config from '@/config';
 import AppButton from '@/components/AppButton.vue';
 import DropdownList from '@/components/DropdownList.vue';
 
-const { currentUserToken } = storeToRefs(useUserStore());
-const { searchJobs } = useJobStore();
+const userStore = useUserStore();
+const jobStore = useJobStore();
+const { currentUserToken } = storeToRefs(userStore);
+const { searchJobs } = jobStore;
 const searchTerm = ref('');
 const field = ref('Judul');
 

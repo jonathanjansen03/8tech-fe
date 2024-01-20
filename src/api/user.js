@@ -9,14 +9,14 @@ export default {
       headers: config.api.authTokenHeader(token),
     });
   },
-  getUserInfoWithId: (token, id) => {
+  getUserInfoWithId: (id, token) => {
     return apiUtil.hitApi({
       method: config.api.method.get,
       path: config.api.user.info + `/${id}`,
       headers: config.api.authTokenHeader(token),
     });
   },
-  updateUserData: (token, data) => {
+  updateUserData: (data, token) => {
     return apiUtil.hitApi({
       method: config.api.method.post,
       path: config.api.user.updateData,
@@ -24,7 +24,7 @@ export default {
       headers: config.api.authTokenHeader(token),
     });
   },
-  uploadProfilePicture: (token, data) => {
+  uploadProfilePicture: (data, token) => {
     return apiUtil.hitApi({
       method: config.api.method.post,
       path: config.api.user.uploadProfilePicture,

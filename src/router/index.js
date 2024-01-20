@@ -1,9 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import NProgress from 'nprogress';
+
 import { useUserStore } from '@/stores/user';
 import config from '@/config';
-import CreateJob from '@/pages/CreateJob.vue';
-import EditJob from '@/pages/EditJob.vue';
-import ApplicantList from '@/pages/ApplicantList.vue';
 
 const HomePage = () => import('@/pages/HomePage.vue');
 const AboutUs = () => import('@/pages/AboutUs.vue');
@@ -12,6 +11,10 @@ const LoginPage = () => import('@/pages/LoginPage.vue');
 const UserProfile = () => import('@/pages/UserProfile.vue');
 const EditProfile = () => import('@/pages/EditProfile.vue');
 const RecruiterPortal = () => import('@/pages/RecruiterPortal.vue');
+const CreateJob = () => import('@/pages/CreateJob.vue');
+// const EditJob = () => import('@/pages/EditJob.vue');
+const JobDetail = () => import('@/pages/JobDetail.vue');
+const ApplicantList = () => import('@/pages/ApplicantList.vue');
 const CompanyProfile = () => import ('@/pages/CompanyProfile.vue');
 const EditCompanyProfile = () => import('@/pages/EditCompanyProfile.vue');
 
@@ -99,7 +102,7 @@ const router = createRouter({
       name: config.pages.recruiterPortal.name,
       component: RecruiterPortal,
       meta: {
-        title: 'Recruiter Portal',
+        title: 'Portal Recruiter',
         requiresAuth: true,
         recruiterRole: true
       }
@@ -109,7 +112,7 @@ const router = createRouter({
       name: config.pages.createJob.name,
       component: CreateJob,
       meta: {
-        title: 'Create Job',
+        title: 'Buat Pekerjaan',
         requiresAuth: true,
         recruiterRole: true
       }
@@ -117,22 +120,21 @@ const router = createRouter({
     {
       path: config.pages.jobDetail.path,
       name: config.pages.jobDetail.name,
-      component: EditJob,
+      component: JobDetail,
       meta: {
-        title: 'Job Detail',
-        requiresAuth: true
-      }
+        title: 'Detil Pekerjaan',
+      },
     },
     {
       path: config.pages.applicantList.path,
       name: config.pages.applicantList.name,
       component: ApplicantList,
       meta: {
-        title: 'Job Applicant List',
-        requiresAuth: true
-      }
-    }
-  ]
+        title: 'Daftar Pelamar Kerja',
+        requiresAuth: true,
+      },
+    },
+  ],
 });
 
 router.beforeEach((to, from, next) => {
@@ -158,17 +160,20 @@ router.beforeEach(async (to) => {
   userStore.setCurrentUser();
   const loginPage = {
     path: config.pages.login.path,
-    query: {redirect: to.fullPath}
+    query: { redirect: to.fullPath },
   };
 
   document.title = `${to.meta.title} | ${config.appName}`;
 
-  if ((to.meta.requiresAuth && !userStore.isLoggedIn) || to.meta.recruiterRole) {
+  if (
+    (to.meta.requiresAuth && !userStore.isLoggedIn) ||
+    to.meta.recruiterRole
+  ) {
     const token = localStorage.getItem('Etoken');
     if (!token) {
       return loginPage;
     }
-    const {valid, roles} = await userStore.isTokenValid(token);
+    const { valid, roles } = await userStore.isTokenValid(token);
 
     if (!valid) {
       return loginPage;

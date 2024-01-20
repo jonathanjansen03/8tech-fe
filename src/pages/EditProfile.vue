@@ -1,7 +1,6 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { useUserStore } from '@/stores/user';
 import { storeToRefs } from 'pinia';
 import { CheckIcon, TrashIcon } from '@heroicons/vue/24/outline';
 import {
@@ -9,6 +8,7 @@ import {
   TrashIcon as SolidTrashIcon,
 } from '@heroicons/vue/24/solid';
 
+import { useUserStore } from '@/stores/user';
 import config from '@/config';
 import defaultUserProfilePicture from '@/assets/images/default-user-profile-picture.png';
 import AppCard from '@/components/AppCard.vue';
@@ -29,7 +29,7 @@ const formData = ref({
   description: '',
   portfolio: '',
 });
-const base64UserProfileImage = ref(null);
+const base64UserProfileImage = ref('');
 const isError = ref(false);
 const errorMessage = ref('');
 
@@ -132,7 +132,10 @@ onMounted(() => {
           v-model="formData.description" />
       </div>
       <div>
-        <div class="flex mt-5" v-for="i in formData.portfolio.length">
+        <div
+          class="flex mt-5"
+          v-for="(i, index) in formData.portfolio.length"
+          :key="index">
           <InputBox
             :id="`portfolio${i}`"
             class="w-full"

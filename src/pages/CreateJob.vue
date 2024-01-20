@@ -1,15 +1,17 @@
 <script setup>
-import SideBar from '@/components/SideBar.vue';
-import { onBeforeUnmount, onMounted, reactive } from 'vue';
+import { onBeforeUnmount, onMounted, reactive, ref } from 'vue';
+import { useRouter } from 'vue-router';
+
 import { useMainStore } from '@/stores/main.js';
+import { useUserStore } from '@/stores/user.js';
+import jobApi from '@/api/job.js';
+import config from '@/config/index.js';
+import validationUtil from '@/utils/validation.js';
+import SideBar from '@/components/SideBar.vue';
 import AppCard from '@/components/AppCard.vue';
 import InputBox from '@/components/InputBox.vue';
-import validationUtil from '@/utils/validation.js';
-import config from '@/config/index.js';
 import AppButton from '@/components/AppButton.vue';
-import jobApi from '@/api/job.js';
-import { useRouter } from 'vue-router';
-import { useUserStore } from '@/stores/user.js';
+
 const { getUserInfo, currentUserToken } = useUserStore();
 
 const router = useRouter();
@@ -17,24 +19,22 @@ const mainStore = useMainStore();
 
 onMounted(() => {
   mainStore.setRecruiterPortal(true);
-})
+});
 
 onBeforeUnmount(() => {
   mainStore.setRecruiterPortal(false);
   mainStore.closePortalNavbar();
-})
+});
 
 const formData = reactive({
   title: '',
-  description: ''
+  description: '',
 });
 const errors = reactive({
   title: '',
-  description: ''
+  description: '',
 });
-const flag = reactive({
-  isLoadingCreateJob: false
-});
+const isLoadingCreateJob = ref(false);
 
 const validateField = (field) => {
   if (!formData[field]) {
@@ -82,35 +82,37 @@ const handleFail = (error) => {
 };
 
 const doCreateJob = async () => {
-  if(flag.isLoadingCreateJob) {
+  if (isLoadingCreateJob.value) {
     return;
   }
 
-  flag.isLoadingCreateJob = true;
+  isLoadingCreateJob.value = true;
   if (!validateFormData()) {
-    flag.isLoadingCreateJob = false;
+    isLoadingCreateJob.value = false;
     return;
   }
 
   try {
     const userInfo = await getUserInfo();
-    await jobApi.create({
-      ...formData,
-      companyId: userInfo.companyId
-    }, currentUserToken);
+    await jobApi.create(
+      {
+        ...formData,
+        companyId: userInfo.companyId,
+      },
+      currentUserToken
+    );
     handleSuccess();
-    flag.isLoadingCreateJob = false;
+    isLoadingCreateJob.value = false;
   } catch (err) {
     handleFail(err);
-    flag.isLoadingCreateJob = false;
+    isLoadingCreateJob.value = false;
   }
 };
-
 </script>
 
 <template>
   <div class="sm:px-20">
-    <SideBar class="sidebar" v-if="mainStore.showPortalNavbar"/>
+    <SideBar class="sidebar" v-if="mainStore.showPortalNavbar" />
     <div>
       <AppCard class="px-5">
         <div @keydown.enter="doCreateJob" class="flex flex-col items-center">
@@ -122,8 +124,7 @@ const doCreateJob = async () => {
             v-model="formData.title"
             :error="errors.title"
             class="mt-8 w-full"
-            @blur="validateField('title')"
-          />
+            @blur="validateField('title')" />
           <InputBox
             id="create-job-description"
             label="Deskripsi Pekerjaan"
@@ -132,11 +133,14 @@ const doCreateJob = async () => {
             v-model="formData.description"
             :error="errors.description"
             class="mt-8 w-full"
-            @blur="validateField('description')"
-          />
+            @blur="validateField('description')" />
           <AppButton @click="doCreateJob" class="mt-12 w-1/2">
             <p>Buat Lowongan Pekerjaan</p>
-            <img v-if="flag.isLoadingCreateJob" class="h-6" src="@/assets/images/loading.svg" alt="loading">
+            <img
+              v-if="isLoadingCreateJob"
+              class="h-6"
+              src="@/assets/images/loading.svg"
+              alt="loading" />
           </AppButton>
         </div>
       </AppCard>
@@ -145,7 +149,7 @@ const doCreateJob = async () => {
 </template>
 
 <style>
-.sidebar{
-  transition: .2s ease-in-out;
+.sidebar {
+  transition: 0.2s ease-in-out;
 }
 </style>

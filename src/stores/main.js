@@ -1,30 +1,27 @@
 import { defineStore } from 'pinia';
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 
 export const useMainStore = defineStore('main', () => {
-  const recruiterPortal = ref(false);
-  const portalNavbar = ref(false);
+  const isRecruiterPortal = ref(false);
+  const showPortalNavbar = ref(false);
 
-  const isRecruiterPortal = computed(() => recruiterPortal.value);
-  const showPortalNavbar = computed(() => portalNavbar.value);
-
-  function setRecruiterPortal(val) {
-    recruiterPortal.value = val;
+  function setRecruiterPortal(value) {
+    isRecruiterPortal.value = value;
   }
 
   function togglePortalNavbar() {
-    portalNavbar.value = !portalNavbar.value;
+    showPortalNavbar.value = !showPortalNavbar.value;
   }
 
   function closePortalNavbar() {
-    portalNavbar.value = false;
+    showPortalNavbar.value = false;
   }
 
   return {
     isRecruiterPortal,
+    showPortalNavbar,
     setRecruiterPortal,
     togglePortalNavbar,
-    showPortalNavbar,
-    closePortalNavbar
+    closePortalNavbar,
   };
 });

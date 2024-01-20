@@ -10,13 +10,14 @@ import AppButton from '@/components/AppButton.vue';
 import AppTicker from '@/components/AppTicker.vue';
 import InputBox from '@/components/InputBox.vue';
 
-const { login } = useUserStore();
-const router = useRouter();
-const route = useRoute();
-
 const LOGIN = 'login';
 const NOT_FOUND = 'NOT_FOUND';
-const NOT_MATCH = 'NOT_MATCH';
+
+const route = useRoute();
+const router = useRouter();
+const userStore = useUserStore();
+
+const { login } = userStore;
 
 const isError = ref(false);
 const errorMessage = ref('');
@@ -28,9 +29,7 @@ const errors = reactive({
   email: '',
   password: '',
 });
-const flag = reactive({
-  isLoadingRegister: false,
-});
+const isLoadingLogin = ref(false);
 
 const redirectPath = computed(
   () => route.query.redirect || config.pages.home.path
@@ -57,13 +56,13 @@ const validateFormData = () => {
 };
 
 const doLogin = async () => {
-  if (flag.isLoadingRegister) {
+  if (isLoadingLogin.value) {
     return;
   }
 
-  flag.isLoadingRegister = true;
+  isLoadingLogin.value = true;
   if (!validateFormData()) {
-    flag.isLoadingRegister = false;
+    isLoadingLogin.value = false;
     return;
   }
 
@@ -71,10 +70,10 @@ const doLogin = async () => {
     formData.email = formData.email.toLowerCase();
     await login(formData);
     handleSucccessfulLogin();
-    flag.isLoadingRegister = false;
+    isLoadingLogin.value = false;
   } catch (err) {
     handleFailedLogin(err);
-    flag.isLoadingRegister = false;
+    isLoadingLogin.value = false;
   }
 };
 
@@ -123,7 +122,7 @@ const handleFailedLogin = (err) => {
         <AppButton @click="doLogin" class="mt-8">
           <p>Masuk</p>
           <img
-            v-if="flag.isLoadingRegister"
+            v-if="isLoadingLogin"
             class="h-6"
             src="@/assets/images/loading.svg"
             alt="loading" />

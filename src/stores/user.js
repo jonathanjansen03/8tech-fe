@@ -76,13 +76,13 @@ export const useUserStore = defineStore('user', () => {
       formData.append('file', data.profilePicture);
 
       const imageLink = await userApi.uploadProfilePicture(
-        currentUserToken.value,
-        formData
+        formData,
+        currentUserToken.value
       );
       data.profilePicture = imageLink.data.profilePicture;
     }
 
-    const res = await userApi.updateUserData(currentUserToken.value, data);
+    const res = await userApi.updateUserData(data, currentUserToken.value);
     currentUser.value = { ...res.data };
     localStorage.setItem('userData', JSON.stringify(currentUser.value));
   };
