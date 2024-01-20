@@ -83,7 +83,7 @@ export default {
     },
     company: {
       create: '/company/create',
-      info: '/company/info',
+      info: (id) => `/company/info/${id}`,
       update: '/company/update',
     },
     job: {

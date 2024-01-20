@@ -156,7 +156,6 @@ watch(pagination, async (newPagination) => {
           class="h-8 mb-2"
           src="@/assets/images/loading.svg" />
       </PaginationComponent>
-
     </div>
   </div>
 </template>

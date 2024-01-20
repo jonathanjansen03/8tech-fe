@@ -76,13 +76,17 @@ const returnToHome = () => {
   router.push(config.pages.home.path);
 };
 
-onMounted(async () => {
+const initPage = async () => {
   const company = await companyStore.getCompanyInfo(currentUser.value.companyId);
   formData.value = {
     name: company.data.name,
     description: company.data.description,
     profilePicture: company.data.profilePicture
   };
+};
+
+onMounted(async () => {
+  await initPage();
 });
 </script>
 

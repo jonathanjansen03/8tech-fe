@@ -12,7 +12,7 @@ export default {
   info: (id) => {
     return apiUtil.hitApi({
       method: config.api.method.get,
-      path: config.api.company.info + `/${id}`,
+      path: config.api.company.info(id),
     });
   },
   update: (token, data) => {

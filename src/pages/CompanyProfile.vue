@@ -30,7 +30,7 @@ const companyProfile = reactive({
   profilePicture: ''
 });
 
-onBeforeMount(async () => {
+const initPage = async () => {
   companyId.value = route.params.id;
   isPrivateProfile.value = companyId.value === currentUser.value?.companyId;
   mainStore.setRecruiterPortal(currentUser.value?.roles.includes('RECRUITER'));
@@ -49,6 +49,10 @@ onBeforeMount(async () => {
   companyProfile.name = companyRes.data.name;
   companyProfile.description = companyRes.data.description;
   companyProfile.profilePicture = companyRes.data.profilePicture;
+};
+
+onBeforeMount(async () => {
+  await initPage();
 });
 
 onBeforeUnmount(() => {
