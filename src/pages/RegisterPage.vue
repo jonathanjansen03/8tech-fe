@@ -40,7 +40,7 @@ const errors = reactive({
   name: '',
   description: '',
 });
-const isRecruiter = false;
+const isRecruiter = ref(false);
 const isLoadingRegister = ref(false);
 
 const validateField = (field) => {

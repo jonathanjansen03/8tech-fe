@@ -25,6 +25,14 @@ export default {
       name: 'user-profile',
       path: '/user/:id',
     },
+    companyProfile: {
+      name: 'company-profile',
+      path: '/company/:id',
+    },
+    companyProfileEdit: {
+      name: 'company-edit',
+      path: '/company/edit',
+    },
     editProfile: {
       name: 'editProfile',
       path: '/profile/edit',
@@ -40,6 +48,10 @@ export default {
     jobDetail: {
       name: 'job-detail',
       path: '/job-detail/:id',
+    },
+    jobEditDetail: {
+      name: 'job-edit',
+      path: '/job-edit/:id',
     },
     applicantList: {
       name: 'job-applicant',
@@ -67,9 +79,12 @@ export default {
       info: '/user/info',
       updateData: '/user/update/me',
       uploadProfilePicture: '/user/uploadProfilePicture',
+      uploadCompanyProfilePicture: '/user/uploadCompanyProfilePicture',
     },
     company: {
       create: '/company/create',
+      info: (id) => `/company/info/${id}`,
+      update: '/company/update',
     },
     job: {
       create: '/job/create',
