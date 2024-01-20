@@ -1,50 +1,57 @@
 <script setup>
 import { onBeforeMount, onBeforeUnmount, reactive, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { storeToRefs } from 'pinia';
 
-import jobApi from '@/api/job.js';
-import { useMainStore } from '@/stores/main.js';
-import { useUserStore } from '@/stores/user.js';
+import { useMainStore } from '@/stores/main';
+import { useUserStore } from '@/stores/user';
+import { useJobStore } from '@/stores/job';
+import config from '@/config';
 import SideBar from '@/components/SideBar.vue';
 import AppButton from '@/components/AppButton.vue';
 import PaginationComponent from '@/components/PaginationComponent.vue';
 
-const mainStore = useMainStore();
-const userStore = useUserStore();
+const GET_APPLICANT_LIST = 'mendapatkan daftar pelamar';
+
 const route = useRoute();
 const router = useRouter();
+const mainStore = useMainStore();
+const userStore = useUserStore();
+const jobStore = useJobStore();
 
-const applicantList = reactive([]);
+const { currentUserToken } = storeToRefs(userStore);
+const { jobApplicants, jobApplicantsTotalPages } = storeToRefs(jobStore);
+const { getApplicants } = jobStore;
+
 const pagination = reactive({
   page: 1,
   size: 5,
   isLastPage: false,
   isFirstPage: true,
-  totalPages: 0,
 });
 const isLoadingFetchApi = ref(false);
-const jobInfo = ref({});
 
-onBeforeMount(async () => {
+const initPage = async () => {
   mainStore.setRecruiterPortal(true);
   isLoadingFetchApi.value = true;
-  const applicantListResponse = await jobApi.applicant(
-    {
-      page: pagination.page,
-      size: pagination.size,
-    },
-    route.params.id,
-    userStore.currentUserToken
-  );
-  applicantList.push(...applicantListResponse.data.data);
-  pagination.totalPages = applicantListResponse.data.totalPages;
-  isLoadingFetchApi.value = false;
 
-  jobInfo.value = await jobApi.info(
-    route.params.id,
-    userStore.currentUserToken
-  );
-});
+  try {
+    await getApplicants(
+      {
+        page: pagination.page,
+        size: pagination.size,
+      },
+      route.params.id,
+      currentUserToken.value
+    );
+  } catch (err) {
+    console.log(err);
+    alert(config.errors.general(GET_APPLICANT_LIST));
+  }
+  isLoadingFetchApi.value = false;
+};
+
+onBeforeMount(initPage);
 
 onBeforeUnmount(() => {
   mainStore.setRecruiterPortal(false);
@@ -56,31 +63,36 @@ watch(pagination, async (newPagination) => {
     pagination.page = 1;
     return;
   }
-  if (newPagination.page > pagination.totalPages) {
-    pagination.page = pagination.totalPages;
+
+  if (newPagination.page > jobApplicantsTotalPages.value) {
+    pagination.page = jobApplicantsTotalPages.value;
     return;
   }
-  isLoadingFetchApi.value = true;
-  const applicantListResponse = await jobApi.applicant(
-    {
-      page: pagination.page,
-      size: pagination.size,
-    },
-    route.params.id,
-    userStore.currentUserToken
-  );
 
-  if (applicantListResponse.data.data.length === 0) {
+  isLoadingFetchApi.value = true;
+  let applicantListResponse;
+
+  try {
+    applicantListResponse = await getApplicants(
+      {
+        page: pagination.page,
+        size: pagination.size,
+      },
+      route.params.id,
+      userStore.currentUserToken
+    );
+  } catch (err) {
+    console.log(err);
+    alert(config.errors.general(GET_APPLICANT_LIST));
+  }
+
+  if (applicantListResponse.data.length === 0) {
     isLoadingFetchApi.value = false;
     return;
   }
 
-  pagination.totalPages = applicantListResponse.data.totalPages;
-  pagination.isLastPage = !applicantListResponse.data['hasNext'];
-  pagination.isFirstPage = !applicantListResponse.data['hasPrevious'];
-
-  applicantList.splice(0, applicantList.length);
-  applicantList.push(...applicantListResponse.data.data);
+  pagination.isLastPage = !applicantListResponse.hasNext;
+  pagination.isFirstPage = !applicantListResponse.hasPrevious;
   isLoadingFetchApi.value = false;
 });
 </script>
@@ -106,7 +118,7 @@ watch(pagination, async (newPagination) => {
           </thead>
           <tbody>
             <tr
-              v-for="(item, index) in applicantList"
+              v-for="(item, index) in jobApplicants"
               :key="index"
               class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-blue-950"
               @click="router.push(`/user/${item.id}`)">
@@ -132,7 +144,7 @@ watch(pagination, async (newPagination) => {
         @goNext="pagination.page++"
         @goPrevious="pagination.page--"
         :page="pagination.page"
-        :totalPages="pagination.totalPages">
+        :totalPages="jobApplicantsTotalPages">
         <img
           v-if="isLoadingFetchApi"
           alt="loading"
