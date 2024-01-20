@@ -15,7 +15,7 @@ const CreateJob = () => import('@/pages/CreateJob.vue');
 const EditJob = () => import('@/pages/EditJob.vue');
 const JobDetail = () => import('@/pages/JobDetail.vue');
 const ApplicantList = () => import('@/pages/ApplicantList.vue');
-const CompanyProfile = () => import ('@/pages/CompanyProfile.vue');
+const CompanyProfile = () => import('@/pages/CompanyProfile.vue');
 const EditCompanyProfile = () => import('@/pages/EditCompanyProfile.vue');
 
 const router = createRouter({
@@ -26,32 +26,32 @@ const router = createRouter({
       name: config.pages.home.name,
       component: HomePage,
       meta: {
-        title: 'Beranda'
-      }
+        title: 'Beranda',
+      },
     },
     {
       path: config.pages.about.path,
       name: config.pages.about.name,
       component: AboutUs,
       meta: {
-        title: 'Tentang Kami'
-      }
+        title: 'Tentang Kami',
+      },
     },
     {
       path: config.pages.register.path,
       name: config.pages.register.name,
       component: RegisterPage,
       meta: {
-        title: 'Daftar'
-      }
+        title: 'Daftar',
+      },
     },
     {
       path: config.pages.login.path,
       name: config.pages.login.name,
       component: LoginPage,
       meta: {
-        title: 'Masuk'
-      }
+        title: 'Masuk',
+      },
     },
     {
       path: config.pages.profile.path,
@@ -59,24 +59,24 @@ const router = createRouter({
       component: UserProfile,
       meta: {
         title: 'Profil',
-        requiresAuth: true
-      }
+        requiresAuth: true,
+      },
     },
     {
       path: config.pages.userProfile.path,
       name: config.pages.userProfile.name,
       component: UserProfile,
       meta: {
-        title: 'Profil'
-      }
+        title: 'Profil',
+      },
     },
     {
       path: config.pages.companyProfile.path,
       name: config.pages.companyProfile.name,
       component: CompanyProfile,
       meta: {
-        title: 'Profil Perusahaan'
-      }
+        title: 'Profil Perusahaan',
+      },
     },
     {
       path: config.pages.companyProfileEdit.path,
@@ -85,8 +85,8 @@ const router = createRouter({
       meta: {
         title: 'Ubah Profil Perusahaan',
         requiresAuth: true,
-        recruiterRole: true
-      }
+        recruiterRole: true,
+      },
     },
     {
       path: config.pages.editProfile.path,
@@ -94,8 +94,8 @@ const router = createRouter({
       component: EditProfile,
       meta: {
         title: 'Edit Profil',
-        requiresAuth: true
-      }
+        requiresAuth: true,
+      },
     },
     {
       path: config.pages.recruiterPortal.path,
@@ -104,8 +104,8 @@ const router = createRouter({
       meta: {
         title: 'Portal Recruiter',
         requiresAuth: true,
-        recruiterRole: true
-      }
+        recruiterRole: true,
+      },
     },
     {
       path: config.pages.createJob.path,
@@ -114,8 +114,8 @@ const router = createRouter({
       meta: {
         title: 'Buat Pekerjaan',
         requiresAuth: true,
-        recruiterRole: true
-      }
+        recruiterRole: true,
+      },
     },
     {
       path: config.pages.jobDetail.path,
@@ -189,11 +189,11 @@ router.beforeEach(async (to) => {
 
     userStore.$patch({
       currentUserToken: localStorage.getItem('Etoken'),
-      currentUser: JSON.parse(localStorage.getItem('userData'))
+      currentUser: JSON.parse(localStorage.getItem('userData')),
     });
     if (to.meta.recruiterRole && !roles.includes('RECRUITER')) {
       return {
-        path: config.pages.home.path
+        path: config.pages.home.path,
       };
     }
   }

@@ -11,6 +11,7 @@ import {
 import { useUserStore } from '@/stores/user';
 import config from '@/config';
 import defaultUserProfilePicture from '@/assets/images/default-user-profile-picture.png';
+
 import AppCard from '@/components/AppCard.vue';
 import AppTicker from '@/components/AppTicker.vue';
 import AppButton from '@/components/AppButton.vue';
@@ -83,7 +84,7 @@ const decrementPortfolio = () => {
   formData.value.portfolio.pop();
 };
 
-onMounted(() => {
+const initPage = () => {
   formData.value = {
     ...currentUser.value,
   };
@@ -91,7 +92,9 @@ onMounted(() => {
   if (!formData.value.portfolio?.length) {
     formData.value.portfolio = [''];
   }
-});
+};
+
+onMounted(initPage);
 </script>
 
 <template>

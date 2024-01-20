@@ -20,14 +20,12 @@ const userStore = useUserStore();
 const jobStore = useJobStore();
 
 const { currentUserToken } = storeToRefs(userStore);
-const { jobApplicants, jobApplicantsTotalPages } = storeToRefs(jobStore);
+const { jobApplicants, jobApplicantsPagination } = storeToRefs(jobStore);
 const { getApplicants } = jobStore;
 
 const pagination = reactive({
   page: 1,
   size: 5,
-  isLastPage: false,
-  isFirstPage: true,
 });
 const isLoadingFetchApi = ref(false);
 
@@ -45,7 +43,7 @@ const initPage = async () => {
       currentUserToken.value
     );
   } catch (err) {
-    console.log(err);
+    console.error(err);
     alert(config.errors.general(GET_APPLICANT_LIST));
   }
   isLoadingFetchApi.value = false;
@@ -64,16 +62,15 @@ watch(pagination, async (newPagination) => {
     return;
   }
 
-  if (newPagination.page > jobApplicantsTotalPages.value) {
-    pagination.page = jobApplicantsTotalPages.value;
+  if (newPagination.page > jobApplicantsPagination.value.totalPages) {
+    pagination.page = jobApplicantsPagination.value.totalPages;
     return;
   }
 
   isLoadingFetchApi.value = true;
-  let applicantListResponse;
 
   try {
-    applicantListResponse = await getApplicants(
+    await getApplicants(
       {
         page: pagination.page,
         size: pagination.size,
@@ -82,17 +79,10 @@ watch(pagination, async (newPagination) => {
       userStore.currentUserToken
     );
   } catch (err) {
-    console.log(err);
+    console.error(err);
     alert(config.errors.general(GET_APPLICANT_LIST));
   }
 
-  if (applicantListResponse.data.length === 0) {
-    isLoadingFetchApi.value = false;
-    return;
-  }
-
-  pagination.isLastPage = !applicantListResponse.hasNext;
-  pagination.isFirstPage = !applicantListResponse.hasPrevious;
   isLoadingFetchApi.value = false;
 });
 </script>
@@ -144,7 +134,7 @@ watch(pagination, async (newPagination) => {
         @goNext="pagination.page++"
         @goPrevious="pagination.page--"
         :page="pagination.page"
-        :totalPages="jobApplicantsTotalPages">
+        :totalPages="jobApplicantsPagination.totalPages">
         <img
           v-if="isLoadingFetchApi"
           alt="loading"

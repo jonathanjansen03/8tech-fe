@@ -1,9 +1,10 @@
 <script setup>
 import { reactive, ref } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
+import { storeToRefs } from 'pinia';
 
 import { useUserStore } from '@/stores/user';
-import companyApi from '@/api/company.js';
+import { useCompanyStore } from '@/stores/company';
 import config from '@/config';
 import validationUtil from '@/utils/validation';
 
@@ -13,8 +14,12 @@ import AppButton from '@/components/AppButton.vue';
 
 const router = useRouter();
 const userStore = useUserStore();
+const companyStore = useCompanyStore();
 
 const { register } = userStore;
+
+const {company} = storeToRefs(companyStore);
+const { createCompany } = companyStore;
 
 const formData = reactive({
   firstName: '',
@@ -100,19 +105,19 @@ const doRegister = async () => {
     return;
   }
 
-  let companyData;
   try {
     if (isRecruiter.value) {
-      companyData = await companyApi.create(companyFormData);
+      await createCompany(companyFormData);
     }
     await register({
       ...formData,
       confirmPassword: undefined,
-      companyId: companyData?.data.id,
+      companyId: company.id,
     });
     handleSuccessfulRegister();
     isLoadingRegister.value = false;
   } catch (err) {
+    console.error(err);
     handleFailedRegister(err);
     isLoadingRegister.value = false;
   }

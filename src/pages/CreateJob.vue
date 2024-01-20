@@ -1,30 +1,26 @@
 <script setup>
 import { onBeforeUnmount, onMounted, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { storeToRefs } from 'pinia';
 
-import { useMainStore } from '@/stores/main.js';
-import { useUserStore } from '@/stores/user.js';
-import jobApi from '@/api/job.js';
-import config from '@/config/index.js';
-import validationUtil from '@/utils/validation.js';
+import { useMainStore } from '@/stores/main';
+import { useUserStore } from '@/stores/user';
+import { useJobStore } from '@/stores/job';
+import config from '@/config';
+import validationUtil from '@/utils/validation';
+
 import SideBar from '@/components/SideBar.vue';
 import AppCard from '@/components/AppCard.vue';
 import InputBox from '@/components/InputBox.vue';
 import AppButton from '@/components/AppButton.vue';
 
-const { getUserInfo, currentUserToken } = useUserStore();
-
 const router = useRouter();
 const mainStore = useMainStore();
+const userStore = useUserStore();
+const jobStore = useJobStore();
 
-onMounted(() => {
-  mainStore.setRecruiterPortal(true);
-});
-
-onBeforeUnmount(() => {
-  mainStore.setRecruiterPortal(false);
-  mainStore.closePortalNavbar();
-});
+const { currentUser, currentUserToken } = storeToRefs(userStore);
+const { createJob } = jobStore;
 
 const formData = reactive({
   title: '',
@@ -93,21 +89,30 @@ const doCreateJob = async () => {
   }
 
   try {
-    const userInfo = await getUserInfo();
-    await jobApi.create(
+    await createJob(
       {
         ...formData,
-        companyId: userInfo.companyId,
+        companyId: currentUser.value.companyId,
       },
-      currentUserToken
+      currentUserToken.value
     );
     handleSuccess();
-    isLoadingCreateJob.value = false;
   } catch (err) {
     handleFail(err);
-    isLoadingCreateJob.value = false;
   }
+  isLoadingCreateJob.value = false;
 };
+
+const initPage = () => {
+  mainStore.setRecruiterPortal(true);
+};
+
+onMounted(initPage);
+
+onBeforeUnmount(() => {
+  mainStore.setRecruiterPortal(false);
+  mainStore.closePortalNavbar();
+});
 </script>
 
 <template>

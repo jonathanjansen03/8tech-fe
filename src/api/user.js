@@ -9,7 +9,7 @@ export default {
       headers: config.api.authTokenHeader(token),
     });
   },
-  getUserInfoWithId: (id, token) => {
+  getUserInfoById: (id, token) => {
     return apiUtil.hitApi({
       method: config.api.method.get,
       path: config.api.user.info + `/${id}`,

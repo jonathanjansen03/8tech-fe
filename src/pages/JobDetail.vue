@@ -3,14 +3,15 @@ import { onBeforeMount, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 
-import { useUserStore } from '@/stores/user.js';
+import { useUserStore } from '@/stores/user';
 import { useJobStore } from '@/stores/job';
-import { useContractStore } from '@/stores/contract.js';
-import config from '@/config/index.js';
+import { useContractStore } from '@/stores/contract';
+import config from '@/config/';
+import defaultUserProfilePicture from '@/assets/images/default-user-profile-picture.png';
+
 import AppCard from '@/components/AppCard.vue';
 import AppButton from '@/components/AppButton.vue';
 import AppTicker from '@/components/AppTicker.vue';
-import defaultUserProfilePicture from '@/assets/images/default-user-profile-picture.png';
 
 const GET_JOB_DETAIL = 'mendapatkan detail pekerjaan';
 const APPLY_JOB = 'melamar pekerjaan';
@@ -55,14 +56,16 @@ const handleFailedApplyJob = (err) => {
   }
 };
 
-onBeforeMount(async () => {
+const initPage = async () => {
   try {
     await findJob(route.params.id);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     alert(config.errors.general(GET_JOB_DETAIL));
   }
-});
+};
+
+onBeforeMount(initPage);
 </script>
 
 <template>
@@ -84,7 +87,11 @@ onBeforeMount(async () => {
           <h2 class="mt-10">Deskripsi pekerjaan:</h2>
           <p class="mt-5 break-all">{{ job.description }}</p>
         </div>
-        <AppTicker :message="errorMessage" type="error" v-if="isError" class="mt-10" />
+        <AppTicker
+          :message="errorMessage"
+          type="error"
+          v-if="isError"
+          class="mt-10" />
         <AppButton class="mt-10" @click="doApplyJob">Lamar Pekerjaan</AppButton>
       </div>
     </AppCard>

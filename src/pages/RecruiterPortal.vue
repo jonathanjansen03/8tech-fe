@@ -1,53 +1,68 @@
 <script setup>
 import { onBeforeMount, onBeforeUnmount, reactive, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
-import { PlusCircleIcon } from '@heroicons/vue/24/outline/index.js';
+import { storeToRefs } from 'pinia';
+import { PlusCircleIcon } from '@heroicons/vue/24/outline';
 
-import { useMainStore } from '@/stores/main.js';
-import { useUserStore } from '@/stores/user.js';
-import jobApi from '@/api/job.js';
-import config from '@/config/index.js';
+import { useMainStore } from '@/stores/main';
+import { useUserStore } from '@/stores/user';
+import { useJobStore } from '@/stores/job';
+import config from '@/config';
 
 import SideBar from '@/components/SideBar.vue';
 import PaginationComponent from '@/components/PaginationComponent.vue';
 
+const COMPANY_ID = 'companyId';
+const CREATED_AT = 'createdAt';
+const GET_JOB_LIST = 'mendapatkan daftar pekerjaan';
+
 const router = useRouter();
 const mainStore = useMainStore();
 const userStore = useUserStore();
+const jobStore = useJobStore();
+
+const { showPortalNavbar } = storeToRefs(mainStore);
+const { setRecruiterPortal, closePortalNavbar } = mainStore;
+
+const { currentUser, currentUserToken } = storeToRefs(userStore);
+
+const { jobListPagination } = storeToRefs(jobStore);
+const { searchJobs } = jobStore;
 
 const jobList = reactive([]);
-
 const pagination = reactive({
   page: 1,
-  size: 5,
-  isLastPage: false,
-  isFirstPage: true,
-  totalPages: 0,
+  size: 5
 });
-
 const isLoadingFetchApi = ref(false);
 
-onBeforeMount(async () => {
-  mainStore.setRecruiterPortal(true);
+const initPage = async () => {
+  setRecruiterPortal(true);
   isLoadingFetchApi.value = true;
-  const jobListResponse = await jobApi.filter(
-    {
-      field: 'companyId',
-      keyword: userStore.currentUser?.companyId,
-      sort: 'craetedAt',
-      page: pagination.page,
-      size: pagination.size,
-    },
-    userStore.currentUserToken
-  );
-  jobList.push(...jobListResponse.data.data);
-  pagination.totalPages = jobListResponse.data.totalPages;
+
+  try {
+    await searchJobs(
+      {
+        field: COMPANY_ID,
+        keyword: currentUser.value.companyId,
+        sort: CREATED_AT,
+        page: pagination.page,
+        size: pagination.size,
+      },
+      currentUserToken.value
+    );
+  } catch (err) {
+    console.error(err);
+    alert(config.errors.general(GET_JOB_LIST));
+  }
   isLoadingFetchApi.value = false;
-});
+};
+
+onBeforeMount(initPage);
 
 onBeforeUnmount(() => {
-  mainStore.setRecruiterPortal(false);
-  mainStore.closePortalNavbar();
+  setRecruiterPortal(false);
+  closePortalNavbar();
 });
 
 watch(pagination, async (newPagination) => {
@@ -55,41 +70,35 @@ watch(pagination, async (newPagination) => {
     pagination.page = 1;
     return;
   }
-  if (newPagination.page > pagination.totalPages) {
-    pagination.page = pagination.totalPages;
+
+  if (newPagination.page > jobListPagination.value.totalPages) {
+    pagination.page = jobListPagination.value.totalPages;
     return;
   }
   isLoadingFetchApi.value = true;
-  const jobListResponse = await jobApi.filter(
-    {
-      field: 'companyId',
-      keyword: userStore.currentUser?.companyId,
-      sort: 'craetedAt',
-      page: pagination.page,
-      size: pagination.size,
-    },
-    userStore.currentUserToken
-  );
 
-  if (jobListResponse.data.data.length === 0) {
-    isLoadingFetchApi.value = false;
-    return;
+  try {
+    await searchJobs(
+      {
+        field: COMPANY_ID,
+        keyword: currentUser.value.companyId,
+        sort: CREATED_AT,
+        page: pagination.page,
+        size: pagination.size,
+      },
+      currentUserToken.value
+    );
+  } catch (err) {
+    console.error(err);
+    alert(config.errors.general(GET_JOB_LIST));
   }
-
-  jobList.splice(0, jobList.length);
-  jobList.push(...jobListResponse.data.data);
-
-  pagination.totalPages = jobListResponse.data.totalPages;
-  pagination.isLastPage = !jobListResponse.data['hasNext'];
-  pagination.isFirstPage = !jobListResponse.data['hasPrevious'];
-
   isLoadingFetchApi.value = false;
 });
 </script>
 
 <template>
   <div class="sm:px-20">
-    <SideBar v-if="mainStore.showPortalNavbar" class="sidebar" />
+    <SideBar v-if="showPortalNavbar" class="sidebar" />
     <div>
       <div class="flex justify-between">
         <h1 class="text-center font-bold mb-8 text-white text-2xl">
@@ -149,7 +158,7 @@ watch(pagination, async (newPagination) => {
         @goNext="pagination.page++"
         @goPrevious="pagination.page--"
         :page="pagination.page"
-        :totalPages="pagination.totalPages">
+        :totalPages="jobListPagination.totalPages">
         <img
           v-if="isLoadingFetchApi"
           alt="loading"
