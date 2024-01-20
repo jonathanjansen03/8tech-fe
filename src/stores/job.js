@@ -9,6 +9,10 @@ export const useJobStore = defineStore('job', () => {
   const jobApplicants = ref([]);
   const jobApplicantsTotalPages = ref(0);
 
+  const createJob = async (data, token) => {
+    await jobApi.create(data, token);
+  };
+
   const searchJobs = async (data, token) => {
     const res = await jobApi.search(data, token);
 
@@ -45,6 +49,7 @@ export const useJobStore = defineStore('job', () => {
     job,
     jobApplicants,
     jobApplicantsTotalPages,
+    createJob,
     searchJobs,
     findJob,
     applyJob,
