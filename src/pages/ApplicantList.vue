@@ -1,20 +1,20 @@
 <script setup>
-import SideBar from '@/components/SideBar.vue';
 import { onBeforeMount, onBeforeUnmount, reactive, ref, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+
+import jobApi from '@/api/job.js';
 import { useMainStore } from '@/stores/main.js';
 import { useUserStore } from '@/stores/user.js';
-import jobApi from '@/api/job.js';
-import router from '@/router/index.js';
+import SideBar from '@/components/SideBar.vue';
 import AppButton from '@/components/AppButton.vue';
-import { useRoute } from 'vue-router';
 import PaginationComponent from '@/components/PaginationComponent.vue';
 
 const mainStore = useMainStore();
 const userStore = useUserStore();
 const route = useRoute();
+const router = useRouter();
 
 const applicantList = reactive([]);
-
 const pagination = reactive({
   page: 1,
   size: 5,
@@ -22,16 +22,12 @@ const pagination = reactive({
   isFirstPage: true,
   totalPages: 0,
 });
-
-const flag = reactive({
-  isLoadingFetchApi: false,
-});
-
-const jobInfo = ref();
+const isLoadingFetchApi = ref(false);
+const jobInfo = ref({});
 
 onBeforeMount(async () => {
   mainStore.setRecruiterPortal(true);
-  flag.isLoadingFetchApi = true;
+  isLoadingFetchApi.value = true;
   const applicantListResponse = await jobApi.applicant(
     {
       page: pagination.page,
@@ -42,7 +38,7 @@ onBeforeMount(async () => {
   );
   applicantList.push(...applicantListResponse.data.data);
   pagination.totalPages = applicantListResponse.data.totalPages;
-  flag.isLoadingFetchApi = false;
+  isLoadingFetchApi.value = false;
 
   jobInfo.value = await jobApi.info(
     route.params.id,
@@ -64,7 +60,7 @@ watch(pagination, async (newPagination) => {
     pagination.page = pagination.totalPages;
     return;
   }
-  flag.isLoadingFetchApi = true;
+  isLoadingFetchApi.value = true;
   const applicantListResponse = await jobApi.applicant(
     {
       page: pagination.page,
@@ -75,7 +71,7 @@ watch(pagination, async (newPagination) => {
   );
 
   if (applicantListResponse.data.data.length === 0) {
-    flag.isLoadingFetchApi = false;
+    isLoadingFetchApi.value = false;
     return;
   }
 
@@ -85,7 +81,7 @@ watch(pagination, async (newPagination) => {
 
   applicantList.splice(0, applicantList.length);
   applicantList.push(...applicantListResponse.data.data);
-  flag.isLoadingFetchApi = false;
+  isLoadingFetchApi.value = false;
 });
 </script>
 
@@ -138,7 +134,7 @@ watch(pagination, async (newPagination) => {
         :page="pagination.page"
         :totalPages="pagination.totalPages">
         <img
-          v-if="flag.isLoadingFetchApi"
+          v-if="isLoadingFetchApi"
           alt="loading"
           class="h-8 mb-2"
           src="@/assets/images/loading.svg" />

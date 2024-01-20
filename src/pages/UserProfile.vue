@@ -1,5 +1,6 @@
 <script setup>
 import { computed, onBeforeMount, reactive, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import {
   ArrowLeftOnRectangleIcon,
@@ -7,23 +8,24 @@ import {
 } from '@heroicons/vue/24/outline';
 import NProgress from 'nprogress';
 
-import userApi from '@/api/user';
-import { useUserStore } from '@/stores/user';
 import { useMainStore } from '@/stores/main';
-
+import { useUserStore } from '@/stores/user';
+import userApi from '@/api/user';
 import config from '@/config';
-import DefaultUserProfilePicture from '@/assets/images/default-user-profile-picture.png';
+import defaultUserProfilePicture from '@/assets/images/default-user-profile-picture.png';
+
 import AppCard from '@/components/AppCard.vue';
 import AppButton from '@/components/AppButton.vue';
-import { useRoute } from 'vue-router';
 
-const route = useRoute();
-const mainStore = useMainStore();
 const NO_DESCRIPTION = 'Belum ada deskripsi.';
 const NO_PORTFOLIO = 'Belum ada portofolio.';
 
+const route = useRoute();
+const mainStore = useMainStore();
 const userStore = useUserStore();
+
 const { currentUser, isUserPortfolioEmpty } = storeToRefs(userStore);
+
 const isPrivateProfile = ref(true);
 const publicUserProfile = reactive({
   firstName: '',
@@ -35,14 +37,21 @@ const publicUserProfile = reactive({
   profilePicture: '',
 });
 
+const userProfilePicture = computed(() => {
+  if (isPrivateProfile.value) {
+    return currentUser.value.profilePicture ?? defaultUserProfilePicture;
+  }
+  return publicUserProfile.profilePicture ?? defaultUserProfilePicture;
+});
+
 onBeforeMount(async () => {
   isPrivateProfile.value = route.params.id === undefined;
   mainStore.setRecruiterPortal(currentUser.value.roles.includes('RECRUITER'));
   if (!isPrivateProfile.value) {
     NProgress.start();
     const res = await userApi.getUserInfoWithId(
-      userStore.currentUserToken,
-      route.params.id
+      route.params.id,
+      userStore.currentUserToken
     );
     NProgress.done();
     publicUserProfile.firstName = res.data.firstName;
@@ -58,14 +67,6 @@ onBeforeMount(async () => {
 watch(route, () => {
   isPrivateProfile.value = route.params.id === undefined;
   mainStore.setRecruiterPortal(currentUser.value.roles.includes('RECRUITER'));
-});
-
-const userProfilePicture = computed(() => {
-  if (isPrivateProfile.value) {
-    return currentUser.value.profilePicture ?? DefaultUserProfilePicture;
-  } else {
-    return publicUserProfile.profilePicture ?? DefaultUserProfilePicture;
-  }
 });
 </script>
 

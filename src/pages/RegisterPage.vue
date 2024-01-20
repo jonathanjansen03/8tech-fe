@@ -1,18 +1,20 @@
 <script setup>
-import { reactive } from 'vue';
+import { reactive, ref } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
 
 import { useUserStore } from '@/stores/user';
+import companyApi from '@/api/company.js';
 import config from '@/config';
 import validationUtil from '@/utils/validation';
 
 import AppCard from '@/components/AppCard.vue';
 import InputBox from '@/components/InputBox.vue';
 import AppButton from '@/components/AppButton.vue';
-import companyApi from '@/api/company.js';
 
-const { register } = useUserStore();
 const router = useRouter();
+const userStore = useUserStore();
+
+const { register } = userStore;
 
 const formData = reactive({
   firstName: '',
@@ -23,13 +25,11 @@ const formData = reactive({
   confirmPassword: '',
   isRecruiter: false,
 });
-
 const companyFormData = reactive({
   profilePicture: '',
   name: '',
   description: '',
 });
-
 const errors = reactive({
   firstName: '',
   lastName: '',
@@ -42,10 +42,7 @@ const errors = reactive({
   name: '',
   description: '',
 });
-
-const flag = reactive({
-  isLoadingRegister: false,
-});
+const isLoadingRegister = ref(false);
 
 const validateField = (field) => {
   if (!formData[field]) {
@@ -94,13 +91,13 @@ const validateFormData = () => {
 };
 
 const doRegister = async () => {
-  if (flag.isLoadingRegister) {
+  if (isLoadingRegister.value) {
     return;
   }
 
-  flag.isLoadingRegister = true;
+  isLoadingRegister.value = true;
   if (!validateFormData()) {
-    flag.isLoadingRegister = false;
+    isLoadingRegister.value = false;
     return;
   }
 
@@ -115,10 +112,10 @@ const doRegister = async () => {
       companyId: companyData?.data.id,
     });
     handleSuccessfulRegister();
-    flag.isLoadingRegister = false;
+    isLoadingRegister.value = false;
   } catch (err) {
     handleFailedRegister(err);
-    flag.isLoadingRegister = false;
+    isLoadingRegister.value = false;
   }
 };
 
@@ -233,7 +230,7 @@ const toggleRecruiter = async () => {
         <AppButton @click="doRegister" class="mt-12">
           <p>Daftar</p>
           <img
-            v-if="flag.isLoadingRegister"
+            v-if="isLoadingRegister"
             class="h-6"
             src="@/assets/images/loading.svg"
             alt="loading" />

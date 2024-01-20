@@ -10,20 +10,27 @@ import {
 } from '@heroicons/vue/24/outline';
 import { UserCircleIcon } from '@heroicons/vue/24/solid';
 
+import { useMainStore } from '@/stores/main.js';
 import { useUserStore } from '@/stores/user';
 import config from '@/config';
 import logo from '@/assets/images/8tech-logo.png';
 import AppButton from '@/components/AppButton.vue';
 import AppCard from '@/components/AppCard.vue';
-import { useMainStore } from '@/stores/main.js';
 
-const store = useUserStore();
 const mainStore = useMainStore();
+const userStore = useUserStore();
 const router = useRouter();
-const { isLoggedIn, currentUserFullName } = storeToRefs(store);
-const { logout } = store;
+const { isLoggedIn, currentUserFullName } = storeToRefs(userStore);
+const { logout } = userStore;
 
 const isOpen = ref(false);
+
+const userFullName = computed(() => {
+  if (currentUserFullName.value.length > 12) {
+    return `${currentUserFullName.value.slice(0, 12)}...`;
+  }
+  return currentUserFullName.value;
+});
 
 const toggleNavbar = () => {
   isOpen.value = !isOpen.value;
@@ -32,13 +39,6 @@ const toggleNavbar = () => {
 const goToHome = () => {
   router.push(config.pages.home.path);
 };
-
-const userFullName = computed(() => {
-  if (currentUserFullName.value.length > 12) {
-    return `${currentUserFullName.value.slice(0, 12)}...`;
-  }
-  return currentUserFullName.value;
-});
 </script>
 
 <template>

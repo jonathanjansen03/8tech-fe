@@ -5,9 +5,9 @@ import NProgress from 'nprogress';
 
 import { useMainStore } from '@/stores/main.js';
 import { useUserStore } from '@/stores/user.js';
-import validationUtil from '@/utils/validation.js';
 import jobApi from '@/api/job.js';
 import config from '@/config/index.js';
+import validationUtil from '@/utils/validation.js';
 import SideBar from '@/components/SideBar.vue';
 import AppCard from '@/components/AppCard.vue';
 import InputBox from '@/components/InputBox.vue';
@@ -15,8 +15,8 @@ import AppButton from '@/components/AppButton.vue';
 
 const { currentUserToken } = useUserStore();
 
-const router = useRouter();
 const route = useRoute();
+const router = useRouter();
 const mainStore = useMainStore();
 
 const jobData = reactive({

@@ -1,19 +1,21 @@
 <script setup>
 import { onBeforeMount } from 'vue';
-import { storeToRefs } from 'pinia';
 import { useRouter } from 'vue-router';
+import { storeToRefs } from 'pinia';
 
 import { useUserStore } from '@/stores/user';
 import { useJobStore } from '@/stores/job';
 import config from '@/config';
 import SearchBar from '@/components/SearchBar.vue';
 import JobCard from '@/components/JobCard.vue';
-const { currentUserToken } = storeToRefs(useUserStore());
-const jobStore = useJobStore();
-const { jobList } = storeToRefs(jobStore);
-const { searchJobs } = jobStore;
 
 const router = useRouter();
+const userStore = useUserStore();
+const jobStore = useJobStore();
+
+const { currentUserToken } = storeToRefs(userStore);
+const { jobList } = storeToRefs(jobStore);
+const { searchJobs } = jobStore;
 
 const goToJobDetail = (id) => {
   router.push({

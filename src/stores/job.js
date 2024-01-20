@@ -4,8 +4,8 @@ import { ref } from 'vue';
 import jobApi from '@/api/job';
 
 export const useJobStore = defineStore('job', () => {
-  const jobList = ref([]);
   const job = ref({});
+  const jobList = ref([]);
 
   const searchJobs = async (data, token) => {
     const res = await jobApi.search(data, token);
