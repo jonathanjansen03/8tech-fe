@@ -29,7 +29,7 @@ export const useJobStore = defineStore('job', () => {
 
     jobList.value = res.data.data.slice(0);
     jobListPagination.value = {
-      totalPage: res.data.totalPages,
+      totalPages: res.data.totalPages,
       hasNext: res.data.hasNext,
       hasPrevious: res.data.hasPrevious,
       isLast: res.data.isLast,

@@ -42,6 +42,13 @@ const goToJobDetailPage = (id) => {
   });
 };
 
+const trimJobDescription = (description) => {
+  if (description.length > 100) {
+    return `${description.slice(0, 100)}...`;
+  }
+  return description;
+};
+
 onBeforeMount(initPage);
 </script>
 
@@ -62,6 +69,7 @@ onBeforeMount(initPage);
               <tr>
                 <th class="px-6 py-3 w-20">No.</th>
                 <th class="px-6 py-3">Judul Pekerjaan</th>
+                <th class="px-6 py-3">Deskripsi Pekerjaan</th>
                 <th class="px-6 py-3 text-center w-48">Action</th>
               </tr>
             </thead>
@@ -74,16 +82,18 @@ onBeforeMount(initPage);
                 <td class="px-6 py-4">
                   {{ (pagination.page - 1) * pagination.size + index + 1 }}
                 </td>
-                <th
-                  scope="row"
+                <td
                   class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                   {{ job.title }}
-                </th>
-                <th scope="row" class="px-6 py-4 flex flex-row-reverse">
+                </td>
+                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  {{ trimJobDescription(job.description+'asdfbnasdfasdhjfbjabsfhjadsbfabfabsdfjbasdjfbahjsdfbahjsdbfhjasfbjasdbfjadsbjadsbjadbsjbasdfasdfasdfajbdjbaajfbsdjhfbajdfbajsdbfjadbsjbh') }}
+                </td>
+                <td class="px-6 py-4 flex flex-row-reverse">
                   <AppButton class="mr-3">
                     <p>Lihat Detail</p>
                   </AppButton>
-                </th>
+                </td>
               </tr>
             </tbody>
           </table>
