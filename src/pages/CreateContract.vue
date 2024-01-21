@@ -41,7 +41,6 @@ onMounted(async () => {
 const initPage = async () => {
   mainStore.setRecruiterPortal(true);
   await contractStore.defineStoreContract(route.params.id, currentUserToken);
-  console.log('#ricat ', contractStore.contract);
   formData.paymentRate = contractStore.contract?.paymentRate;
   formData.title = contractStore.contract?.title;
   formData.description = contractStore.contract?.description;
