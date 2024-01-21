@@ -18,7 +18,7 @@ const companyStore = useCompanyStore();
 
 const { register } = userStore;
 
-const {company} = storeToRefs(companyStore);
+const { company } = storeToRefs(companyStore);
 const { createCompany } = companyStore;
 
 const formData = reactive({
@@ -106,6 +106,7 @@ const doRegister = async () => {
   }
 
   try {
+    formData.email = formData.email.trim().toLowerCase();
     if (isRecruiter.value) {
       await createCompany(companyFormData);
     }

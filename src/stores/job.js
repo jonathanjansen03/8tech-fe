@@ -32,6 +32,8 @@ export const useJobStore = defineStore('job', () => {
       totalPage: res.data.totalPages,
       hasNext: res.data.hasNext,
       hasPrevious: res.data.hasPrevious,
+      isLast: res.data.isLast,
+      isFirst: res.data.isFirst,
     };
   };
 
@@ -49,6 +51,8 @@ export const useJobStore = defineStore('job', () => {
       totalPages: res.data.totalPages,
       hasNext: res.data.hasNext,
       hasPrevious: res.data.hasPrevious,
+      isLast: res.data.isLast,
+      isFirst: res.data.isFirst,
     };
   };
 

@@ -1,7 +1,8 @@
 <script setup>
-import { onBeforeMount, ref } from 'vue';
+import { computed, onBeforeMount, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
+import { ChevronLeftIcon } from '@heroicons/vue/24/outline';
 
 import { useUserStore } from '@/stores/user';
 import { useJobStore } from '@/stores/job';
@@ -29,6 +30,8 @@ const { setContract } = contractStore;
 
 const isError = ref(false);
 const errorMessage = ref('');
+
+const isInvisibleApplyButton = computed(() => !!route.query.ref);
 
 const doApplyJob = async () => {
   if (!isLoggedIn.value) {
@@ -88,7 +91,10 @@ onBeforeMount(initPage);
   <div>
     <AppCard class="px-5">
       <div class="flex flex-col">
-        <h1>Detail Pekerjaan</h1>
+        <h1 class="flex items-center">
+          <ChevronLeftIcon class="cursor-pointer mr-3 stroke-2 w-6" @click="router.back" />
+          Detail Pekerjaan
+        </h1>
         <div class="mt-5 px-24">
           <div class="items-center flex mt-5">
             <img
@@ -112,7 +118,12 @@ onBeforeMount(initPage);
           type="error"
           v-if="isError"
           class="mt-10" />
-        <AppButton class="mt-10" @click="doApplyJob">Lamar Pekerjaan</AppButton>
+        <AppButton
+          v-if="!isInvisibleApplyButton"
+          class="mt-10"
+          @click="doApplyJob">
+          Lamar Pekerjaan
+        </AppButton>
       </div>
     </AppCard>
   </div>

@@ -27,8 +27,8 @@ export const useCompanyStore = defineStore('company', () => {
       formData.append('file', data);
 
       const imageLink = await userApi.uploadCompanyProfilePicture(
-        token,
-        formData
+        formData,
+        token
       );
       return imageLink.data.profilePicture;
     }
