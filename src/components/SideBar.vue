@@ -1,9 +1,11 @@
 <script setup>
+import { useRouter } from 'vue-router';
 import { XMarkIcon, PlusCircleIcon, HomeIcon } from '@heroicons/vue/24/outline';
-import { useMainStore } from '@/stores/main.js';
-import router from '@/router/index.js';
-import config from '@/config/index.js';
 
+import { useMainStore } from '@/stores/main';
+import config from '@/config';
+
+const router = useRouter();
 const mainStore = useMainStore();
 </script>
 

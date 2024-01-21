@@ -10,7 +10,7 @@ import {
 } from '@heroicons/vue/24/outline';
 import { UserCircleIcon } from '@heroicons/vue/24/solid';
 
-import { useMainStore } from '@/stores/main.js';
+import { useMainStore } from '@/stores/main';
 import { useUserStore } from '@/stores/user';
 import config from '@/config';
 import logo from '@/assets/images/8tech-logo.png';

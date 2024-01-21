@@ -1,36 +1,33 @@
 <script setup>
-import { onBeforeUnmount, onMounted, reactive, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import { useMainStore } from '@/stores/main.js';
-import { useUserStore } from '@/stores/user.js';
-import { useContractStore } from '@/stores/contract.js';
-import config from '@/config/index.js';
-import validationUtil from '@/utils/validation.js';
-import SideBar from '@/components/SideBar.vue';
+import { useUserStore } from '@/stores/user';
+import { useContractStore } from '@/stores/contract';
+import config from '@/config';
+import validationUtil from '@/utils/validation';
 import AppCard from '@/components/AppCard.vue';
 import InputBox from '@/components/InputBox.vue';
 import AppButton from '@/components/AppButton.vue';
 
-const {currentUserToken} = useUserStore();
+const { currentUserToken } = useUserStore();
 
 const router = useRouter();
 const route = useRoute();
-const mainStore = useMainStore();
 const contractStore = useContractStore();
 
 const formData = reactive({
   title: '',
   description: '',
   details: '',
-  paymentRate: ''
+  paymentRate: '',
 });
 
 const errors = reactive({
   title: '',
   description: '',
   details: '',
-  paymentRate: ''
+  paymentRate: '',
 });
 const isLoading = ref(false);
 
@@ -39,18 +36,12 @@ onMounted(async () => {
 });
 
 const initPage = async () => {
-  mainStore.setRecruiterPortal(true);
   await contractStore.fetchStoreContract(route.params.id, currentUserToken);
   formData.paymentRate = contractStore.contract?.paymentRate;
   formData.title = contractStore.contract?.title;
   formData.description = contractStore.contract?.description;
   formData.details = contractStore.contract?.details;
 };
-
-onBeforeUnmount(() => {
-  mainStore.setRecruiterPortal(false);
-  mainStore.closePortalNavbar();
-});
 
 const validateField = (field) => {
   if (!formData[field]) {
@@ -115,14 +106,17 @@ const doUpdateContract = async () => {
   }
 
   try {
-    await contractStore.updateContract({
-      title: formData.title,
-      description: formData.description,
-      paymentRate: parseInt(formData.paymentRate),
-      customField: 'details=' + formData.details,
-      id: route.params.id,
-      status: config.constants.contractStatus.ACCEPTED
-    }, currentUserToken);
+    await contractStore.updateContract(
+      {
+        title: formData.title,
+        description: formData.description,
+        paymentRate: parseInt(formData.paymentRate),
+        customField: 'details=' + formData.details,
+        id: route.params.id,
+        status: config.constants.contractStatus.ACCEPTED,
+      },
+      currentUserToken
+    );
     handleSuccess();
     isLoading.value = false;
   } catch (err) {
@@ -134,10 +128,11 @@ const doUpdateContract = async () => {
 
 <template>
   <div class="sm:px-20">
-    <SideBar v-if="mainStore.showPortalNavbar" class="sidebar"/>
     <div>
       <AppCard class="px-5">
-        <div class="flex flex-col items-center" @keydown.enter="doUpdateContract">
+        <div
+          class="flex flex-col items-center"
+          @keydown.enter="doUpdateContract">
           <h1>Buat Kontrak</h1>
           <InputBox
             id="create-contract-title"
@@ -146,7 +141,7 @@ const doUpdateContract = async () => {
             class="mt-8 w-full"
             label="Judul Kontrak"
             type="text"
-            @blur="validateField('title')"/>
+            @blur="validateField('title')" />
           <InputBox
             id="create-contract-description"
             v-model="formData.description"
@@ -155,7 +150,7 @@ const doUpdateContract = async () => {
             label="Deskripsi Kontrak"
             text-area
             text-area-height="h-40"
-            @blur="validateField('description')"/>
+            @blur="validateField('description')" />
           <InputBox
             id="create-contract-details"
             v-model="formData.details"
@@ -164,21 +159,21 @@ const doUpdateContract = async () => {
             label="Detail Kontrak"
             text-area
             text-area-height="h-40"
-            @blur="validateField('details')"/>
+            @blur="validateField('details')" />
           <InputBox
             id="create-contract-paymentRate"
             v-model="formData.paymentRate"
             :error="errors.paymentRate"
             class="mt-8 w-full"
             label="Pembayaran Kontrak"
-            @blur="validateField('paymentRate')"/>
+            @blur="validateField('paymentRate')" />
           <AppButton class="mt-12 w-1/2" @click="doUpdateContract">
             <p>Ajukan Kontrak</p>
             <img
               v-if="isLoading"
               alt="loading"
               class="h-6"
-              src="@/assets/images/loading.svg"/>
+              src="@/assets/images/loading.svg" />
           </AppButton>
         </div>
       </AppCard>

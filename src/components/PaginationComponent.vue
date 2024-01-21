@@ -1,5 +1,5 @@
 <script setup>
-import { ChevronDoubleLeftIcon, ChevronDoubleRightIcon } from '@heroicons/vue/24/outline/index.js';
+import { ChevronDoubleLeftIcon, ChevronDoubleRightIcon } from '@heroicons/vue/24/outline';
 
 const props = defineProps({
   page: {

@@ -130,7 +130,7 @@ const goCreateContract = (id) => {
                 {{ item.firstName + ' ' + item.lastName }}
               </th>
               <th scope="row" class="px-6 py-4 flex flex-row-reverse">
-                <AppButton class="mr-3">
+                <AppButton>
                   <p @click.stop="goCreateContract(item.contractId)">Terima lamaran</p>
                 </AppButton>
               </th>
