@@ -8,6 +8,8 @@ export const useUserStore = defineStore('user', () => {
   const currentUser = ref({});
   const currentUserToken = ref('');
   const userProfile = ref({});
+  const userAppliedJobs = ref([]);
+  const userAppliedJobsPagination = ref({});
 
   const isLoggedIn = computed(() => !!currentUser.value?.id);
   const isRecruiter = computed(() => {
@@ -101,10 +103,24 @@ export const useUserStore = defineStore('user', () => {
     localStorage.setItem('userData', JSON.stringify(currentUser.value));
   };
 
+  const getUserAppliedJobs = async (data) => {
+    const res = await userApi.getAppliedJobs(data, currentUserToken.value);
+    userAppliedJobs.value = res.data.data.slice(0);
+    userAppliedJobsPagination.value = {
+      totalPage: res.data.totalPages,
+      hasNext: res.data.hasNext,
+      hasPrevious: res.data.hasPrevious,
+      isLast: res.data.isLast,
+      isFirst: res.data.isFirst,
+    };
+  };
+
   return {
     currentUser,
     currentUserToken,
     userProfile,
+    userAppliedJobs,
+    userAppliedJobsPagination,
     isLoggedIn,
     isRecruiter,
     currentUserFullName,
@@ -117,5 +133,6 @@ export const useUserStore = defineStore('user', () => {
     isTokenValid,
     updateUserData,
     setCurrentUser,
+    getUserAppliedJobs,
   };
 });
