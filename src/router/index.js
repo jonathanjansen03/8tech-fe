@@ -164,6 +164,8 @@ router.afterEach(() => {
 });
 
 router.beforeEach(async (to) => {
+  document.title = `${to.meta.title} | ${config.appName}`;
+
   const userStore = useUserStore();
   userStore.setCurrentUser();
   const loginPage = {
@@ -171,13 +173,11 @@ router.beforeEach(async (to) => {
     query: { redirect: to.fullPath },
   };
 
-  if (to.path === config.pages.home.path && userStore.isRecruiter.value) {
+  if (to.path === config.pages.home.path && userStore.isRecruiter) {
     return {
       path: config.pages.recruiterPortal.path,
     };
   }
-
-  document.title = `${to.meta.title} | ${config.appName}`;
 
   if (
     (to.meta.requiresAuth && !userStore.isLoggedIn) ||
@@ -200,7 +200,8 @@ router.beforeEach(async (to) => {
       currentUser: JSON.parse(localStorage.getItem('userData')),
     });
 
-    if (to.meta.recruiterRole && !userStore.isRecruiter.value) {
+
+    if (to.meta.recruiterRole && !userStore.isRecruiter) {
       return {
         path: config.pages.home.path,
       };
