@@ -129,7 +129,7 @@ const doUpdateJob = async () => {
 
 const goToJobApplicantsPage = () => {
   router.push({
-    name: config.pages.jobApplicants.name,
+    name: config.pages.applicantList.name,
     params: {
       id: route.params.id
     },

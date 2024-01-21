@@ -17,6 +17,7 @@ const JobDetail = () => import('@/pages/JobDetail.vue');
 const ApplicantList = () => import('@/pages/ApplicantList.vue');
 const CompanyProfile = () => import('@/pages/CompanyProfile.vue');
 const EditCompanyProfile = () => import('@/pages/EditCompanyProfile.vue');
+const CreateContract = () => import('@/pages/CreateContract.vue');
 const AppliedJobs = () => import('@/pages/AppliedJobs.vue');
 
 const router = createRouter({
@@ -150,6 +151,16 @@ const router = createRouter({
       meta: {
         title: 'Daftar Pekerjaan yang Dilamar',
         requiresAuth: true,
+      },
+    },
+    {
+      path: config.pages.createContract.path,
+      name: config.pages.createContract.name,
+      component: CreateContract,
+      meta: {
+        title: 'Buat Kontrak',
+        requiresAuth: true,
+        recruiterRole: true,
       },
     },
   ],
