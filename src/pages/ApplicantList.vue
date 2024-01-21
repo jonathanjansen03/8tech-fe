@@ -9,6 +9,7 @@ import { useJobStore } from '@/stores/job';
 import config from '@/config';
 import AppButton from '@/components/AppButton.vue';
 import PaginationComponent from '@/components/PaginationComponent.vue';
+import NProgress from 'nprogress';
 
 const GET_APPLICANT_LIST = 'mendapatkan daftar pelamar';
 
@@ -29,6 +30,7 @@ const pagination = reactive({
 const isLoadingFetchApi = ref(false);
 
 const initPage = async () => {
+  NProgress.start();
   mainStore.setRecruiterPortal(true);
   isLoadingFetchApi.value = true;
 
@@ -46,6 +48,7 @@ const initPage = async () => {
     alert(config.errors.general(GET_APPLICANT_LIST));
   }
   isLoadingFetchApi.value = false;
+  NProgress.done();
 };
 
 onBeforeMount(initPage);
@@ -81,6 +84,16 @@ watch(pagination, async (newPagination) => {
 
   isLoadingFetchApi.value = false;
 });
+
+const goCreateContract = (id) => {
+  router.push({
+    name: config.pages.createContract.name,
+    params: {
+      id
+    },
+  });
+};
+
 </script>
 
 <template>
@@ -118,7 +131,7 @@ watch(pagination, async (newPagination) => {
               </th>
               <th scope="row" class="px-6 py-4 flex flex-row-reverse">
                 <AppButton class="mr-3">
-                  <p @click.stop="router.push(`/contract-create/${item.contractId}`)">Terima lamaran</p>
+                  <p @click.stop="goCreateContract(item.contractId)">Terima lamaran</p>
                 </AppButton>
               </th>
             </tr>

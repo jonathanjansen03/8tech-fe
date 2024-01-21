@@ -9,7 +9,7 @@ export const useContractStore = defineStore('contract', () => {
     contract.value = Object.assign({}, data);
   };
 
-  const defineStoreContract = async (id, token) => {
+  const fetchStoreContract = async (id, token) => {
     const res = await contractApi.info(id, token);
     setContract(res.data);
   };
@@ -21,7 +21,7 @@ export const useContractStore = defineStore('contract', () => {
   return {
     contract,
     setContract,
-    defineStoreContract,
+    fetchStoreContract,
     updateContract
   };
 });
