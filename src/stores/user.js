@@ -10,9 +10,13 @@ export const useUserStore = defineStore('user', () => {
   const userProfile = ref({});
 
   const isLoggedIn = computed(() => !!currentUser.value?.id);
-  const isRecruiter = computed(() =>
-    currentUser.value?.roles.includes('RECRUITER')
-  );
+  const isRecruiter = computed(() => {
+    if (!currentUser.value.roles) {
+      return false;
+    }
+
+    return currentUser.value?.roles.includes('RECRUITER');
+  });
   const currentUserFullName = computed(
     () => `${currentUser.value.firstName} ${currentUser.value.lastName}`
   );
@@ -37,8 +41,8 @@ export const useUserStore = defineStore('user', () => {
   };
 
   const setCurrentUser = () => {
-    const token = localStorage.getItem('Etoken');
-    const userData = localStorage.getItem('userData');
+    const token = localStorage.getItem('Etoken') || '';
+    const userData = localStorage.getItem('userData') || '{}';
 
     currentUser.value = JSON.parse(userData);
     currentUserToken.value = token;
