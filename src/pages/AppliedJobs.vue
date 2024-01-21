@@ -37,7 +37,8 @@ const initPage = async () => {
 const goToJobDetailPage = (id) => {
   router.push({
     name: config.pages.jobDetail.name,
-    params: { id }
+    params: { id },
+    query: { ref: 'appliedJobs'}
   });
 };
 
