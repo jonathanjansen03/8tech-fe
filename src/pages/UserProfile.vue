@@ -77,7 +77,7 @@ const initPage = async () => {
     try {
       await getUserInfoById(route.params.id, currentUserToken.value);
     } catch (err) {
-      console.log(err);
+      console.error(err);
       alert(config.errors.general(GET_PROFILE_DATA));
     }
 

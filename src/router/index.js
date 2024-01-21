@@ -17,6 +17,7 @@ const JobDetail = () => import('@/pages/JobDetail.vue');
 const ApplicantList = () => import('@/pages/ApplicantList.vue');
 const CompanyProfile = () => import('@/pages/CompanyProfile.vue');
 const EditCompanyProfile = () => import('@/pages/EditCompanyProfile.vue');
+const AppliedJobs = () => import('@/pages/AppliedJobs.vue');
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -139,6 +140,15 @@ const router = createRouter({
       component: ApplicantList,
       meta: {
         title: 'Daftar Pelamar Kerja',
+        requiresAuth: true,
+      },
+    },
+    {
+      path: config.pages.appliedJobs.path,
+      name: config.pages.appliedJobs.name,
+      component: AppliedJobs,
+      meta: {
+        title: 'Daftar Pekerjaan yang Dilamar',
         requiresAuth: true,
       },
     },

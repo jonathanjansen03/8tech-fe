@@ -7,7 +7,6 @@ import { useMainStore } from '@/stores/main';
 import { useUserStore } from '@/stores/user';
 import { useJobStore } from '@/stores/job';
 import config from '@/config';
-import SideBar from '@/components/SideBar.vue';
 import AppButton from '@/components/AppButton.vue';
 import PaginationComponent from '@/components/PaginationComponent.vue';
 
@@ -71,11 +70,8 @@ watch(pagination, async (newPagination) => {
 
   try {
     await getApplicants(
-      {
-        page: pagination.page,
-        size: pagination.size,
-      },
       route.params.id,
+      pagination,
       userStore.currentUserToken
     );
   } catch (err) {
@@ -89,7 +85,6 @@ watch(pagination, async (newPagination) => {
 
 <template>
   <div class="sm:px-20">
-    <SideBar class="sidebar" v-if="mainStore.showPortalNavbar" />
     <div>
       <h1 class="text-center font-bold mb-8 text-white text-2xl">
         Daftar Pelamar untuk Lowongan Pekerjaan

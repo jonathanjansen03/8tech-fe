@@ -43,19 +43,23 @@ export default {
     },
     createJob: {
       name: 'create-job',
-      path: '/create-job',
+      path: '/job/create',
     },
     jobDetail: {
       name: 'job-detail',
-      path: '/job-detail/:id',
+      path: '/job/:id',
     },
     jobEditDetail: {
       name: 'job-edit',
-      path: '/job-edit/:id',
+      path: '/job/:id/edit',
     },
     applicantList: {
       name: 'job-applicant',
-      path: '/job-applicant/:id',
+      path: '/job/:id/applicants',
+    },
+    appliedJobs: {
+      name: 'applied-jobs',
+      path: '/applied-jobs',
     },
   },
   api: {
@@ -70,7 +74,10 @@ export default {
       Authorization: `Bearer ${token}`,
     }),
     defaultPageSize: 12,
-    jobFilterFields: { Judul: 'title', Deskripsi: 'description' },
+    jobFilterFields: {
+      Judul: 'title',
+      Deskripsi: 'description',
+    },
     auth: {
       register: '/auth/register',
       login: '/auth/login',
@@ -80,6 +87,7 @@ export default {
       updateData: '/user/update/me',
       uploadProfilePicture: '/user/uploadProfilePicture',
       uploadCompanyProfilePicture: '/user/uploadCompanyProfilePicture',
+      appliedJobs: '/user/applied',
     },
     company: {
       create: '/company/create',

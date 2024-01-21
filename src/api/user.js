@@ -33,7 +33,7 @@ export default {
       isUploadingFile: true,
     });
   },
-  uploadCompanyProfilePicture: (token, data) => {
+  uploadCompanyProfilePicture: (data, token) => {
     return apiUtil.hitApi({
       method: config.api.method.post,
       path: config.api.user.uploadCompanyProfilePicture,
@@ -42,4 +42,12 @@ export default {
       isUploadingFile: true,
     });
   },
+  getAppliedJobs: (data, token) => {
+    return apiUtil.hitApi({
+      method: config.api.method.post,
+      path: config.api.user.appliedJobs,
+      body: data,
+      headers: config.api.authTokenHeader(token),
+    });
+  }
 };
