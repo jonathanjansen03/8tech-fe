@@ -18,10 +18,15 @@ export const useContractStore = defineStore('contract', () => {
     setContract(await contractApi.update(data, token));
   };
 
+  const rejectContract = async (id, token) => {
+    await contractApi.reject(id, token);
+  };
+
   return {
     contract,
     setContract,
     fetchStoreContract,
-    updateContract
+    updateContract,
+    rejectContract,
   };
 });

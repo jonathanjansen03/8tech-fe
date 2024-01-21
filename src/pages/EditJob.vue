@@ -131,7 +131,7 @@ const goToJobApplicantsPage = () => {
   router.push({
     name: config.pages.applicantList.name,
     params: {
-      id: route.params.id
+      id: route.params.id,
     },
   });
 };
@@ -191,9 +191,7 @@ watch(
                 class="h-6"
                 src="@/assets/images/loading.svg" />
             </AppButton>
-            <AppButton
-              class="mt-12 w-1/2 m-5"
-              @click="goToJobApplicantsPage">
+            <AppButton class="mt-12 w-1/2 m-5" @click="goToJobApplicantsPage">
               <p>Lihat pelamar</p>
             </AppButton>
           </div>

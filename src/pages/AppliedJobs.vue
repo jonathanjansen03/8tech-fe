@@ -4,17 +4,23 @@ import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 
 import { useUserStore } from '@/stores/user';
+import { useContractStore } from '@/stores/contract';
 import config from '@/config';
 
 import PaginationComponent from '@/components/PaginationComponent.vue';
 import AppButton from '@/components/AppButton.vue';
 
 const GET_APPLIED_JOBS = 'mendapatkan daftar pekerjaan';
+const REJECT_CONTRACT = 'membatalkan lamaran pekerjaan';
 
 const router = useRouter();
 const userStore = useUserStore();
-const { userAppliedJobs, userAppliedJobsPagination } = storeToRefs(userStore);
+const contractStore = useContractStore();
+
+const { currentUserToken, userAppliedJobs, userAppliedJobsPagination } =
+  storeToRefs(userStore);
 const { getUserAppliedJobs } = userStore;
+const { rejectContract } = contractStore;
 
 const pagination = reactive({
   page: 1,
@@ -38,7 +44,7 @@ const goToJobDetailPage = (id) => {
   router.push({
     name: config.pages.jobDetail.name,
     params: { id },
-    query: { ref: 'appliedJobs'}
+    query: { ref: 'appliedJobs' },
   });
 };
 
@@ -47,6 +53,17 @@ const trimJobDescription = (description) => {
     return `${description.slice(0, 100)}...`;
   }
   return description;
+};
+
+const unapplyJob = async (id) => {
+  console.log(userAppliedJobs.value)
+  try {
+    await rejectContract(id, currentUserToken.value);
+    await getUserAppliedJobs(pagination);
+  } catch (err) {
+    console.error(err);
+    alert(config.errors.general(REJECT_CONTRACT));
+  }
 };
 
 onBeforeMount(initPage);
@@ -70,15 +87,14 @@ onBeforeMount(initPage);
                 <th class="px-6 py-3 w-20">No.</th>
                 <th class="px-6 py-3">Judul Pekerjaan</th>
                 <th class="px-6 py-3">Deskripsi Pekerjaan</th>
-                <th class="px-6 py-3 text-center w-48">Action</th>
+                <th class="px-6 py-3 text-center">Tindakan</th>
               </tr>
             </thead>
             <tbody>
               <tr
                 v-for="(job, index) in userAppliedJobs"
                 :key="index"
-                class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-blue-950"
-                @click="goToJobDetailPage(job.id)">
+                class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-blue-950">
                 <td class="px-6 py-4">
                   {{ (pagination.page - 1) * pagination.size + index + 1 }}
                 </td>
@@ -86,12 +102,18 @@ onBeforeMount(initPage);
                   class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                   {{ job.title }}
                 </td>
-                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                  {{ trimJobDescription(job.description+'asdfbnasdfasdhjfbjabsfhjadsbfabfabsdfjbasdjfbahjsdfbahjsdbfhjasfbjasdbfjadsbjadsbjadbsjbasdfasdfasdfajbdjbaajfbsdjhfbajdfbajsdbfjadbsjbh') }}
+                <td
+                  class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  {{ trimJobDescription(job.description) }}
                 </td>
-                <td class="px-6 py-4 flex flex-row-reverse">
-                  <AppButton class="mr-3">
-                    <p>Lihat Detail</p>
+                <td class="px-6 py-4 flex justify-center gap-x-3">
+                  <AppButton
+                    class="w-[12.754rem]"
+                    @click="goToJobDetailPage(job.id)">
+                    <p>Lihat detail</p>
+                  </AppButton>
+                  <AppButton type="danger" @click="unapplyJob(job.contractId)">
+                    <p>Batal melamar pekerjaan</p>
                   </AppButton>
                 </td>
               </tr>

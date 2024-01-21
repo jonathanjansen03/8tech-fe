@@ -100,7 +100,8 @@ export default {
     },
     contract: {
       info: (id) => `/contract/id/${id}`,
-      update: '/contract/update'
+      update: '/contract/update',
+      reject: (id) => `/contract/reject/${id}`
     },
     job: {
       create: '/job/create',
