@@ -20,7 +20,7 @@ import AppCard from '@/components/AppCard.vue';
 const mainStore = useMainStore();
 const userStore = useUserStore();
 const router = useRouter();
-const { isLoggedIn, currentUserFullName } = storeToRefs(userStore);
+const { isLoggedIn, isRecruiter, currentUserFullName } = storeToRefs(userStore);
 const { logout } = userStore;
 
 const isOpen = ref(false);
@@ -96,17 +96,21 @@ const goToHome = () => {
           <RouterLink
             to="/"
             class="text-md transition duration-300 hover:text-blue-600 after:absolute after:content-[''] after:w-0 after:h-[3px] after:block after:transition-all after:duration-300 after:bottom-1/4 hover:after:w-[4rem] hover:after:h-[3px] hover:after:bg-blue-600">
-            Beranda
+            <span>Beranda</span>
           </RouterLink>
           <RouterLink
             to="/"
-            class="text-md transition duration-300 hover:text-blue-600 after:absolute after:content-[''] after:w-0 after:h-[3px] after:block after:transition-all after:duration-300 after:bottom-1/4 hover:after:w-[6.8rem] hover:after:h-[3px] hover:after:bg-blue-600">
-            Cari Pekerjaan
+            class="text-md transition duration-300 hover:text-blue-600 after:absolute after:content-[''] after:w-0 after:h-[3px] after:block after:transition-all after:duration-300 after:bottom-1/4 hover:after:w-[14.3rem] hover:after:h-[3px] hover:after:bg-blue-600"
+            :class="{ 'hover:after:w-[19.25rem]': isRecruiter }">
+            <span v-if="!isRecruiter">Daftar Pekerjaan yang Dilamar</span>
+            <span v-if="isRecruiter"
+              >Daftar Kontrak yang Sedang Berlangsung</span
+            >
           </RouterLink>
           <RouterLink
             :to="{ name: config.pages.about.name }"
             class="text-md transition duration-300 hover:text-blue-600 after:absolute after:content-[''] after:w-0 after:h-[3px] after:block after:transition-all after:duration-300 after:bottom-1/4 hover:after:w-[6.5rem] hover:after:h-[3px] hover:after:bg-blue-600">
-            Tentang Kami
+            <span>Tentang Kami</span>
           </RouterLink>
         </div>
         <div>
