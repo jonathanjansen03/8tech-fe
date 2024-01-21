@@ -65,6 +65,10 @@ export default {
       name: 'contract-create',
       path: '/contract-create/:id',
     },
+    contractDetail: {
+      name: 'contract-detail',
+      path: '/contract/:id',
+    }
   },
   api: {
     basePath: 'https://api-8-tech.koyeb.app',
@@ -131,11 +135,11 @@ export default {
   },
   constants: {
     contractStatus: {
-      PENDING: 'PENDING',
-      ACCEPTED: 'ACCEPTED',
-      REJECTED: 'REJECTED',
-      ONGOING: 'ONGOING',
-      COMPLETED: 'COMPLETED',
+      pending: 'PENDING',
+      accepted: 'ACCEPTED',
+      rejected: 'REJECTED',
+      ongoing: 'ONGOING',
+      completed: 'COMPLETED',
     }
   }
 };

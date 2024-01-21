@@ -48,6 +48,13 @@ const goToJobDetailPage = (id) => {
   });
 };
 
+const goToContractDetailPage = (id) => {
+  router.push({
+    name: config.pages.contractDetail.name,
+    params: { id },
+  });
+};
+
 const trimJobDescription = (description) => {
   if (description.length > 100) {
     return `${description.slice(0, 100)}...`;
@@ -56,7 +63,6 @@ const trimJobDescription = (description) => {
 };
 
 const unapplyJob = async (id) => {
-  console.log(userAppliedJobs.value)
   try {
     await rejectContract(id, currentUserToken.value);
     await getUserAppliedJobs(pagination);
@@ -73,7 +79,9 @@ onBeforeMount(initPage);
   <div>
     <div class="sm:px-20">
       <div>
-        <h1 class="text-center font-bold mb-8 text-white text-2xl">
+        <h1
+          class="text-center font-bold mb-8 text-white text-2xl"
+          @click="console.log(userAppliedJobs)">
           Daftar Lamaran Pekerjaan
         </h1>
 
@@ -106,15 +114,35 @@ onBeforeMount(initPage);
                   class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                   {{ trimJobDescription(job.description) }}
                 </td>
-                <td class="px-6 py-4 flex justify-center gap-x-3">
-                  <AppButton
-                    class="w-[12.754rem]"
-                    @click="goToJobDetailPage(job.id)">
-                    <p>Lihat detail</p>
-                  </AppButton>
-                  <AppButton type="danger" @click="unapplyJob(job.contractId)">
-                    <p>Batal melamar pekerjaan</p>
-                  </AppButton>
+                <td class="px-6 py-4">
+                  <div
+                    v-if="
+                      job.contractStatus ===
+                      config.constants.contractStatus.pending
+                    "
+                    class="flex justify-center gap-x-3">
+                    <AppButton
+                      class="w-[12.754rem]"
+                      @click="goToJobDetailPage(job.id)">
+                      Lihat detail
+                    </AppButton>
+                    <AppButton
+                      type="danger"
+                      @click="unapplyJob(job.contractId)">
+                      Batal melamar pekerjaan
+                    </AppButton>
+                  </div>
+                  <div
+                    v-if="
+                      job.contractStatus ===
+                      config.constants.contractStatus.accepted
+                    ">
+                    <AppButton
+                      class="w-full"
+                      @click="goToContractDetailPage(job.contractId)">
+                      Lihat kontrak
+                    </AppButton>
+                  </div>
                 </td>
               </tr>
             </tbody>
