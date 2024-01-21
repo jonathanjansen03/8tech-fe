@@ -57,6 +57,10 @@ export default {
       name: 'job-applicant',
       path: '/job-applicant/:id',
     },
+    createContract: {
+      name: 'contract-create',
+      path: '/contract-create/:id',
+    },
   },
   api: {
     basePath: 'https://api-8-tech.koyeb.app',
@@ -86,6 +90,10 @@ export default {
       info: (id) => `/company/info/${id}`,
       update: '/company/update',
     },
+    contract: {
+      info: (id) => `/contract/id/${id}`,
+      update: '/contract/update'
+    },
     job: {
       create: '/job/create',
       filter: '/job/filter',
@@ -107,7 +115,18 @@ export default {
       confirmPassword: 'Harus sama dengan password.',
       unique: 'Email sudah terdaftar. Silakan gunakan email lain.',
       required: 'Harus diisi.',
+      paymentRate: 'Harus diisi.',
+      paymentRateNumber: 'Harus di isi dengan angka.',
     },
     USER_ALREADY_APPLIED: 'Anda sudah melamar pekerjaan ini.',
   },
+  constant: {
+    contractStatus: {
+      PENDING: 'PENDING',
+      ACCEPTED: 'ACCEPTED',
+      REJECTED: 'REJECTED',
+      ONGOING: 'ONGOING',
+      COMPLETED: 'COMPLETED',
+    }
+  }
 };

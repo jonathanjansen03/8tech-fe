@@ -82,7 +82,7 @@ watch(route, () => {
 
       <div class="flex flex-row justify-between mb-2">
         <h1>Profil</h1>
-        <h3 @click="router.push(`/company/${currentUser.companyId}`)" class="cursor-pointer text-blue-700 hover:text-blue-500" >Lihat profil perusahaan</h3>
+        <h3 @click="router.push(`/company/${currentUser.companyId}`)" class="cursor-pointer text-blue-700 hover:text-blue-500" v-if="isPrivateProfile && currentUser.companyId">Lihat profil perusahaan</h3>
       </div>
 
       <div class="flex justify-center mt-5">

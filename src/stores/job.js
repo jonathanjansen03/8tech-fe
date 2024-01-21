@@ -30,7 +30,7 @@ export const useJobStore = defineStore('job', () => {
   const getApplicants = async (id, data, token) => {
     const res = await jobApi.applicant(id, data, token);
 
-    jobApplicants.value = res.data.data.slice(0);
+    jobApplicants.value = res.data.data ? res.data.data.slice(0) : [];
     jobApplicantsTotalPages.value = res.data.totalPages;
 
     return {

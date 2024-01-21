@@ -17,6 +17,7 @@ const JobDetail = () => import('@/pages/JobDetail.vue');
 const ApplicantList = () => import('@/pages/ApplicantList.vue');
 const CompanyProfile = () => import ('@/pages/CompanyProfile.vue');
 const EditCompanyProfile = () => import('@/pages/EditCompanyProfile.vue');
+const CreateContract = () => import('@/pages/CreateContract.vue');
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -140,6 +141,16 @@ const router = createRouter({
       meta: {
         title: 'Daftar Pelamar Kerja',
         requiresAuth: true,
+      },
+    },
+    {
+      path: config.pages.createContract.path,
+      name: config.pages.createContract.name,
+      component: CreateContract,
+      meta: {
+        title: 'Buat Kontrak',
+        requiresAuth: true,
+        recruiterRole: true,
       },
     },
   ],

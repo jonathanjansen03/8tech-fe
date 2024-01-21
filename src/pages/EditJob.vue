@@ -34,7 +34,7 @@ const isLoadingFetchApi = ref(false);
 onMounted(async () => {
   NProgress.start();
   mainStore.setRecruiterPortal(true);
-  const res = await jobApi.info(route.params.id, currentUserToken);
+  const res = await jobApi.findOne(route.params.id, currentUserToken);
   jobData.title = res.data.title;
   jobData.description = res.data.description;
   NProgress.done();

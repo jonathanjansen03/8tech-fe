@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
+import contractApi from '@/api/contract';
 
 export const useContractStore = defineStore('contract', () => {
   const contract = ref({});
@@ -8,8 +9,19 @@ export const useContractStore = defineStore('contract', () => {
     contract.value = Object.assign({}, data);
   };
 
+  const defineStoreContract = async (id, token) => {
+    const res = await contractApi.info(id, token);
+    setContract(res.data);
+  };
+
+  const updateContract = async (data, token) => {
+    setContract(await contractApi.update(data, token));
+  };
+
   return {
     contract,
     setContract,
+    defineStoreContract,
+    updateContract
   };
 });

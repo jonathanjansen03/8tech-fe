@@ -37,11 +37,11 @@ const initPage = async () => {
 
   try {
     await getApplicants(
+      route.params.id,
       {
         page: pagination.page,
         size: pagination.size,
       },
-      route.params.id,
       currentUserToken.value
     );
   } catch (err) {
@@ -132,7 +132,7 @@ watch(pagination, async (newPagination) => {
               </th>
               <th scope="row" class="px-6 py-4 flex flex-row-reverse">
                 <AppButton class="mr-3">
-                  <p>Lihat Detail</p>
+                  <p @click.stop="router.push(`/contract-create/${item.contractId}`)">Terima lamaran</p>
                 </AppButton>
               </th>
             </tr>
