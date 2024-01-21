@@ -108,6 +108,7 @@ watch(route, () => {
       <div class="flex flex-row justify-between mb-2">
         <h1>Profil</h1>
         <h3
+          v-if="isPrivateProfile && isRecruiter"
           @click="goToCompanyProfile"
           class="cursor-pointer text-blue-700 hover:text-blue-500">
           Lihat profil perusahaan
