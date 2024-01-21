@@ -128,7 +128,7 @@ export default {
     },
     USER_ALREADY_APPLIED: 'Anda sudah melamar pekerjaan ini.',
   },
-  constant: {
+  constants: {
     contractStatus: {
       PENDING: 'PENDING',
       ACCEPTED: 'ACCEPTED',

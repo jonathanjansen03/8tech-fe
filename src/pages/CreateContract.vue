@@ -122,7 +122,7 @@ const doUpdateContract = async () => {
       paymentRate: parseInt(formData.paymentRate),
       customField: 'details=' + formData.details,
       id: route.params.id,
-      status: config.constant.contractStatus.ACCEPTED
+      status: config.constants.contractStatus.ACCEPTED
     }, currentUserToken);
     handleSuccess();
     isLoading.value = false;
