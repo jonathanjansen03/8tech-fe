@@ -57,6 +57,13 @@ const initPage = async () => {
   isLoadingFetchApi.value = false;
 };
 
+const goToJobEditPage = (id) => {
+  router.push({
+    name: config.pages.jobEditDetail.name,
+    params: { id },
+  });
+};
+
 onBeforeMount(initPage);
 
 onBeforeUnmount(() => {
@@ -128,25 +135,25 @@ watch(pagination, async (newPagination) => {
           </thead>
           <tbody>
             <tr
-              v-for="(item, index) in jobList"
+              v-for="(job, index) in jobList"
               :key="index"
               class="bg-white border-b cursor-pointer dark:bg-gray-800 dark:border-gray-700 hover:bg-blue-950"
-              @click="router.push(`/job-edit/${item.id}`)">
+              @click="goToJobEditPage(job.id)">
               <td class="px-6 py-4">
                 {{ (pagination.page - 1) * pagination.size + index + 1 }}
               </td>
               <th
                 class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                 scope="row">
-                {{ item.title }}
+                {{ job.title }}
               </th>
               <th
                 class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center"
                 scope="row">
                 {{
-                  new Date(item.createdAt).toLocaleDateString() +
+                  new Date(job.createdAt).toLocaleDateString() +
                   ' ' +
-                  new Date(item.createdAt).toLocaleTimeString()
+                  new Date(job.createdAt).toLocaleTimeString()
                 }}
               </th>
             </tr>
