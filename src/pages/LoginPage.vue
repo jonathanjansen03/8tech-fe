@@ -67,7 +67,7 @@ const doLogin = async () => {
   }
 
   try {
-    formData.email = formData.email.toLowerCase();
+    formData.email = formData.email.trim().toLowerCase();
     await login(formData);
     handleSucccessfulLogin();
     isLoadingLogin.value = false;
