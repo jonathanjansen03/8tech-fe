@@ -7,7 +7,6 @@ import { useMainStore } from '@/stores/main';
 import { useUserStore } from '@/stores/user';
 import { useJobStore } from '@/stores/job';
 import config from '@/config';
-import SideBar from '@/components/SideBar.vue';
 import AppButton from '@/components/AppButton.vue';
 import PaginationComponent from '@/components/PaginationComponent.vue';
 
@@ -20,14 +19,12 @@ const userStore = useUserStore();
 const jobStore = useJobStore();
 
 const { currentUserToken } = storeToRefs(userStore);
-const { jobApplicants, jobApplicantsTotalPages } = storeToRefs(jobStore);
+const { jobApplicants, jobApplicantsPagination } = storeToRefs(jobStore);
 const { getApplicants } = jobStore;
 
 const pagination = reactive({
   page: 1,
   size: 5,
-  isLastPage: false,
-  isFirstPage: true,
 });
 const isLoadingFetchApi = ref(false);
 
@@ -45,7 +42,7 @@ const initPage = async () => {
       currentUserToken.value
     );
   } catch (err) {
-    console.log(err);
+    console.error(err);
     alert(config.errors.general(GET_APPLICANT_LIST));
   }
   isLoadingFetchApi.value = false;
@@ -64,49 +61,38 @@ watch(pagination, async (newPagination) => {
     return;
   }
 
-  if (newPagination.page > jobApplicantsTotalPages.value) {
-    pagination.page = jobApplicantsTotalPages.value;
+  if (newPagination.page > jobApplicantsPagination.value.totalPages) {
+    pagination.page = jobApplicantsPagination.value.totalPages;
     return;
   }
 
   isLoadingFetchApi.value = true;
-  let applicantListResponse;
 
   try {
-    applicantListResponse = await getApplicants(
-      {
-        page: pagination.page,
-        size: pagination.size,
-      },
+    await getApplicants(
       route.params.id,
+      pagination,
       userStore.currentUserToken
     );
   } catch (err) {
-    console.log(err);
+    console.error(err);
     alert(config.errors.general(GET_APPLICANT_LIST));
   }
 
-  if (applicantListResponse.data.length === 0) {
-    isLoadingFetchApi.value = false;
-    return;
-  }
-
-  pagination.isLastPage = !applicantListResponse.hasNext;
-  pagination.isFirstPage = !applicantListResponse.hasPrevious;
   isLoadingFetchApi.value = false;
 });
 </script>
 
 <template>
   <div class="sm:px-20">
-    <SideBar class="sidebar" v-if="mainStore.showPortalNavbar" />
     <div>
       <h1 class="text-center font-bold mb-8 text-white text-2xl">
-        Daftar Pelamar untuk lowongan pekerjaan
+        Daftar Pelamar untuk Lowongan Pekerjaan
       </h1>
 
       <div class="relative overflow-x-auto">
         <table
+          v-if="jobApplicants.length"
           class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead
             class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -138,13 +124,17 @@ watch(pagination, async (newPagination) => {
             </tr>
           </tbody>
         </table>
+        <h3 v-if="!jobApplicants.length" class="text-center text-white">
+          Belum ada pelamar untuk lowongan pekerjaan ini.
+        </h3>
       </div>
 
       <PaginationComponent
+        v-if="jobApplicantsPagination.totalPages > 1"
         @goNext="pagination.page++"
         @goPrevious="pagination.page--"
         :page="pagination.page"
-        :totalPages="jobApplicantsTotalPages">
+        :totalPages="jobApplicantsPagination.totalPages">
         <img
           v-if="isLoadingFetchApi"
           alt="loading"

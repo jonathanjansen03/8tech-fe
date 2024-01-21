@@ -17,13 +17,13 @@ import { useCompanyStore } from '@/stores/company.js';
 const router = useRouter();
 const userStore = useUserStore();
 const companyStore = useCompanyStore();
-const {currentUser, currentUserToken} = storeToRefs(userStore);
+const { currentUser, currentUserToken } = storeToRefs(userStore);
 
 const isLoading = ref(false);
 const formData = ref({
   name: '',
   description: '',
-  profilePicture: null
+  profilePicture: null,
 });
 const base64UserProfileImage = ref(null);
 const isError = ref(false);
@@ -46,10 +46,13 @@ const updateProfile = async () => {
   }
   try {
     isLoading.value = true;
-    await companyStore.updateCompanyData({
-      ...formData.value,
-      id: currentUser.value.companyId
-    }, currentUserToken.value);
+    await companyStore.updateCompanyData(
+      {
+        ...formData.value,
+        id: currentUser.value.companyId,
+      },
+      currentUserToken.value
+    );
     handleSucccessfulUpdateProfile();
     isLoading.value = false;
   } catch (err) {
@@ -77,11 +80,13 @@ const returnToHome = () => {
 };
 
 const initPage = async () => {
-  const company = await companyStore.getCompanyInfo(currentUser.value.companyId);
+  const company = await companyStore.getCompanyInfo(
+    currentUser.value.companyId
+  );
   formData.value = {
     name: company.data.name,
     description: company.data.description,
-    profilePicture: company.data.profilePicture
+    profilePicture: company.data.profilePicture,
   };
 };
 
@@ -99,25 +104,22 @@ onMounted(async () => {
         <ImageInput
           :defaultImage="defaultUserProfilePicture"
           :image="userProfilePicture"
-          @change="updateUserProfilePicture"/>
+          @change="updateUserProfilePicture" />
       </div>
       <div class="flex flex-col">
-        <InputBox
-          id="firstName"
-          v-model="formData.name"
-          label="Nama Depan"/>
+        <InputBox id="firstName" v-model="formData.name" label="Nama Depan" />
       </div>
       <div class="flex flex-col mt-5">
         <InputBox
           id="description"
           v-model="formData.description"
-          label="Deskripsi"/>
+          label="Deskripsi" />
       </div>
       <AppTicker
         v-if="isError"
         :message="errorMessage"
         class="mt-8"
-        type="error"/>
+        type="error" />
 
       <div class="flex justify-center mt-5">
         <RouterLink :to="{ name: config.pages.profile.name }">
@@ -125,14 +127,18 @@ onMounted(async () => {
             class="flex items-center py-3"
             outline
             @click="returnToHome">
-            <TrashIcon class="mr-2 w-5"/>
+            <TrashIcon class="mr-2 w-5" />
             Batal
           </AppButton>
         </RouterLink>
         <AppButton class="flex items-center ml-12 py-3" @click="updateProfile">
-          <CheckIcon class="mr-2 w-5"/>
+          <CheckIcon class="mr-2 w-5" />
           Simpan
-          <img v-if="true" alt="loading" class="h-6" src="@/assets/images/loading.svg">
+          <img
+            v-if="true"
+            alt="loading"
+            class="h-6"
+            src="@/assets/images/loading.svg" />
         </AppButton>
       </div>
     </AppCard>

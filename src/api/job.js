@@ -18,20 +18,11 @@ export default {
       headers: config.api.authTokenHeader(token),
     });
   },
-  filter: (data, token) => {
+  search: (data) => {
     return apiUtil.hitApi({
       method: config.api.method.post,
       path: config.api.job.filter,
       body: data,
-      headers: config.api.authTokenHeader(token),
-    });
-  },
-  search: (data, token) => {
-    return apiUtil.hitApi({
-      method: config.api.method.post,
-      path: config.api.job.filter,
-      body: data,
-      headers: config.api.authTokenHeader(token),
     });
   },
   findOne: (id) => {

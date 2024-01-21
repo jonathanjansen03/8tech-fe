@@ -7,8 +7,18 @@ import userApi from '@/api/user';
 export const useUserStore = defineStore('user', () => {
   const currentUser = ref({});
   const currentUserToken = ref('');
+  const userProfile = ref({});
+  const userAppliedJobs = ref([]);
+  const userAppliedJobsPagination = ref({});
 
   const isLoggedIn = computed(() => !!currentUser.value?.id);
+  const isRecruiter = computed(() => {
+    if (!currentUser.value.roles) {
+      return false;
+    }
+
+    return currentUser.value?.roles.includes('RECRUITER');
+  });
   const currentUserFullName = computed(
     () => `${currentUser.value.firstName} ${currentUser.value.lastName}`
   );
@@ -33,8 +43,8 @@ export const useUserStore = defineStore('user', () => {
   };
 
   const setCurrentUser = () => {
-    const token = localStorage.getItem('Etoken');
-    const userData = localStorage.getItem('userData');
+    const token = localStorage.getItem('Etoken') || '';
+    const userData = localStorage.getItem('userData') || '{}';
 
     currentUser.value = JSON.parse(userData);
     currentUserToken.value = token;
@@ -70,6 +80,12 @@ export const useUserStore = defineStore('user', () => {
     return res.data;
   };
 
+  const getUserInfoById = async (id) => {
+    const res = await userApi.getUserInfoById(id, currentUserToken.value);
+
+    userProfile.value = Object.assign({}, res.data);
+  };
+
   const updateUserData = async (data) => {
     if (typeof data.profilePicture !== 'string') {
       const formData = new FormData();
@@ -87,18 +103,36 @@ export const useUserStore = defineStore('user', () => {
     localStorage.setItem('userData', JSON.stringify(currentUser.value));
   };
 
+  const getUserAppliedJobs = async (data) => {
+    const res = await userApi.getAppliedJobs(data, currentUserToken.value);
+    userAppliedJobs.value = res.data.data.slice(0);
+    userAppliedJobsPagination.value = {
+      totalPage: res.data.totalPages,
+      hasNext: res.data.hasNext,
+      hasPrevious: res.data.hasPrevious,
+      isLast: res.data.isLast,
+      isFirst: res.data.isFirst,
+    };
+  };
+
   return {
     currentUser,
     currentUserToken,
+    userProfile,
+    userAppliedJobs,
+    userAppliedJobsPagination,
     isLoggedIn,
+    isRecruiter,
     currentUserFullName,
     isUserPortfolioEmpty,
     register,
     login,
     logout,
     getUserInfo,
+    getUserInfoById,
     isTokenValid,
     updateUserData,
     setCurrentUser,
+    getUserAppliedJobs,
   };
 });

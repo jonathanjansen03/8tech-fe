@@ -17,7 +17,7 @@ const jobTitle = computed(() => {
 
 <template>
   <AppCard
-    class="items-center h-44 mt-6 min-[420px]:px-5 min-[420px]:py-4 flex">
+    class="cursor-pointer items-center h-44 mt-6 min-[420px]:px-5 min-[420px]:py-4 flex hover:drop-shadow-[0_8px_8px_rgba(0,0,0,0.25)] transition duration-300">
     <div
       class="job-card cursor-pointer items-center flex flex-col min-[420px]:gap-x-8 min-[420px]:flex-row">
       <img

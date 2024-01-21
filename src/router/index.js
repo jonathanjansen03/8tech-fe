@@ -15,9 +15,10 @@ const CreateJob = () => import('@/pages/CreateJob.vue');
 const EditJob = () => import('@/pages/EditJob.vue');
 const JobDetail = () => import('@/pages/JobDetail.vue');
 const ApplicantList = () => import('@/pages/ApplicantList.vue');
-const CompanyProfile = () => import ('@/pages/CompanyProfile.vue');
+const CompanyProfile = () => import('@/pages/CompanyProfile.vue');
 const EditCompanyProfile = () => import('@/pages/EditCompanyProfile.vue');
 const CreateContract = () => import('@/pages/CreateContract.vue');
+const AppliedJobs = () => import('@/pages/AppliedJobs.vue');
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -27,32 +28,32 @@ const router = createRouter({
       name: config.pages.home.name,
       component: HomePage,
       meta: {
-        title: 'Beranda'
-      }
+        title: 'Beranda',
+      },
     },
     {
       path: config.pages.about.path,
       name: config.pages.about.name,
       component: AboutUs,
       meta: {
-        title: 'Tentang Kami'
-      }
+        title: 'Tentang Kami',
+      },
     },
     {
       path: config.pages.register.path,
       name: config.pages.register.name,
       component: RegisterPage,
       meta: {
-        title: 'Daftar'
-      }
+        title: 'Daftar',
+      },
     },
     {
       path: config.pages.login.path,
       name: config.pages.login.name,
       component: LoginPage,
       meta: {
-        title: 'Masuk'
-      }
+        title: 'Masuk',
+      },
     },
     {
       path: config.pages.profile.path,
@@ -60,24 +61,24 @@ const router = createRouter({
       component: UserProfile,
       meta: {
         title: 'Profil',
-        requiresAuth: true
-      }
+        requiresAuth: true,
+      },
     },
     {
       path: config.pages.userProfile.path,
       name: config.pages.userProfile.name,
       component: UserProfile,
       meta: {
-        title: 'Profil'
-      }
+        title: 'Profil',
+      },
     },
     {
       path: config.pages.companyProfile.path,
       name: config.pages.companyProfile.name,
       component: CompanyProfile,
       meta: {
-        title: 'Profil Perusahaan'
-      }
+        title: 'Profil Perusahaan',
+      },
     },
     {
       path: config.pages.companyProfileEdit.path,
@@ -86,8 +87,8 @@ const router = createRouter({
       meta: {
         title: 'Ubah Profil Perusahaan',
         requiresAuth: true,
-        recruiterRole: true
-      }
+        recruiterRole: true,
+      },
     },
     {
       path: config.pages.editProfile.path,
@@ -95,8 +96,8 @@ const router = createRouter({
       component: EditProfile,
       meta: {
         title: 'Edit Profil',
-        requiresAuth: true
-      }
+        requiresAuth: true,
+      },
     },
     {
       path: config.pages.recruiterPortal.path,
@@ -105,8 +106,8 @@ const router = createRouter({
       meta: {
         title: 'Portal Recruiter',
         requiresAuth: true,
-        recruiterRole: true
-      }
+        recruiterRole: true,
+      },
     },
     {
       path: config.pages.createJob.path,
@@ -115,15 +116,15 @@ const router = createRouter({
       meta: {
         title: 'Buat Pekerjaan',
         requiresAuth: true,
-        recruiterRole: true
-      }
+        recruiterRole: true,
+      },
     },
     {
       path: config.pages.jobDetail.path,
       name: config.pages.jobDetail.name,
       component: JobDetail,
       meta: {
-        title: 'Detil Pekerjaan',
+        title: 'Detail Pekerjaan',
       },
     },
     {
@@ -140,6 +141,15 @@ const router = createRouter({
       component: ApplicantList,
       meta: {
         title: 'Daftar Pelamar Kerja',
+        requiresAuth: true,
+      },
+    },
+    {
+      path: config.pages.appliedJobs.path,
+      name: config.pages.appliedJobs.name,
+      component: AppliedJobs,
+      meta: {
+        title: 'Daftar Pekerjaan yang Dilamar',
         requiresAuth: true,
       },
     },
@@ -182,6 +192,12 @@ router.beforeEach(async (to) => {
     query: { redirect: to.fullPath },
   };
 
+  if (to.path === config.pages.home.path && userStore.isRecruiter.value) {
+    return {
+      path: config.pages.recruiterPortal.path,
+    };
+  }
+
   document.title = `${to.meta.title} | ${config.appName}`;
 
   if (
@@ -189,10 +205,12 @@ router.beforeEach(async (to) => {
     to.meta.recruiterRole
   ) {
     const token = localStorage.getItem('Etoken');
+
     if (!token) {
       return loginPage;
     }
-    const { valid, roles } = await userStore.isTokenValid(token);
+
+    const { valid } = await userStore.isTokenValid(token);
 
     if (!valid) {
       return loginPage;
@@ -200,11 +218,12 @@ router.beforeEach(async (to) => {
 
     userStore.$patch({
       currentUserToken: localStorage.getItem('Etoken'),
-      currentUser: JSON.parse(localStorage.getItem('userData'))
+      currentUser: JSON.parse(localStorage.getItem('userData')),
     });
-    if (to.meta.recruiterRole && !roles.includes('RECRUITER')) {
+
+    if (to.meta.recruiterRole && !userStore.isRecruiter.value) {
       return {
-        path: config.pages.home.path
+        path: config.pages.home.path,
       };
     }
   }

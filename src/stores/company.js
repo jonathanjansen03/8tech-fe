@@ -1,8 +1,18 @@
 import { defineStore } from 'pinia';
+import { ref } from 'vue';
+
 import companyApi from '@/api/company';
 import userApi from '@/api/user';
 
 export const useCompanyStore = defineStore('company', () => {
+  const company = ref({});
+
+  const createCompany = async (data) => {
+    const res = await companyApi.create(data);
+
+    company.value = Object.assign({}, res.data);
+  };
+
   const getCompanyInfo = async (id) => {
     return await companyApi.info(id);
   };
@@ -17,8 +27,8 @@ export const useCompanyStore = defineStore('company', () => {
       formData.append('file', data);
 
       const imageLink = await userApi.uploadCompanyProfilePicture(
-        token,
-        formData
+        formData,
+        token
       );
       return imageLink.data.profilePicture;
     }
@@ -38,8 +48,10 @@ export const useCompanyStore = defineStore('company', () => {
   };
 
   return {
+    company,
+    createCompany,
     getCompanyInfo,
     updateCompany,
-    updateCompanyData
+    updateCompanyData,
   };
 });
