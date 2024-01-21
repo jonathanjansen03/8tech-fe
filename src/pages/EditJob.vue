@@ -127,6 +127,15 @@ const doUpdateJob = async () => {
   isLoadingFetchApi.value = false;
 };
 
+const goToJobApplicantsPage = () => {
+  router.push({
+    name: config.pages.jobApplicants.name,
+    params: {
+      id: route.params.id
+    },
+  });
+};
+
 onMounted(initPage);
 
 onBeforeUnmount(() => {
@@ -184,7 +193,7 @@ watch(
             </AppButton>
             <AppButton
               class="mt-12 w-1/2 m-5"
-              @click="router.push(`/job-applicant/${route.params.id}`)">
+              @click="goToJobApplicantsPage">
               <p>Lihat pelamar</p>
             </AppButton>
           </div>
