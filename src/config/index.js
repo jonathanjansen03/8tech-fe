@@ -108,7 +108,6 @@ export default {
     },
     contract: {
       info: (id) => `/contract/id/${id}`,
-      update: '/contract/update',
       recruiterList: '/contract/recruiterContractList',
       download: (id) =>  `/contract/generate/${id}`,
       update: '/contract/update',

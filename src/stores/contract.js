@@ -43,11 +43,11 @@ export const useContractStore = defineStore('contract', () => {
 
   const statusMapping = (statusCode) => {
     switch (statusCode) {
-      case config.constants.contractStatus.ACCEPTED:
+      case config.constants.contractStatus.accepted:
         return 'Menunggu konfirmasi Pekerja';
-      case config.constants.contractStatus.COMPLETED:
+      case config.constants.contractStatus.completed:
         return 'Selesai';
-      case config.constants.contractStatus.ONGOING:
+      case config.constants.contractStatus.ongoing:
         return 'Masih dalah proses';
       default:
         return 'Unknown';
@@ -60,15 +60,14 @@ export const useContractStore = defineStore('contract', () => {
 
   return {
     contract,
-    recruiterContractListPagination,
     recruiterContractList,
-    recruiterRejectContract,
-    statusMapping,
+    recruiterContractListPagination,
     setContract,
     fetchStoreContract,
     updateContract,
-    getRecruiterContractList
-    updateContract,
+    recruiterRejectContract,
+    getRecruiterContractList,
+    statusMapping,
     rejectContract,
   };
 });
