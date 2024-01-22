@@ -1,13 +1,11 @@
 <script setup>
-import { onBeforeUnmount, onMounted, reactive, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import { useMainStore } from '@/stores/main.js';
 import { useUserStore } from '@/stores/user.js';
 import { useContractStore } from '@/stores/contract.js';
 import config from '@/config/index.js';
 import validationUtil from '@/utils/validation.js';
-import SideBar from '@/components/SideBar.vue';
 import AppCard from '@/components/AppCard.vue';
 import InputBox from '@/components/InputBox.vue';
 import AppButton from '@/components/AppButton.vue';
@@ -18,7 +16,6 @@ const {currentUserToken} = useUserStore();
 
 const router = useRouter();
 const route = useRoute();
-const mainStore = useMainStore();
 const contractStore = useContractStore();
 
 const {fetchStoreContract, recruiterRejectContract} = contractStore;
@@ -40,13 +37,8 @@ const isLoading = ref(false);
 const isUpdating = ref(false);
 const template = ref('');
 
-onMounted(async () => {
-  await initPage();
-});
-
 const initPage = async () => {
   NProgress.start();
-  mainStore.setRecruiterPortal(true);
   isUpdating.value = route.query.update === 'true';
   await fetchStoreContract(route.params.id, currentUserToken);
   formData.paymentRate = contractStore.contract?.paymentRate;
@@ -64,10 +56,7 @@ const initPage = async () => {
   NProgress.done();
 };
 
-onBeforeUnmount(() => {
-  mainStore.setRecruiterPortal(false);
-  mainStore.closePortalNavbar();
-});
+onMounted(initPage);
 
 const validateField = (field) => {
   if (!formData[field]) {
@@ -165,7 +154,6 @@ const goToPdf = (id) => {
 
 <template>
   <div class="sm:px-20">
-    <SideBar v-if="mainStore.showPortalNavbar" class="sidebar"/>
     <div>
       <AppCard class="px-5">
         <div class="flex flex-col items-center" @keydown.enter="doUpdateContract">

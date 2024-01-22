@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import contractApi from '@/api/contract';
-import config from '@/config/index.js';
+import config from '@/config';
 
 export const useContractStore = defineStore('contract', () => {
   const contract = ref({});
@@ -38,7 +38,6 @@ export const useContractStore = defineStore('contract', () => {
       isLast: res.data.isLast,
       isFirst: res.data.isFirst
     };
-    console.log('#ricat get rec list ', recruiterContractList.value);
     return res.data;
   };
 
