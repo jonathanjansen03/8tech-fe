@@ -87,7 +87,7 @@ watch(pagination, async (newPagination) => {
 
 const goCreateContract = (id) => {
   router.push({
-    name: config.pages.createContract.name,
+    name: config.pages.editContract.name,
     params: {
       id
     },
