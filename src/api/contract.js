@@ -17,6 +17,14 @@ export default {
       headers: config.api.authTokenHeader(token)
     });
   },
+  recruiterContractList: (data, token) => {
+    return apiUtil.hitApi({
+      method: config.api.method.post,
+      path: config.api.contract.recruiterList,
+      body: data,
+      headers: config.api.authTokenHeader(token)
+    });
+  },
   reject: (id, token) => {
     return apiUtil.hitApi({
       method: config.api.method.get,

@@ -9,12 +9,16 @@ import validationUtil from '@/utils/validation';
 import AppCard from '@/components/AppCard.vue';
 import InputBox from '@/components/InputBox.vue';
 import AppButton from '@/components/AppButton.vue';
+import contractTemplate from '@/assets/docs/contractTemplate.json';
+import NProgress from 'nprogress';
 
 const { currentUserToken } = useUserStore();
 
 const router = useRouter();
 const route = useRoute();
 const contractStore = useContractStore();
+
+const {fetchStoreContract, recruiterRejectContract} = contractStore;
 
 const formData = reactive({
   title: '',
@@ -30,18 +34,29 @@ const errors = reactive({
   paymentRate: '',
 });
 const isLoading = ref(false);
-
-onMounted(async () => {
-  await initPage();
-});
+const isUpdating = ref(false);
+const template = ref('');
 
 const initPage = async () => {
-  await contractStore.fetchStoreContract(route.params.id, currentUserToken);
+  NProgress.start();
+  isUpdating.value = route.query.update === 'true';
+  await fetchStoreContract(route.params.id, currentUserToken);
   formData.paymentRate = contractStore.contract?.paymentRate;
   formData.title = contractStore.contract?.title;
   formData.description = contractStore.contract?.description;
-  formData.details = contractStore.contract?.details;
+
+  formData.details = contractStore.contract?.customField?.split(';').map((fieldList) => {
+    const [key, value] = fieldList.split('=');
+    if (key === 'details') {
+      return value;
+    }
+  });
+
+  template.value = contractTemplate.default;
+  NProgress.done();
 };
+
+onMounted(initPage);
 
 const validateField = (field) => {
   if (!formData[field]) {
@@ -106,17 +121,15 @@ const doUpdateContract = async () => {
   }
 
   try {
-    await contractStore.updateContract(
-      {
-        title: formData.title,
-        description: formData.description,
-        paymentRate: parseInt(formData.paymentRate),
-        customField: 'details=' + formData.details,
-        id: route.params.id,
-        status: config.constants.contractStatus.ACCEPTED,
-      },
-      currentUserToken
-    );
+    await contractStore.updateContract({
+      title: formData.title,
+      description: formData.description,
+      paymentRate: parseInt(formData.paymentRate),
+      customField: 'details=' + formData.details,
+      id: route.params.id,
+      status: config.constants.contractStatus.ACCEPTED,
+      template: template.value
+    }, currentUserToken);
     handleSuccess();
     isLoading.value = false;
   } catch (err) {
@@ -124,16 +137,28 @@ const doUpdateContract = async () => {
     isLoading.value = false;
   }
 };
+
+const rejectContract = async () => {
+  isLoading.value = true;
+  await recruiterRejectContract(route.params.id, currentUserToken);
+  isLoading.value = false;
+  router.back();
+};
+
+const goToPdf = (id) => {
+  isLoading.value = true;
+  window.open(config.api.basePath + config.api.contract.download(id), '_blank');
+  isLoading.value = false;
+};
 </script>
 
 <template>
   <div class="sm:px-20">
     <div>
       <AppCard class="px-5">
-        <div
-          class="flex flex-col items-center"
-          @keydown.enter="doUpdateContract">
-          <h1>Buat Kontrak</h1>
+        <div class="flex flex-col items-center" @keydown.enter="doUpdateContract">
+          <h1 v-if="!isUpdating">Buat Kontrak</h1>
+          <h1 v-else>Detail Kontrak</h1>
           <InputBox
             id="create-contract-title"
             v-model="formData.title"
@@ -166,15 +191,34 @@ const doUpdateContract = async () => {
             :error="errors.paymentRate"
             class="mt-8 w-full"
             label="Pembayaran Kontrak"
-            @blur="validateField('paymentRate')" />
-          <AppButton class="mt-12 w-1/2" @click="doUpdateContract">
-            <p>Ajukan Kontrak</p>
-            <img
-              v-if="isLoading"
-              alt="loading"
-              class="h-6"
-              src="@/assets/images/loading.svg" />
-          </AppButton>
+            @blur="validateField('paymentRate')"/>
+          <div class="flex flex-row w-full">
+            <AppButton class="mt-12 w-1/2 m-5" @click="doUpdateContract">
+              <p v-if="!isUpdating">Ajukan Kontrak</p>
+              <p v-else>Simpan Perubahan</p>
+              <img
+                v-if="isLoading"
+                alt="loading"
+                class="h-6"
+                src="@/assets/images/loading.svg"/>
+            </AppButton>
+            <AppButton v-if="isUpdating" class="mt-12 w-1/2 m-5" @click="rejectContract()">
+              <p>Batalkan</p>
+              <img
+                v-if="isLoading"
+                alt="loading"
+                class="h-6"
+                src="@/assets/images/loading.svg"/>
+            </AppButton>
+            <AppButton v-if="isUpdating" class="mt-12 w-1/2 m-5" @click="goToPdf(route.params.id)">
+              <p>Download PDF</p>
+              <img
+                v-if="isLoading"
+                alt="loading"
+                class="h-6"
+                src="@/assets/images/loading.svg"/>
+            </AppButton>
+          </div>
         </div>
       </AppCard>
     </div>

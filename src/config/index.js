@@ -57,13 +57,17 @@ export default {
       name: 'job-applicant',
       path: '/job/:id/applicants',
     },
+    contractList: {
+      name: 'contract-list',
+      path: '/contracts/',
+    },
     appliedJobs: {
       name: 'applied-jobs',
       path: '/applied-jobs',
     },
-    createContract: {
-      name: 'contract-create',
-      path: '/contract-create/:id',
+    editContract: {
+      name: 'contract-edit',
+      path: '/contract-edit/:id',
     },
     contractDetail: {
       name: 'contract-detail',
@@ -104,6 +108,9 @@ export default {
     },
     contract: {
       info: (id) => `/contract/id/${id}`,
+      update: '/contract/update',
+      recruiterList: '/contract/recruiterContractList',
+      download: (id) =>  `/contract/generate/${id}`,
       update: '/contract/update',
       reject: (id) => `/contract/reject/${id}`
     },
