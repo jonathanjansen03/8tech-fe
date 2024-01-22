@@ -19,6 +19,7 @@ const CompanyProfile = () => import('@/pages/CompanyProfile.vue');
 const EditCompanyProfile = () => import('@/pages/EditCompanyProfile.vue');
 const CreateContract = () => import('@/pages/CreateContract.vue');
 const AppliedJobs = () => import('@/pages/AppliedJobs.vue');
+const ContractList = () => import('@/pages/ContractList.vue');
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -145,6 +146,16 @@ const router = createRouter({
       },
     },
     {
+      path: config.pages.contractList.path,
+      name: config.pages.contractList.name,
+      component: ContractList,
+      meta: {
+        title: 'Daftar Kontrak yang sedang berjalan',
+        requiresAuth: true,
+        recruiterRole: true,
+      },
+    },
+    {
       path: config.pages.appliedJobs.path,
       name: config.pages.appliedJobs.name,
       component: AppliedJobs,
@@ -154,8 +165,8 @@ const router = createRouter({
       },
     },
     {
-      path: config.pages.createContract.path,
-      name: config.pages.createContract.name,
+      path: config.pages.editContract.path,
+      name: config.pages.editContract.name,
       component: CreateContract,
       meta: {
         title: 'Buat Kontrak',

@@ -11,6 +11,7 @@ import config from '@/config';
 
 import SideBar from '@/components/SideBar.vue';
 import PaginationComponent from '@/components/PaginationComponent.vue';
+import NProgress from 'nprogress';
 
 const COMPANY_ID = 'companyId';
 const CREATED_AT = 'createdAt';
@@ -40,6 +41,7 @@ const initPage = async () => {
   isLoadingFetchApi.value = true;
 
   try {
+    NProgress.start();
     await searchJobs(
       {
         field: COMPANY_ID,
@@ -55,6 +57,7 @@ const initPage = async () => {
     alert(config.errors.general(GET_JOB_LIST));
   }
   isLoadingFetchApi.value = false;
+  NProgress.done();
 };
 
 const goToJobEditPage = (id) => {
