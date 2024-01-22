@@ -12,7 +12,7 @@ import AppTicker from '@/components/AppTicker.vue';
 import AppButton from '@/components/AppButton.vue';
 import InputBox from '@/components/InputBox.vue';
 import ImageInput from '@/components/ImageInput.vue';
-import { useCompanyStore } from '@/stores/company;
+import { useCompanyStore } from '@/stores/company';
 
 const router = useRouter();
 const userStore = useUserStore();

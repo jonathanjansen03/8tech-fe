@@ -1,5 +1,5 @@
 <script setup>
-import { onBeforeMount, reactive, ref } from 'vue';
+import { onBeforeMount, reactive, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 
@@ -56,8 +56,8 @@ const goToContractDetailPage = (id) => {
 };
 
 const trimJobDescription = (description) => {
-  if (description.length > 100) {
-    return `${description.slice(0, 100)}...`;
+  if (description.length > 30) {
+    return `${description.slice(0, 30)}...`;
   }
   return description;
 };
@@ -73,6 +73,29 @@ const unapplyJob = async (id) => {
 };
 
 onBeforeMount(initPage);
+
+watch(pagination, async (newPagination) => {
+  if (newPagination.page < 1) {
+    pagination.page = 1;
+    return;
+  }
+
+  if (newPagination.page > userAppliedJobsPagination.value.totalPages) {
+    pagination.page = userAppliedJobsPagination.value.totalPages;
+    return;
+  }
+
+  isLoadingFetchApi.value = true;
+
+  try {
+    await getUserAppliedJobs(pagination);
+  } catch (err) {
+    console.error(err);
+    alert(config.errors.general(GET_APPLIED_JOBS));
+  }
+
+  isLoadingFetchApi.value = false;
+});
 </script>
 
 <template>
@@ -81,7 +104,7 @@ onBeforeMount(initPage);
       <div>
         <h1
           class="text-center font-bold mb-8 text-white text-2xl"
-          @click="console.log(userAppliedJobs)">
+          @click="console.log(userAppliedJobsPagination)">
           Daftar Lamaran Pekerjaan
         </h1>
 
@@ -92,8 +115,8 @@ onBeforeMount(initPage);
             <thead
               class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
-                <th class="px-6 py-3 w-20">No.</th>
-                <th class="px-6 py-3">Judul Pekerjaan</th>
+                <th class="px-6 py-3 w-16">No.</th>
+                <th class="px-6 py-3 w-10">Judul Pekerjaan</th>
                 <th class="px-6 py-3">Deskripsi Pekerjaan</th>
                 <th class="px-6 py-3 text-center">Tindakan</th>
               </tr>
@@ -107,6 +130,7 @@ onBeforeMount(initPage);
                   {{ (pagination.page - 1) * pagination.size + index + 1 }}
                 </td>
                 <td
+                  @click="console.log(job)"
                   class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                   {{ job.title }}
                 </td>
@@ -122,20 +146,21 @@ onBeforeMount(initPage);
                     "
                     class="flex justify-center gap-x-3">
                     <AppButton
-                      class="w-[12.754rem]"
+                      class="w-full"
                       @click="goToJobDetailPage(job.id)">
                       Lihat detail
                     </AppButton>
                     <AppButton
                       type="danger"
+                      class="w-full"
                       @click="unapplyJob(job.contractId)">
                       Batal melamar pekerjaan
                     </AppButton>
                   </div>
                   <div
                     v-if="
-                      job.contractStatus ===
-                      config.constants.contractStatus.accepted
+                      job.contractStatus !==
+                      config.constants.contractStatus.pending
                     ">
                     <AppButton
                       class="w-full"

@@ -1,20 +1,32 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
+
 import contractApi from '@/api/contract';
 import config from '@/config';
 
 export const useContractStore = defineStore('contract', () => {
   const contract = ref({});
+  const contractCustomFields = ref({});
   const recruiterContractList = ref([]);
   const recruiterContractListPagination = ref({});
+
+  const setContractCustomFields = () => {
+    const customFields = contract.value.customField || '';
+
+    customFields.split(';').forEach((field) => {
+      const [key, value] = field.split('=');
+      contractCustomFields.value[key] = value;
+    });
+  };
 
   const setContract = (data) => {
     contract.value = Object.assign({}, data);
   };
 
-  const fetchStoreContract = async (id, token) => {
+  const fetchContract = async (id, token) => {
     const res = await contractApi.info(id, token);
     setContract(res.data);
+    setContractCustomFields();
   };
 
   const updateContract = async (data, token) => {
@@ -60,10 +72,12 @@ export const useContractStore = defineStore('contract', () => {
 
   return {
     contract,
+    contractCustomFields,
     recruiterContractList,
     recruiterContractListPagination,
     setContract,
-    fetchStoreContract,
+    setContractCustomFields,
+    fetchContract,
     updateContract,
     recruiterRejectContract,
     getRecruiterContractList,

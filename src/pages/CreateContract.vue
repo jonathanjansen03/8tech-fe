@@ -18,7 +18,7 @@ const router = useRouter();
 const route = useRoute();
 const contractStore = useContractStore();
 
-const {fetchStoreContract, recruiterRejectContract} = contractStore;
+const { fetchContract, recruiterRejectContract } = contractStore;
 
 const formData = reactive({
   title: '',
@@ -40,17 +40,19 @@ const template = ref('');
 const initPage = async () => {
   NProgress.start();
   isUpdating.value = route.query.update === 'true';
-  await fetchStoreContract(route.params.id, currentUserToken);
+  await fetchContract(route.params.id, currentUserToken);
   formData.paymentRate = contractStore.contract?.paymentRate;
   formData.title = contractStore.contract?.title;
   formData.description = contractStore.contract?.description;
 
-  formData.details = contractStore.contract?.customField?.split(';').map((fieldList) => {
-    const [key, value] = fieldList.split('=');
-    if (key === 'details') {
-      return value;
-    }
-  });
+  formData.details = contractStore.contract?.customField
+    ?.split(';')
+    .map((fieldList) => {
+      const [key, value] = fieldList.split('=');
+      if (key === 'details') {
+        return value;
+      }
+    });
 
   template.value = contractTemplate.default;
   NProgress.done();
@@ -121,15 +123,18 @@ const doUpdateContract = async () => {
   }
 
   try {
-    await contractStore.updateContract({
-      title: formData.title,
-      description: formData.description,
-      paymentRate: parseInt(formData.paymentRate),
-      customField: 'details=' + formData.details,
-      id: route.params.id,
-      status: config.constants.contractStatus.ACCEPTED,
-      template: template.value
-    }, currentUserToken);
+    await contractStore.updateContract(
+      {
+        title: formData.title,
+        description: formData.description,
+        paymentRate: parseInt(formData.paymentRate),
+        customField: 'details=' + formData.details,
+        id: route.params.id,
+        status: config.constants.contractStatus.ACCEPTED,
+        template: template.value,
+      },
+      currentUserToken.value
+    );
     handleSuccess();
     isLoading.value = false;
   } catch (err) {
@@ -140,7 +145,7 @@ const doUpdateContract = async () => {
 
 const rejectContract = async () => {
   isLoading.value = true;
-  await recruiterRejectContract(route.params.id, currentUserToken);
+  await recruiterRejectContract(route.params.id, currentUserToken.value);
   isLoading.value = false;
   router.back();
 };
@@ -156,7 +161,9 @@ const goToPdf = (id) => {
   <div class="sm:px-20">
     <div>
       <AppCard class="px-5">
-        <div class="flex flex-col items-center" @keydown.enter="doUpdateContract">
+        <div
+          class="flex flex-col items-center"
+          @keydown.enter="doUpdateContract">
           <h1 v-if="!isUpdating">Buat Kontrak</h1>
           <h1 v-else>Detail Kontrak</h1>
           <InputBox
@@ -191,7 +198,7 @@ const goToPdf = (id) => {
             :error="errors.paymentRate"
             class="mt-8 w-full"
             label="Pembayaran Kontrak"
-            @blur="validateField('paymentRate')"/>
+            @blur="validateField('paymentRate')" />
           <div class="flex flex-row w-full">
             <AppButton class="mt-12 w-1/2 m-5" @click="doUpdateContract">
               <p v-if="!isUpdating">Ajukan Kontrak</p>
@@ -200,23 +207,29 @@ const goToPdf = (id) => {
                 v-if="isLoading"
                 alt="loading"
                 class="h-6"
-                src="@/assets/images/loading.svg"/>
+                src="@/assets/images/loading.svg" />
             </AppButton>
-            <AppButton v-if="isUpdating" class="mt-12 w-1/2 m-5" @click="rejectContract()">
+            <AppButton
+              v-if="isUpdating"
+              class="mt-12 w-1/2 m-5"
+              @click="rejectContract">
               <p>Batalkan</p>
               <img
                 v-if="isLoading"
                 alt="loading"
                 class="h-6"
-                src="@/assets/images/loading.svg"/>
+                src="@/assets/images/loading.svg" />
             </AppButton>
-            <AppButton v-if="isUpdating" class="mt-12 w-1/2 m-5" @click="goToPdf(route.params.id)">
-              <p>Download PDF</p>
+            <AppButton
+              v-if="isUpdating"
+              class="mt-12 w-1/2 m-5"
+              @click="goToPdf(route.params.id)">
+              <p>Unduh PDF Kontrak</p>
               <img
                 v-if="isLoading"
                 alt="loading"
                 class="h-6"
-                src="@/assets/images/loading.svg"/>
+                src="@/assets/images/loading.svg" />
             </AppButton>
           </div>
         </div>
@@ -224,9 +237,3 @@ const goToPdf = (id) => {
     </div>
   </div>
 </template>
-
-<style>
-.sidebar {
-  transition: 0.2s ease-in-out;
-}
-</style>
