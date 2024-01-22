@@ -72,7 +72,7 @@ export default {
     contractDetail: {
       name: 'contract-detail',
       path: '/contract/:id',
-    }
+    },
   },
   api: {
     basePath: 'https://api-8-tech.koyeb.app',
@@ -109,9 +109,10 @@ export default {
     contract: {
       info: (id) => `/contract/id/${id}`,
       recruiterList: '/contract/recruiterContractList',
-      download: (id) =>  `/contract/generate/${id}`,
+      download: (id) => `/contract/generate/${id}`,
       update: '/contract/update',
-      reject: (id) => `/contract/reject/${id}`
+      reject: (id) => `/contract/reject/${id}`,
+      payoutLink: (id) => `/contract/payoutLink/${id}`,
     },
     job: {
       create: '/job/create',
@@ -146,6 +147,11 @@ export default {
       rejected: 'REJECTED',
       ongoing: 'ONGOING',
       completed: 'COMPLETED',
-    }
-  }
+    },
+    paymentStatus: {
+      pending: 'PENDING',
+      paid: 'PAID',
+      failed: 'FAILED',
+    },
+  },
 };

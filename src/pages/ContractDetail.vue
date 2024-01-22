@@ -22,14 +22,20 @@ const contractStore = useContractStore();
 
 const { currentUserToken } = storeToRefs(userStore);
 
-const { contract, contractCustomFields } = storeToRefs(contractStore);
-const { fetchContract, updateContract, rejectContract } = contractStore;
+const { contract, contractCustomFields, isContractCompleted, isContractPaid } =
+  storeToRefs(contractStore);
+const { fetchContract, updateContract, rejectContract, getContractPayoutLink } =
+  contractStore;
 
 const isLoading = ref(false);
 
 const initPage = async () => {
   try {
     await fetchContract(route.params.id, currentUserToken.value);
+
+    if (isContractCompleted.value && isContractPaid.value) {
+      await getContractPayoutLink(route.params.id, currentUserToken.value);
+    }
   } catch (err) {
     console.error(err);
     alert(config.errors.general(GET_CONTRACT_DETAIL));
@@ -68,6 +74,12 @@ const doRejectContract = async () => {
   }
 };
 
+const goToPayoutLink = () => {
+  isLoading.value = true;
+  window.open(contract.value.payoutLink, '_blank');
+  isLoading.value = false;
+};
+
 const goToPdf = (id) => {
   isLoading.value = true;
   window.open(config.api.basePath + config.api.contract.download(id), '_blank');
@@ -80,9 +92,7 @@ onBeforeMount(initPage);
 <template>
   <div class="sm:px-20">
     <div>
-      <AppCard
-        class="px-5"
-        @click="console.log(contract, contractCustomFields)">
+      <AppCard class="px-5">
         <div class="flex flex-col">
           <h1 class="flex items-center">
             <ChevronLeftIcon
@@ -110,7 +120,9 @@ onBeforeMount(initPage);
             <h3>Nominal Pembayaran</h3>
             <p>{{ contract.paymentRate }}</p>
           </div>
-          <div v-if="contract.status === config.constants.contractStatus.accepted" class="flex gap-x-5">
+          <div
+            v-if="contract.status === config.constants.contractStatus.accepted"
+            class="flex gap-x-5">
             <AppButton class="mt-12 w-1/2" @click="doAcceptContract">
               Terima Kontrak
               <img
@@ -131,6 +143,17 @@ onBeforeMount(initPage);
                 src="@/assets/images/loading.svg" />
             </AppButton>
           </div>
+          <AppButton
+            v-if="isContractCompleted && isContractPaid"
+            class="mt-8"
+            @click="goToPayoutLink">
+            Terima Pembayaran
+            <img
+              v-if="isLoading"
+              alt="loading"
+              class="h-6"
+              src="@/assets/images/loading.svg" />
+          </AppButton>
           <AppButton class="mt-8" outline @click="goToPdf(route.params.id)">
             Unduh PDF Kontrak
             <img
