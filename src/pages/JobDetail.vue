@@ -2,6 +2,7 @@
 import { computed, onBeforeMount, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
+import NProgress from 'nprogress';
 import { ChevronLeftIcon } from '@heroicons/vue/24/outline';
 
 import { useUserStore } from '@/stores/user';
@@ -28,6 +29,7 @@ const { findJob, applyJob } = jobStore;
 const { job } = storeToRefs(jobStore);
 const { setContract } = contractStore;
 
+const isLoading = ref(false);
 const isError = ref(false);
 const errorMessage = ref('');
 
@@ -39,12 +41,14 @@ const doApplyJob = async () => {
     return;
   }
 
+  isLoading.value = true;
   try {
     const contract = await applyJob(route.params.id, currentUserToken.value);
     handleSuccessfulApplyJob(contract);
   } catch (err) {
     handleFailedApplyJob(err);
   }
+  isLoading.value = false;
 };
 
 const handleSuccessfulApplyJob = (contract) => {
@@ -76,12 +80,14 @@ const goToLoginPage = () => {
 };
 
 const initPage = async () => {
+  NProgress.start();
   try {
     await findJob(route.params.id);
   } catch (err) {
     console.error(err);
     alert(config.errors.general(GET_JOB_DETAIL));
   }
+  NProgress.done();
 };
 
 onBeforeMount(initPage);
@@ -123,6 +129,11 @@ onBeforeMount(initPage);
           class="mt-10"
           @click="doApplyJob">
           Lamar Pekerjaan
+          <img
+            v-if="isLoading"
+            alt="loading"
+            class="h-6 ml-1"
+            src="@/assets/images/loading.svg" />
         </AppButton>
       </div>
     </AppCard>
