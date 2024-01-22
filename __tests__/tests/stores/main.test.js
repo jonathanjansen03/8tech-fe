@@ -1,7 +1,7 @@
 import { createPinia, setActivePinia } from 'pinia';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { useMainStore } from '@/stores/main.js';
+import { useMainStore } from '@/stores/main';
 
 describe('Main store', () => {
   let mainStore;

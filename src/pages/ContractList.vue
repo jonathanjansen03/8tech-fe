@@ -166,9 +166,3 @@ const goEditContract = (id) => {
     </div>
   </div>
 </template>
-
-<style>
-.sidebar {
-  transition: 0.2s ease-in-out;
-}
-</style>

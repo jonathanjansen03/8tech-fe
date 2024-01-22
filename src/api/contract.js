@@ -24,5 +24,12 @@ export default {
       body: data,
       headers: config.api.authTokenHeader(token)
     });
+  },
+  reject: (id, token) => {
+    return apiUtil.hitApi({
+      method: config.api.method.get,
+      path: config.api.contract.reject(id),
+      headers: config.api.authTokenHeader(token)
+    });
   }
 };

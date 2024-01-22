@@ -20,6 +20,7 @@ const EditCompanyProfile = () => import('@/pages/EditCompanyProfile.vue');
 const CreateContract = () => import('@/pages/CreateContract.vue');
 const AppliedJobs = () => import('@/pages/AppliedJobs.vue');
 const ContractList = () => import('@/pages/ContractList.vue');
+const ContractDetail = () => import('@/pages/ContractDetail.vue');
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -172,6 +173,15 @@ const router = createRouter({
         title: 'Buat Kontrak',
         requiresAuth: true,
         recruiterRole: true,
+      },
+    },
+    {
+      path: config.pages.contractDetail.path,
+      name: config.pages.contractDetail.name,
+      component: ContractDetail,
+      meta: {
+        title: 'Detail Kontak',
+        requiresAuth: true,
       },
     },
   ],
