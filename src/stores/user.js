@@ -107,7 +107,7 @@ export const useUserStore = defineStore('user', () => {
     const res = await userApi.getAppliedJobs(data, currentUserToken.value);
     userAppliedJobs.value = res.data.data.slice(0);
     userAppliedJobsPagination.value = {
-      totalPage: res.data.totalPages,
+      totalPages: res.data.totalPages,
       hasNext: res.data.hasNext,
       hasPrevious: res.data.hasPrevious,
       isLast: res.data.isLast,
