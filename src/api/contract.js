@@ -31,5 +31,16 @@ export default {
       path: config.api.contract.reject(id),
       headers: config.api.authTokenHeader(token)
     });
+  },
+  paymentRequest: (id, token) => {
+    return apiUtil.hitApi({
+      method: config.api.method.post,
+      path: config.api.contract.paymentRequest,
+      body: {
+        "ewalletCode": 'SHOPEEPAY',
+        "contractId": id
+      },
+      headers: config.api.authTokenHeader(token)
+    });
   }
 };

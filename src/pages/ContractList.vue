@@ -46,7 +46,6 @@ const initPage = async () => {
   }
   isLoadingFetchApi.value = false;
   NProgress.done();
-  console.log('#ricat ', recruiterContractList);
 };
 
 onBeforeMount(initPage);
