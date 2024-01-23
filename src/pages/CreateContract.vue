@@ -11,14 +11,15 @@ import InputBox from '@/components/InputBox.vue';
 import AppButton from '@/components/AppButton.vue';
 import contractTemplate from '@/assets/docs/contractTemplate.json';
 import NProgress from 'nprogress';
+import { storeToRefs } from 'pinia';
 
-const { currentUserToken } = useUserStore();
-
+const userStore = useUserStore();
 const router = useRouter();
 const route = useRoute();
 const contractStore = useContractStore();
 
 const { fetchContract, recruiterRejectContract } = contractStore;
+const { currentUserToken } = storeToRefs(userStore);
 
 const formData = reactive({
   title: '',
@@ -41,7 +42,7 @@ const template = ref('');
 const initPage = async () => {
   NProgress.start();
   isUpdating.value = route.query.update === 'true';
-  await fetchContract(route.params.id, currentUserToken);
+  await fetchContract(route.params.id, currentUserToken.value);
   formData.paymentRate = contractStore.contract?.paymentRate;
   formData.title = contractStore.contract?.title;
   formData.description = contractStore.contract?.description;
@@ -135,7 +136,7 @@ const doUpdateContract = async () => {
         status: config.constants.contractStatus.accepted,
         template: template.value,
       },
-      currentUserToken
+      currentUserToken.value
     );
     handleSuccess();
     isLoading.value = false;
@@ -147,7 +148,7 @@ const doUpdateContract = async () => {
 
 const rejectContract = async () => {
   isLoading.value = true;
-  await recruiterRejectContract(route.params.id, currentUserToken);
+  await recruiterRejectContract(route.params.id, currentUserToken.value);
   isLoading.value = false;
   router.back();
 };
@@ -160,13 +161,13 @@ const goToPdf = (id) => {
 
 const pay = async (id) => {
   isLoading.value = true;
-  const url = await contractStore.recruiterPayContract(id, currentUserToken);
+  const url = await contractStore.recruiterPayContract(id, currentUserToken.value);
   window.open(url, '_blank');
   await contractStore.updateContract(
     {
       status: config.constants.contractStatus.completed,
     },
-    currentUserToken
+    currentUserToken.value
   );
   isLoading.value = false;
 };

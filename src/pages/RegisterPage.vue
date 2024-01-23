@@ -113,7 +113,7 @@ const doRegister = async () => {
     await register({
       ...formData,
       confirmPassword: undefined,
-      companyId: company.id,
+      companyId: company.value.id,
     });
     handleSuccessfulRegister();
     isLoadingRegister.value = false;
