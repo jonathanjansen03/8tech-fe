@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
 import contractApi from '@/api/contract';
 import config from '@/config';
@@ -9,6 +9,16 @@ export const useContractStore = defineStore('contract', () => {
   const contractCustomFields = ref({});
   const recruiterContractList = ref([]);
   const recruiterContractListPagination = ref({});
+
+  const isContractCompleted = computed(
+    () => contract.value.status === config.constants.contractStatus.completed
+  );
+
+  const isContractPaid = computed(
+    () =>
+      contract.value.payment?.paymentStatus ===
+      config.constants.paymentStatus.paid
+  );
 
   const setContractCustomFields = () => {
     const customFields = contract.value.customField || '';
@@ -34,10 +44,15 @@ export const useContractStore = defineStore('contract', () => {
   };
 
   const recruiterRejectContract = async (id, token) => {
-    setContract(await contractApi.update({
-      id,
-      status: config.constants.contractStatus.REJECTED
-    }, token));
+    setContract(
+      await contractApi.update(
+        {
+          id,
+          status: config.constants.contractStatus.rejected,
+        },
+        token
+      )
+    );
   };
 
   const recruiterPayContract = async (id, token) => {
@@ -53,7 +68,7 @@ export const useContractStore = defineStore('contract', () => {
       hasNext: res.data.hasNext,
       hasPrevious: res.data.hasPrevious,
       isLast: res.data.isLast,
-      isFirst: res.data.isFirst
+      isFirst: res.data.isFirst,
     };
     return res.data;
   };
@@ -75,11 +90,17 @@ export const useContractStore = defineStore('contract', () => {
     await contractApi.reject(id, token);
   };
 
+  const getContractPayoutLink = async (id, token) => {
+    await contractApi.getPayoutLink(id, token);
+  };
+
   return {
     contract,
     contractCustomFields,
     recruiterContractList,
     recruiterContractListPagination,
+    isContractCompleted,
+    isContractPaid,
     recruiterPayContract,
     setContract,
     setContractCustomFields,
@@ -89,5 +110,6 @@ export const useContractStore = defineStore('contract', () => {
     getRecruiterContractList,
     statusMapping,
     rejectContract,
+    getContractPayoutLink,
   };
 });

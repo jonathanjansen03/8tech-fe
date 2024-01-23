@@ -102,9 +102,7 @@ watch(pagination, async (newPagination) => {
   <div>
     <div class="sm:px-20">
       <div>
-        <h1
-          class="text-center font-bold mb-8 text-white text-2xl"
-          @click="console.log(userAppliedJobsPagination)">
+        <h1 class="text-center font-bold mb-8 text-white text-2xl">
           Daftar Lamaran Pekerjaan
         </h1>
 
@@ -130,7 +128,6 @@ watch(pagination, async (newPagination) => {
                   {{ (pagination.page - 1) * pagination.size + index + 1 }}
                 </td>
                 <td
-                  @click="console.log(job)"
                   class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                   {{ job.title }}
                 </td>
