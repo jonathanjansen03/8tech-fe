@@ -35,6 +35,7 @@ const errors = reactive({
 });
 const isLoading = ref(false);
 const isUpdating = ref(false);
+const statusOngoing = ref(false);
 const template = ref('');
 
 const initPage = async () => {
@@ -44,6 +45,7 @@ const initPage = async () => {
   formData.paymentRate = contractStore.contract?.paymentRate;
   formData.title = contractStore.contract?.title;
   formData.description = contractStore.contract?.description;
+  statusOngoing.value = contractStore.contract?.status === config.constants.contractStatus.ongoing;
 
   formData.details = contractStore.contract?.customField
     ?.split(';')
@@ -133,7 +135,7 @@ const doUpdateContract = async () => {
         status: config.constants.contractStatus.accepted,
         template: template.value,
       },
-      currentUserToken.value
+      currentUserToken
     );
     handleSuccess();
     isLoading.value = false;
@@ -145,7 +147,7 @@ const doUpdateContract = async () => {
 
 const rejectContract = async () => {
   isLoading.value = true;
-  await recruiterRejectContract(route.params.id, currentUserToken.value);
+  await recruiterRejectContract(route.params.id, currentUserToken);
   isLoading.value = false;
   router.back();
 };
@@ -153,6 +155,19 @@ const rejectContract = async () => {
 const goToPdf = (id) => {
   isLoading.value = true;
   window.open(config.api.basePath + config.api.contract.download(id), '_blank');
+  isLoading.value = false;
+};
+
+const pay = async (id) => {
+  isLoading.value = true;
+  const url = await contractStore.recruiterPayContract(id, currentUserToken);
+  window.open(url, '_blank');
+  await contractStore.updateContract(
+    {
+      status: config.constants.contractStatus.completed,
+    },
+    currentUserToken
+  );
   isLoading.value = false;
 };
 </script>
@@ -199,8 +214,8 @@ const goToPdf = (id) => {
             class="mt-8 w-full"
             label="Pembayaran Kontrak"
             @blur="validateField('paymentRate')" />
-          <div class="flex flex-row w-full">
-            <AppButton class="mt-12 w-1/2 m-5" @click="doUpdateContract">
+          <div class="flex flex-row w-full gap-x-5">
+            <AppButton class="mt-12 w-1/2 " @click="doUpdateContract" v-if="!statusOngoing">
               <p v-if="!isUpdating">Ajukan Kontrak</p>
               <p v-else>Simpan Perubahan</p>
               <img
@@ -210,28 +225,38 @@ const goToPdf = (id) => {
                 src="@/assets/images/loading.svg" />
             </AppButton>
             <AppButton
-              v-if="isUpdating"
-              class="mt-12 w-1/2 m-5"
+              v-if="isUpdating && !statusOngoing"
+              type="danger"
+              class="mt-12 w-1/2"
               @click="rejectContract">
               <p>Batalkan</p>
               <img
                 v-if="isLoading"
                 alt="loading"
                 class="h-6"
-                src="@/assets/images/loading.svg" />
-            </AppButton>
-            <AppButton
-              v-if="isUpdating"
-              class="mt-12 w-1/2 m-5"
-              @click="goToPdf(route.params.id)">
-              <p>Unduh PDF Kontrak</p>
-              <img
-                v-if="isLoading"
-                alt="loading"
-                class="h-6"
-                src="@/assets/images/loading.svg" />
+                src="@/assets/images/loading.svg"/>
             </AppButton>
           </div>
+          <AppButton v-if="statusOngoing" class="mt-12 w-full m-5" @click="pay(route.params.id)">
+            <p>Bayar Jasa Freelancer</p>
+            <img
+              v-if="isLoading"
+              alt="loading"
+              class="h-6"
+              src="@/assets/images/loading.svg" />
+          </AppButton>
+          <AppButton
+            v-if="isUpdating"
+            class="mt-5 w-full m-5"
+            outline
+            @click="goToPdf(route.params.id)">
+            <p>Unduh PDF Kontrak</p>
+            <img
+              v-if="isLoading"
+              alt="loading"
+              class="h-6"
+              src="@/assets/images/loading.svg" />
+          </AppButton>
         </div>
       </AppCard>
     </div>

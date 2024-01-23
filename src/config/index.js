@@ -109,6 +109,7 @@ export default {
     contract: {
       info: (id) => `/contract/id/${id}`,
       recruiterList: '/contract/recruiterContractList',
+      paymentRequest: '/contract/paymentRequest',
       download: (id) => `/contract/generate/${id}`,
       update: '/contract/update',
       reject: (id) => `/contract/reject/${id}`,

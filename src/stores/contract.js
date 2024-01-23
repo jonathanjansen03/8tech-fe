@@ -55,6 +55,11 @@ export const useContractStore = defineStore('contract', () => {
     );
   };
 
+  const recruiterPayContract = async (id, token) => {
+    const res = await contractApi.paymentRequest(id, token);
+    return res.data?.paymentUrl;
+  };
+
   const getRecruiterContractList = async (data, token) => {
     const res = await contractApi.recruiterContractList(data, token);
     recruiterContractList.value = res.data.data ? res.data.data.slice(0) : [];
@@ -96,6 +101,7 @@ export const useContractStore = defineStore('contract', () => {
     recruiterContractListPagination,
     isContractCompleted,
     isContractPaid,
+    recruiterPayContract,
     setContract,
     setContractCustomFields,
     fetchContract,
