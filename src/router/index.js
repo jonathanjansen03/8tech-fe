@@ -151,7 +151,7 @@ const router = createRouter({
       name: config.pages.contractList.name,
       component: ContractList,
       meta: {
-        title: 'Daftar Kontrak yang sedang berjalan',
+        title: 'Daftar Kontrak',
         requiresAuth: true,
         recruiterRole: true,
       },

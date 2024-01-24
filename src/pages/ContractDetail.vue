@@ -36,7 +36,8 @@ const initPage = async () => {
   try {
     await fetchContract(route.params.id, currentUserToken.value);
 
-    if (isContractCompleted.value && isContractPaid.value && !Object.keys(payout.value).length) {
+      console.log(isContractCompleted.value, isContractPaid.value, " #ricat");
+    if (isContractCompleted.value && isContractPaid.value) {
       await getContractPayoutLink(route.params.id, currentUserToken.value);
     }
   } catch (err) {
@@ -91,6 +92,8 @@ const handleError = (err, message) => {
 
 const goToPayoutLink = () => {
   isLoading.value = true;
+  console.log("#ricat1 ", payout.value.payoutUrl);
+  console.log("#ricat2 ", payout.value.payoutUrl);
   window.open(payout.value.payoutUrl, '_blank');
   isLoading.value = false;
 };
@@ -109,7 +112,7 @@ onBeforeMount(initPage);
     <div>
       <AppCard class="px-5">
         <div class="flex flex-col">
-          <h1 class="flex items-center" @click="console.log(payout)">
+          <h1 class="flex items-center">
             <ChevronLeftIcon
               class="cursor-pointer mr-3 stroke-2 w-6"
               @click="router.back" />
@@ -159,7 +162,7 @@ onBeforeMount(initPage);
             </AppButton>
           </div>
           <AppButton
-            v-if="isContractCompleted && isContractPaid && !Object.keys(payout).length"
+            v-if="isContractCompleted && isContractPaid && Object.keys(payout).length"
             class="mt-8"
             @click="goToPayoutLink">
             Terima Pembayaran

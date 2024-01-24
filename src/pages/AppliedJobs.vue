@@ -9,6 +9,7 @@ import config from '@/config';
 
 import PaginationComponent from '@/components/PaginationComponent.vue';
 import AppButton from '@/components/AppButton.vue';
+import NProgress from 'nprogress';
 
 const GET_APPLIED_JOBS = 'mendapatkan daftar pekerjaan';
 const REJECT_CONTRACT = 'membatalkan lamaran pekerjaan';
@@ -30,7 +31,7 @@ const isLoadingFetchApi = ref(false);
 
 const initPage = async () => {
   isLoadingFetchApi.value = true;
-
+  NProgress.start();
   try {
     await getUserAppliedJobs(pagination);
   } catch (err) {
@@ -38,6 +39,7 @@ const initPage = async () => {
     alert(config.errors.general(GET_APPLIED_JOBS));
   }
   isLoadingFetchApi.value = false;
+  NProgress.done();
 };
 
 const goToJobDetailPage = (id) => {

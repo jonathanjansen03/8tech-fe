@@ -76,7 +76,7 @@ const getPath = (type) => {
           <RouterLink :to="getPath('list')">
             <span v-if="!isRecruiter">Daftar Pekerjaan yang Dilamar</span>
             <span v-if="isRecruiter">
-              Daftar Kontrak yang Sedang Berlangsung
+              Daftar Kontrak
             </span>
           </RouterLink>
           <RouterLink :to="{ name: config.pages.about.name }">
@@ -114,7 +114,7 @@ const getPath = (type) => {
             :class="{ 'hover:after:w-[19.25rem]': isRecruiter }">
             <span v-if="!isRecruiter">Daftar Pekerjaan yang Dilamar</span>
             <span v-if="isRecruiter">
-              Daftar Kontrak yang Sedang Berlangsung
+              Daftar Kontrak
             </span>
           </RouterLink>
           <RouterLink
