@@ -36,7 +36,6 @@ const initPage = async () => {
   try {
     await fetchContract(route.params.id, currentUserToken.value);
 
-      console.log(isContractCompleted.value, isContractPaid.value, " #ricat");
     if (isContractCompleted.value && isContractPaid.value) {
       await getContractPayoutLink(route.params.id, currentUserToken.value);
     }
@@ -92,8 +91,6 @@ const handleError = (err, message) => {
 
 const goToPayoutLink = () => {
   isLoading.value = true;
-  console.log("#ricat1 ", payout.value.payoutUrl);
-  console.log("#ricat2 ", payout.value.payoutUrl);
   window.open(payout.value.payoutUrl, '_blank');
   isLoading.value = false;
 };
