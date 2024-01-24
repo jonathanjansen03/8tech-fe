@@ -154,7 +154,7 @@ watch(route, () => {
         <h3>Deskripsi</h3>
         <p>
           {{
-            (isPrivateProfile ? currentUser : publicUserProfile).description ??
+            (isPrivateProfile ? currentUser : publicUserProfile).description ||
             NO_DESCRIPTION
           }}
         </p>
@@ -177,7 +177,7 @@ watch(route, () => {
         <h3>Rata-Rata Rating</h3>
         <p>
           {{
-            (isPrivateProfile ? currentUser : publicUserProfile).ratingsAvg ??
+            (isPrivateProfile ? currentUser : publicUserProfile).ratingsAvg ||
             NO_RATING
           }}
         </p>
