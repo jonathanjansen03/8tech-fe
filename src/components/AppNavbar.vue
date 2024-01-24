@@ -137,12 +137,12 @@ const getPath = (type) => {
             </div>
             <AppCard
               class="absolute invisible duration-300 left-4 opacity-0 top-14 transition w-36 hover:opacity-100 hover:visible peer-hover:opacity-100 peer-hover:visible">
-              <RouterLink
-                :to="{ name: config.pages.profile.name }"
+              <div
+                @click="router.push(config.pages.profile.path)"
                 class="flex text-black hover:text-blue-800">
                 <UserIcon class="mr-2 w-5" />
                 Lihat profil
-              </RouterLink>
+              </div>
               <span
                 class="flex mt-2 text-black hover:text-blue-800"
                 @click="logout">
