@@ -15,11 +15,19 @@ const props = defineProps({
     default: false,
   },
   label: String,
-  modelValue: String,
+  modelValue: {
+    default: ''
+  },
   error: String,
   textAreaHeight: {
     type: String,
     default: 'h-32',
+  },
+  min: String,
+  max: String,
+  disabled: {
+    type: Boolean,
+    default: false,
   },
 });
 const emit = defineEmits(['update:modelValue', 'blur']);
@@ -48,21 +56,27 @@ const labelClasses = computed(() => {
       :class="{
         'border-gray-500 focus:outline-indigo-500': !props.error,
         'border-red-500 focus:outline-red-500': props.error,
+        'cursor-not-allowed': props.disabled,
         [props.textAreaHeight]: true,
-      }"></textarea>
+      }"
+      :disabled="props.disabled"></textarea>
     <input
       v-else
-      :id="props.id"
       name="input"
+      :id="props.id"
       :type="props.type"
       :value="props.modelValue"
+      :min="props.min"
+      :max="props.max"
       @input="emit('update:modelValue', $event.target.value)"
       @blur="emit('blur')"
       class="border p-2 peer rounded-md w-full {{props.textAreaHeight}}"
       :class="{
         'border-gray-500 focus:outline-indigo-500': !props.error,
         'border-red-500 focus:outline-red-500': props.error,
-      }" />
+        'cursor-not-allowed': props.disabled,
+      }"
+      :disabled="props.disabled" />
     <label
       :for="props.id"
       class="absolute left-2 top-2 transition-input-box hover:cursor-text peer-focus:text-indigo-500 peer-focus:text-xs peer-focus:-top-2 peer-focus:bg-white"

@@ -38,8 +38,8 @@ const toggleNavbar = () => {
 
 const getPath = (type) => {
   const paths = {
-    home: isRecruiter ? 'home' : 'recruiterPortal',
-    list: isRecruiter ? 'appliedJobs' : 'applicantList',
+    home: isRecruiter.value ? 'recruiterPortal':'home' ,
+    list: isRecruiter.value ? 'contractList':'appliedJobs' ,
   };
 
   return config.pages[paths[type]].path || '';

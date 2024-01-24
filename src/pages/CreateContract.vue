@@ -13,13 +13,19 @@ import contractTemplate from '@/assets/docs/contractTemplate.json';
 import NProgress from 'nprogress';
 import { storeToRefs } from 'pinia';
 
+const RATE_FREELANCER = 'memberikan penilaian';
+
 const userStore = useUserStore();
 const router = useRouter();
 const route = useRoute();
 const contractStore = useContractStore();
 
-const { fetchContract, recruiterRejectContract } = contractStore;
-const { currentUserToken } = storeToRefs(userStore);
+const { currentUser, currentUserToken } = storeToRefs(userStore);
+
+const { contract, isContractPending, isContractCompleted, isContractRated } =
+  storeToRefs(contractStore);
+const { fetchContract, recruiterRejectContract, rateFreelancer } =
+  contractStore;
 
 const formData = reactive({
   title: '',
@@ -27,7 +33,6 @@ const formData = reactive({
   details: '',
   paymentRate: '',
 });
-
 const errors = reactive({
   title: '',
   description: '',
@@ -36,8 +41,10 @@ const errors = reactive({
 });
 const isLoading = ref(false);
 const isUpdating = ref(false);
+const isPaying = ref(false);
 const statusOngoing = ref(false);
 const template = ref('');
+const freelancerRating = ref(1);
 
 const initPage = async () => {
   NProgress.start();
@@ -46,7 +53,8 @@ const initPage = async () => {
   formData.paymentRate = contractStore.contract?.paymentRate;
   formData.title = contractStore.contract?.title;
   formData.description = contractStore.contract?.description;
-  statusOngoing.value = contractStore.contract?.status === config.constants.contractStatus.ongoing;
+  statusOngoing.value =
+    contractStore.contract?.status === config.constants.contractStatus.ongoing;
 
   formData.details = contractStore.contract?.customField
     ?.split(';')
@@ -91,6 +99,12 @@ const validateFormData = () => {
       continue;
     }
 
+    if (formData.paymentRate < 10000) {
+      errors.paymentRate = config.errors.form.paymentRateMin;
+      isFormValid = false;
+      continue;
+    }
+
     if (!validationUtil.validateForm(key, formData[key])) {
       errors[key] = config.errors.form[key];
       isFormValid = false;
@@ -100,7 +114,7 @@ const validateFormData = () => {
 };
 
 const handleSuccess = () => {
-  router.back();
+  router.push(config.pages.contractList.path);
 };
 
 const handleFail = (error) => {
@@ -160,16 +174,36 @@ const goToPdf = (id) => {
 };
 
 const pay = async (id) => {
-  isLoading.value = true;
-  const url = await contractStore.recruiterPayContract(id, currentUserToken.value);
-  window.open(url, '_blank');
+  isPaying.value = true;
+  const url = await contractStore.recruiterPayContract(
+    id,
+    currentUserToken.value
+  );
+  window.open(url, '_self');
   await contractStore.updateContract(
     {
       status: config.constants.contractStatus.completed,
     },
     currentUserToken.value
   );
-  isLoading.value = false;
+  isPaying.value = false;
+};
+
+const doRateFreelancer = async () => {
+  try {
+    await rateFreelancer(
+      {
+        userId: contract.value.userId,
+        recruiterUserId: currentUser.value.id,
+        ratingOf10: freelancerRating.value,
+        contractId: contract.value.id,
+      },
+      currentUserToken.value
+    );
+    handleSuccess();
+  } catch (err) {
+    handleFail(err, RATE_FREELANCER);
+  }
 };
 </script>
 
@@ -177,9 +211,7 @@ const pay = async (id) => {
   <div class="sm:px-20">
     <div>
       <AppCard class="px-5">
-        <div
-          class="flex flex-col items-center"
-          @keydown.enter="doUpdateContract">
+        <div class="flex flex-col">
           <h1 v-if="!isUpdating">Buat Kontrak</h1>
           <h1 v-else>Detail Kontrak</h1>
           <InputBox
@@ -189,6 +221,7 @@ const pay = async (id) => {
             class="mt-8 w-full"
             label="Judul Kontrak"
             type="text"
+            :disabled="!isContractPending"
             @blur="validateField('title')" />
           <InputBox
             id="create-contract-description"
@@ -198,6 +231,7 @@ const pay = async (id) => {
             label="Deskripsi Kontrak"
             text-area
             text-area-height="h-40"
+            :disabled="!isContractPending"
             @blur="validateField('description')" />
           <InputBox
             id="create-contract-details"
@@ -207,16 +241,24 @@ const pay = async (id) => {
             label="Detail Kontrak"
             text-area
             text-area-height="h-40"
+            :disabled="!isContractPending"
             @blur="validateField('details')" />
           <InputBox
             id="create-contract-paymentRate"
             v-model="formData.paymentRate"
+            label="Pembayaran Kontrak"
+            type="number"
+            min="10000"
             :error="errors.paymentRate"
             class="mt-8 w-full"
-            label="Pembayaran Kontrak"
+            :disabled="!isContractPending"
             @blur="validateField('paymentRate')" />
           <div class="flex flex-row w-full gap-x-5">
-            <AppButton class="mt-12 w-1/2 " @click="doUpdateContract" v-if="!statusOngoing">
+            <AppButton
+              class="mt-12"
+              :class="{ 'w-1/2': !statusOngoing, 'w-full': statusOngoing }"
+              @click="doUpdateContract"
+              v-if="!statusOngoing && !isContractCompleted">
               <p v-if="!isUpdating">Ajukan Kontrak</p>
               <p v-else>Simpan Perubahan</p>
               <img
@@ -226,7 +268,7 @@ const pay = async (id) => {
                 src="@/assets/images/loading.svg" />
             </AppButton>
             <AppButton
-              v-if="isUpdating && !statusOngoing"
+              v-if="isUpdating && !statusOngoing && !isContractCompleted"
               type="danger"
               class="mt-12 w-1/2"
               @click="rejectContract">
@@ -235,11 +277,34 @@ const pay = async (id) => {
                 v-if="isLoading"
                 alt="loading"
                 class="h-6"
-                src="@/assets/images/loading.svg"/>
+                src="@/assets/images/loading.svg" />
             </AppButton>
           </div>
-          <AppButton v-if="statusOngoing" class="mt-12 w-full m-5" @click="pay(route.params.id)">
+          <AppButton
+            v-if="statusOngoing && !isContractCompleted"
+            class="mt-12 w-full"
+            @click="pay(route.params.id)">
             <p>Bayar Jasa Freelancer</p>
+            <img
+              v-if="isPaying"
+              alt="loading"
+              class="h-6"
+              src="@/assets/images/loading.svg" />
+          </AppButton>
+          <InputBox
+            v-if="isUpdating && isContractCompleted && !isContractRated"
+            v-model="freelancerRating"
+            id="freelancer-rating"
+            type="number"
+            min="1"
+            max="10"
+            label="Penilaian Freelancer (1-10)"
+            class="mt-12 w-1/6" />
+          <AppButton
+            v-if="isUpdating && isContractCompleted && !isContractRated"
+            class="mt-5 w-full"
+            @click="doRateFreelancer">
+            Kasih Penilaian Freelancer
             <img
               v-if="isLoading"
               alt="loading"
@@ -248,7 +313,7 @@ const pay = async (id) => {
           </AppButton>
           <AppButton
             v-if="isUpdating"
-            class="mt-5 w-full m-5"
+            class="mt-12 w-full"
             outline
             @click="goToPdf(route.params.id)">
             <p>Unduh PDF Kontrak</p>
