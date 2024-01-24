@@ -114,6 +114,7 @@ const doRegister = async () => {
       ...formData,
       confirmPassword: undefined,
       companyId: company.value.id,
+      roles: isRecruiter.value ? ['RECRUITER', 'USER'] : ['USER'],
     });
     handleSuccessfulRegister();
     isLoadingRegister.value = false;
