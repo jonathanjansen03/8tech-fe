@@ -151,3 +151,11 @@ const getPath = (type) => {
     </div>
   </nav>
 </template>
+
+<style scoped>
+.router-link-exact-active {
+  @apply text-blue-600;
+  @apply underline;
+  @apply underline-offset-8;
+}
+</style>
