@@ -163,7 +163,7 @@ watch(
     <SideBar v-if="mainStore.showPortalNavbar" class="sidebar" />
     <div>
       <AppCard class="px-5">
-        <div class="flex flex-col items-center" @keydown.enter="doUpdateJob">
+        <div class="flex flex-col items-center">
           <h1>Detail Lowongan Pekerjaan</h1>
           <InputBox
             id="create-job-title"

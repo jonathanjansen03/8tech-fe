@@ -10,14 +10,12 @@ import {
 } from '@heroicons/vue/24/outline';
 import { UserCircleIcon } from '@heroicons/vue/24/solid';
 
-import { useMainStore } from '@/stores/main';
 import { useUserStore } from '@/stores/user';
 import config from '@/config';
 import logo from '@/assets/images/8tech-logo.png';
 import AppButton from '@/components/AppButton.vue';
 import AppCard from '@/components/AppCard.vue';
 
-const mainStore = useMainStore();
 const userStore = useUserStore();
 const router = useRouter();
 const { isLoggedIn, isRecruiter, currentUserFullName } = storeToRefs(userStore);
@@ -76,7 +74,7 @@ const getPath = (type) => {
           <RouterLink :to="getPath('list')">
             <span v-if="!isRecruiter">Daftar Pekerjaan yang Dilamar</span>
             <span v-if="isRecruiter">
-              Daftar Kontrak yang Sedang Berlangsung
+              Daftar Kontrak
             </span>
           </RouterLink>
           <RouterLink :to="{ name: config.pages.about.name }">
@@ -92,10 +90,6 @@ const getPath = (type) => {
     <!-- non-mobile navbar -->
     <div class="max-md:hidden">
       <div class="bg-zinc-800 flex items-center justify-around py-3 w-full">
-        <Bars3Icon
-          v-if="mainStore.isRecruiterPortal"
-          @click="mainStore.togglePortalNavbar()"
-          class="cursor-pointer w-10" />
         <img
           :src="logo"
           alt="Logo"
@@ -111,10 +105,10 @@ const getPath = (type) => {
           <RouterLink
             :to="getPath('list')"
             class="text-md transition duration-300 hover:text-blue-600 after:absolute after:content-[''] after:w-0 after:h-[3px] after:block after:transition-all after:duration-300 after:bottom-1/4 hover:after:w-[14.3rem] hover:after:h-[3px] hover:after:bg-blue-600"
-            :class="{ 'hover:after:w-[19.25rem]': isRecruiter }">
+            :class="{ 'hover:after:w-[7.25rem]': isRecruiter }">
             <span v-if="!isRecruiter">Daftar Pekerjaan yang Dilamar</span>
             <span v-if="isRecruiter">
-              Daftar Kontrak yang Sedang Berlangsung
+              Daftar Kontrak
             </span>
           </RouterLink>
           <RouterLink

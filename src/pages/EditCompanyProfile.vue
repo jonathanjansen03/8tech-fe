@@ -107,7 +107,7 @@ onMounted(async () => {
           @change="updateUserProfilePicture" />
       </div>
       <div class="flex flex-col">
-        <InputBox id="firstName" v-model="formData.name" label="Nama Depan" />
+        <InputBox id="firstName" v-model="formData.name" label="Nama Perusahaan" />
       </div>
       <div class="flex flex-col mt-5">
         <InputBox
@@ -135,7 +135,7 @@ onMounted(async () => {
           <CheckIcon class="mr-2 w-5" />
           Simpan
           <img
-            v-if="true"
+            v-if="isLoading"
             alt="loading"
             class="h-6"
             src="@/assets/images/loading.svg" />

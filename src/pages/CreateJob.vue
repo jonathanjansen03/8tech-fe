@@ -120,7 +120,7 @@ onBeforeUnmount(() => {
     <SideBar class="sidebar" v-if="mainStore.showPortalNavbar" />
     <div>
       <AppCard class="px-5">
-        <div @keydown.enter="doCreateJob" class="flex flex-col items-center">
+        <div class="flex flex-col items-center">
           <h1>Buat Lowongan Pekerjaan</h1>
           <InputBox
             id="create-job-title"

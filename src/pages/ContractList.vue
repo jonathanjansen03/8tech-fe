@@ -68,7 +68,6 @@ watch(pagination, async (newPagination) => {
   }
 
   isLoadingFetchApi.value = true;
-
   try {
     await getRecruiterContractList(
       {
@@ -102,7 +101,7 @@ const goEditContract = (id) => {
   <div class="sm:px-20">
     <div>
       <h1 class="text-center font-bold mb-8 text-white text-2xl">
-        Daftar kontrak yang sedang berlangsung
+        Daftar kontrak
       </h1>
 
       <div class="relative overflow-x-auto">
