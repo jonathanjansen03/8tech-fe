@@ -7,6 +7,7 @@ import {
   PlusCircleIcon,
   TrashIcon as SolidTrashIcon,
 } from '@heroicons/vue/24/solid';
+import NProgress from 'nprogress';
 
 import { useUserStore } from '@/stores/user';
 import config from '@/config';
@@ -33,6 +34,7 @@ const formData = ref({
 const base64UserProfileImage = ref('');
 const isError = ref(false);
 const errorMessage = ref('');
+const isLoading = ref(false);
 
 const userProfilePicture = computed(() => {
   return base64UserProfileImage.value
@@ -46,12 +48,14 @@ const updateUserProfilePicture = (image) => {
 };
 
 const updateProfile = async () => {
+  isLoading.value = true;
   try {
     await userStore.updateUserData(formData.value);
     handleSucccessfulUpdateProfile();
   } catch (err) {
     handleFailedUpdateProfile(err);
   }
+  isLoading.value = false;
 };
 
 const handleSucccessfulUpdateProfile = () => {
@@ -85,6 +89,8 @@ const decrementPortfolio = () => {
 };
 
 const initPage = () => {
+  NProgress.start();
+
   formData.value = {
     ...currentUser.value,
   };
@@ -92,6 +98,8 @@ const initPage = () => {
   if (!formData.value.portfolio?.length) {
     formData.value.portfolio = [''];
   }
+
+  NProgress.done();
 };
 
 onMounted(initPage);
@@ -172,6 +180,11 @@ onMounted(initPage);
         <AppButton class="flex items-center ml-12 py-3" @click="updateProfile">
           <CheckIcon class="mr-2 w-5" />
           Simpan
+          <img
+            v-if="isLoading"
+            alt="loading"
+            class="h-6 ml-1"
+            src="@/assets/images/loading.svg" />
         </AppButton>
       </div>
     </AppCard>

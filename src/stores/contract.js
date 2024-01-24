@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 
 import contractApi from '@/api/contract';
+import ratingApi from '@/api/rating';
 import config from '@/config';
 
 export const useContractStore = defineStore('contract', () => {
@@ -9,6 +10,11 @@ export const useContractStore = defineStore('contract', () => {
   const contractCustomFields = ref({});
   const recruiterContractList = ref([]);
   const recruiterContractListPagination = ref({});
+  const payout = ref({});
+
+  const isContractPending = computed(
+    () => contract.value.status === config.constants.contractStatus.pending
+  );
 
   const isContractCompleted = computed(
     () => contract.value.status === config.constants.contractStatus.completed
@@ -19,6 +25,8 @@ export const useContractStore = defineStore('contract', () => {
       contract.value.payment?.paymentStatus ===
       config.constants.paymentStatus.paid
   );
+
+  const isContractRated = computed(() => !!contract.value.ratingId);
 
   const setContractCustomFields = () => {
     const customFields = contract.value.customField || '';
@@ -91,7 +99,20 @@ export const useContractStore = defineStore('contract', () => {
   };
 
   const getContractPayoutLink = async (id, token) => {
-    await contractApi.getPayoutLink(id, token);
+    const res = await contractApi.getPayoutLink(id, token);
+    payout.value = res.data;
+  };
+
+  const rateFreelancer = async (data, token) => {
+    const res = await ratingApi.create(data, token);
+
+    await updateContract(
+      {
+        id: contract.value.id,
+        ratingId: res.data.id,
+      },
+      token
+    );
   };
 
   return {
@@ -99,8 +120,11 @@ export const useContractStore = defineStore('contract', () => {
     contractCustomFields,
     recruiterContractList,
     recruiterContractListPagination,
+    payout,
+    isContractPending,
     isContractCompleted,
     isContractPaid,
+    isContractRated,
     recruiterPayContract,
     setContract,
     setContractCustomFields,
@@ -111,5 +135,6 @@ export const useContractStore = defineStore('contract', () => {
     statusMapping,
     rejectContract,
     getContractPayoutLink,
+    rateFreelancer,
   };
 });

@@ -3,6 +3,7 @@ import { onBeforeMount, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { ChevronLeftIcon } from '@heroicons/vue/24/outline';
+import NProgress from 'nprogress';
 
 import { useUserStore } from '@/stores/user';
 import { useContractStore } from '@/stores/contract';
@@ -14,6 +15,7 @@ import AppButton from '@/components/AppButton.vue';
 const GET_CONTRACT_DETAIL = 'mendapatkan detail kontrak';
 const ACCEPT_CONTRACT = 'menerima kontrak';
 const REJECT_CONTRACT = 'menolak kontrak';
+const ALREADY_PAID = 'ALREADY_PAID';
 
 const route = useRoute();
 const router = useRouter();
@@ -22,7 +24,7 @@ const contractStore = useContractStore();
 
 const { currentUserToken } = storeToRefs(userStore);
 
-const { contract, contractCustomFields, isContractCompleted, isContractPaid } =
+const { contract, contractCustomFields, payout, isContractCompleted, isContractPaid } =
   storeToRefs(contractStore);
 const { fetchContract, updateContract, rejectContract, getContractPayoutLink } =
   contractStore;
@@ -30,16 +32,19 @@ const { fetchContract, updateContract, rejectContract, getContractPayoutLink } =
 const isLoading = ref(false);
 
 const initPage = async () => {
+  NProgress.start();
   try {
     await fetchContract(route.params.id, currentUserToken.value);
 
-    if (isContractCompleted.value && isContractPaid.value) {
+    if (isContractCompleted.value && isContractPaid.value && !Object.keys(payout.value).length) {
       await getContractPayoutLink(route.params.id, currentUserToken.value);
     }
   } catch (err) {
-    console.error(err);
-    alert(config.errors.general(GET_CONTRACT_DETAIL));
+    if (err.message.payment !== ALREADY_PAID) {
+      handleError(err, GET_CONTRACT_DETAIL);
+    }
   }
+  NProgress.done();
 };
 
 const capitalizeEveryWord = (str) => {
@@ -54,14 +59,14 @@ const doAcceptContract = async () => {
   try {
     await updateContract(
       {
-        ...contract.value,
+        id: route.params.id,
         status: config.constants.contractStatus.ongoing,
       },
       currentUserToken.value
     );
+    goToAppliedJobsPage();
   } catch (err) {
-    console.error(err);
-    alert(config.errors.general(ACCEPT_CONTRACT));
+    handleError(err, ACCEPT_CONTRACT);
   }
 };
 
@@ -69,14 +74,24 @@ const doRejectContract = async () => {
   try {
     await rejectContract(route.params.id, currentUserToken.value);
   } catch (err) {
-    console.error(err);
-    alert(config.errors.general(REJECT_CONTRACT));
+    handleError(err, REJECT_CONTRACT);
   }
+};
+
+const goToAppliedJobsPage = () => {
+  router.push({
+    name: config.pages.appliedJobs.name
+  });
+};
+
+const handleError = (err, message) => {
+  console.error(err);
+  alert(config.errors.general(message));
 };
 
 const goToPayoutLink = () => {
   isLoading.value = true;
-  window.open(contract.value.payoutLink, '_blank');
+  window.open(payout.value.payoutUrl, '_blank');
   isLoading.value = false;
 };
 
@@ -94,7 +109,7 @@ onBeforeMount(initPage);
     <div>
       <AppCard class="px-5">
         <div class="flex flex-col">
-          <h1 class="flex items-center">
+          <h1 class="flex items-center" @click="console.log(payout)">
             <ChevronLeftIcon
               class="cursor-pointer mr-3 stroke-2 w-6"
               @click="router.back" />
@@ -144,7 +159,7 @@ onBeforeMount(initPage);
             </AppButton>
           </div>
           <AppButton
-            v-if="isContractCompleted && isContractPaid"
+            v-if="isContractCompleted && isContractPaid && !Object.keys(payout).length"
             class="mt-8"
             @click="goToPayoutLink">
             Terima Pembayaran

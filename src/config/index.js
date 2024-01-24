@@ -59,7 +59,7 @@ export default {
     },
     contractList: {
       name: 'contract-list',
-      path: '/contracts/',
+      path: '/contracts',
     },
     appliedJobs: {
       name: 'applied-jobs',
@@ -123,6 +123,10 @@ export default {
       apply: (id) => `/job/apply/${id}`,
       applicant: '/job/applicants',
     },
+    rating: {
+      create: '/rating/create',
+      update: '/rating/update',
+    },
   },
   errors: {
     general: (action) => `Gagal ${action}. Silakan coba lagi nanti.`,
@@ -137,7 +141,8 @@ export default {
       unique: 'Email sudah terdaftar. Silakan gunakan email lain.',
       required: 'Harus diisi.',
       paymentRate: 'Harus diisi.',
-      paymentRateNumber: 'Harus di isi dengan angka.',
+      paymentRateNumber: 'Harus diisi dengan angka.',
+      paymentRateMin: 'Harus lebih besar dari Rp10.000.',
     },
     USER_ALREADY_APPLIED: 'Anda sudah melamar pekerjaan ini.',
   },

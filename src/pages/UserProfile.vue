@@ -25,6 +25,7 @@ import AppButton from '@/components/AppButton.vue';
 
 const NO_DESCRIPTION = 'Belum ada deskripsi.';
 const NO_PORTFOLIO = 'Belum ada portofolio.';
+const NO_RATING = 'Belum ada rating.';
 const GET_PROFILE_DATA = 'mendapatkan profil';
 
 const route = useRoute();
@@ -106,7 +107,7 @@ watch(route, () => {
     class="mt-8 px-3 min-[420px]:px-10 sm:px-20 md:px-32 lg:px-40 xl:px-52 2xl:px-72">
     <AppCard class="user-profile px-8 py-8">
       <div class="flex flex-row justify-between mb-2">
-        <h1>Profil</h1>
+        <h1 @click="console.log(currentUser)">Profil</h1>
         <h3
           v-if="isPrivateProfile && isRecruiter"
           @click="goToCompanyProfile"
@@ -170,6 +171,15 @@ watch(route, () => {
         </p>
         <p v-if="isUserPortfolioEmpty">
           {{ NO_PORTFOLIO }}
+        </p>
+      </div>
+      <div class="flex flex-col mt-5">
+        <h3>Rata-Rata Rating</h3>
+        <p>
+          {{
+            (isPrivateProfile ? currentUser : publicUserProfile).ratingsAvg ??
+            NO_RATING
+          }}
         </p>
       </div>
       <div v-if="isPrivateProfile" class="flex justify-center mt-5">
