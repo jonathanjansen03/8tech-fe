@@ -140,7 +140,8 @@ onMounted(initPage);
         <InputBox
           id="description"
           label="Deskripsi"
-          v-model="formData.description" />
+          v-model="formData.description"
+          textArea />
       </div>
       <div>
         <div
