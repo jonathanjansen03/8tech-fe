@@ -95,35 +95,34 @@ const validateFormData = () => {
 };
 
 const doRegister = async () => {
-  alert(config.errors.server);
-  // if (isLoadingRegister.value) {
-  //   return;
-  // }
-  //
-  // isLoadingRegister.value = true;
-  // if (!validateFormData()) {
-  //   isLoadingRegister.value = false;
-  //   return;
-  // }
-  //
-  // try {
-  //   formData.email = formData.email.trim().toLowerCase();
-  //   if (isRecruiter.value) {
-  //     await createCompany(companyFormData);
-  //   }
-  //   await register({
-  //     ...formData,
-  //     confirmPassword: undefined,
-  //     companyId: company.value.id,
-  //     roles: isRecruiter.value ? ['RECRUITER', 'USER'] : ['USER'],
-  //   });
-  //   handleSuccessfulRegister();
-  //   isLoadingRegister.value = false;
-  // } catch (err) {
-  //   console.error(err);
-  //   handleFailedRegister(err);
-  //   isLoadingRegister.value = false;
-  // }
+  if (isLoadingRegister.value) {
+    return;
+  }
+
+  isLoadingRegister.value = true;
+  if (!validateFormData()) {
+    isLoadingRegister.value = false;
+    return;
+  }
+
+  try {
+    formData.email = formData.email.trim().toLowerCase();
+    if (isRecruiter.value) {
+      await createCompany(companyFormData);
+    }
+    await register({
+      ...formData,
+      confirmPassword: undefined,
+      companyId: company.value.id,
+      roles: isRecruiter.value ? ['RECRUITER', 'USER'] : ['USER'],
+    });
+    handleSuccessfulRegister();
+    isLoadingRegister.value = false;
+  } catch (err) {
+    console.error(err);
+    handleFailedRegister(err);
+    isLoadingRegister.value = false;
+  }
 };
 
 const handleSuccessfulRegister = () => {
