@@ -96,7 +96,7 @@ const getPath = (type) => {
           class="cursor-pointer h-auto w-36"
           @click="router.push(getPath('home'))" />
         <div
-          class="navbar__links flex gap-x-16 lg:gap-x-40 items-center justify-center w-8/12">
+          class="navbar__links flex gap-x-16 py-5 lg:gap-x-40 items-center justify-center w-8/12">
           <RouterLink
             :to="getPath('home')"
             class="text-md transition duration-300 hover:text-blue-600 after:absolute after:content-[''] after:w-0 after:h-[3px] after:block after:transition-all after:duration-300 after:bottom-1/4 hover:after:w-[4rem] hover:after:h-[3px] hover:after:bg-blue-600">
@@ -156,6 +156,6 @@ const getPath = (type) => {
 .router-link-exact-active {
   @apply text-blue-600;
   @apply underline;
-  @apply underline-offset-8;
+  @apply underline-offset-[14px];
 }
 </style>
