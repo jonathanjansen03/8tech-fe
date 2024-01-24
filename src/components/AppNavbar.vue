@@ -8,17 +8,19 @@ import {
   UserIcon,
   XMarkIcon,
 } from '@heroicons/vue/24/outline';
-import { UserCircleIcon } from '@heroicons/vue/24/solid';
 
 import { useUserStore } from '@/stores/user';
 import config from '@/config';
 import logo from '@/assets/images/8tech-logo.png';
+import defaultUserProfilePicture from '@/assets/images/default-user-profile-picture.png';
+
 import AppButton from '@/components/AppButton.vue';
 import AppCard from '@/components/AppCard.vue';
 
 const userStore = useUserStore();
 const router = useRouter();
-const { isLoggedIn, isRecruiter, currentUserFullName } = storeToRefs(userStore);
+const { currentUser, isLoggedIn, isRecruiter, currentUserFullName } =
+  storeToRefs(userStore);
 const { logout } = userStore;
 
 const isOpen = ref(false);
@@ -30,14 +32,18 @@ const userFullName = computed(() => {
   return currentUserFullName.value;
 });
 
+const userProfilePicture = computed(
+  () => currentUser.value.profilePicture || defaultUserProfilePicture
+);
+
 const toggleNavbar = () => {
   isOpen.value = !isOpen.value;
 };
 
 const getPath = (type) => {
   const paths = {
-    home: isRecruiter.value ? 'recruiterPortal':'home' ,
-    list: isRecruiter.value ? 'contractList':'appliedJobs' ,
+    home: isRecruiter.value ? 'recruiterPortal' : 'home',
+    list: isRecruiter.value ? 'contractList' : 'appliedJobs',
   };
 
   return config.pages[paths[type]].path || '';
@@ -73,9 +79,7 @@ const getPath = (type) => {
           </RouterLink>
           <RouterLink :to="getPath('list')">
             <span v-if="!isRecruiter">Daftar Pekerjaan yang Dilamar</span>
-            <span v-if="isRecruiter">
-              Daftar Kontrak
-            </span>
+            <span v-if="isRecruiter"> Daftar Kontrak </span>
           </RouterLink>
           <RouterLink :to="{ name: config.pages.about.name }">
             <span>Tentang Kami</span>
@@ -107,9 +111,7 @@ const getPath = (type) => {
             class="text-md transition duration-300 hover:text-blue-600 after:absolute after:content-[''] after:w-0 after:h-[3px] after:block after:transition-all after:duration-300 after:bottom-1/4 hover:after:w-[14.3rem] hover:after:h-[3px] hover:after:bg-blue-600"
             :class="{ 'hover:after:w-[7.25rem]': isRecruiter }">
             <span v-if="!isRecruiter">Daftar Pekerjaan yang Dilamar</span>
-            <span v-if="isRecruiter">
-              Daftar Kontrak
-            </span>
+            <span v-if="isRecruiter"> Daftar Kontrak </span>
           </RouterLink>
           <RouterLink
             :to="{ name: config.pages.about.name }"
@@ -118,16 +120,19 @@ const getPath = (type) => {
           </RouterLink>
         </div>
         <div>
-          <RouterLink
-            :to="{ name: config.pages.login.name }"
-            v-if="!isLoggedIn">
-            <AppButton>Masuk</AppButton>
-          </RouterLink>
+          <AppButton
+            v-if="!isLoggedIn"
+            @click="router.push(config.pages.login.path)">
+            Masuk
+          </AppButton>
           <div v-if="isLoggedIn" class="cursor-pointer peer relative">
             <div
               class="cursor-pointer flex items-center p-4 peer"
               @click="router.push({ name: config.pages.profile.name })">
-              <UserCircleIcon class="mr-2 w-8" />
+              <img
+                :src="userProfilePicture"
+                alt="User profile picture"
+                class="mr-2 rounded-full w-8" />
               <span>{{ userFullName }}</span>
             </div>
             <AppCard
