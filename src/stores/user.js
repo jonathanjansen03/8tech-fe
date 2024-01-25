@@ -11,8 +11,7 @@ export const useUserStore = defineStore('user', () => {
   const userProfile = ref({});
   const userAppliedJobs = ref([]);
   const userAppliedJobsPagination = ref({});
-  const userRatingAverage = ref(0);
-  const userRatingCount = ref(0);
+  const userRating = ref({});
 
   const isLoggedIn = computed(() => !!currentUser.value?.id);
   const isRecruiter = computed(() => {
@@ -120,8 +119,10 @@ export const useUserStore = defineStore('user', () => {
 
   const getUserRating = async (id) => {
     const res = await ratingApi.getAverageRating(id, currentUserToken.value);
-    userRatingAverage.value = res.data._avg.ratingOf10;
-    userRatingCount.value = res.data._count.ratingOf10;
+    userRating.value = Object.assign({}, {
+      average: res.data._avg.ratingOf10,
+      count: res.data._count.ratingOf10,
+    });
   };
 
   return {
@@ -130,8 +131,7 @@ export const useUserStore = defineStore('user', () => {
     userProfile,
     userAppliedJobs,
     userAppliedJobsPagination,
-    userRatingAverage,
-    userRatingCount,
+    userRating,
     isLoggedIn,
     isRecruiter,
     currentUserFullName,

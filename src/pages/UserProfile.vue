@@ -27,8 +27,7 @@ const userStore = useUserStore();
 const {
   currentUser,
   currentUserToken,
-  userRatingAverage,
-  userRatingCount,
+  userRating,
   userProfile,
   isRecruiter,
   isUserPortfolioEmpty,
@@ -157,13 +156,13 @@ watch(route, () => {
           {{ NO_PORTFOLIO }}
         </p>
       </div>
-      <div class="flex flex-col mt-5">
+      <div v-if="!isRecruiter" class="flex flex-col mt-5">
         <h3>Rata-Rata Rating</h3>
-        <p v-if="userRatingCount">
-          {{ userRatingAverage }} dari 10 ({{ userRatingCount }} orang memberi
+        <p v-if="userRating.count">
+          {{ userRating.average }} dari 10 ({{ userRating.count }} orang memberi
           rating)
         </p>
-        <p v-if="!userRatingCount">
+        <p v-if="!userRating.count">
           {{ NO_RATING }}
         </p>
       </div>
