@@ -78,7 +78,6 @@ export const useContractStore = defineStore('contract', () => {
       isLast: res.data.isLast,
       isFirst: res.data.isFirst,
     };
-    return res.data;
   };
 
   const statusMapping = (statusCode) => {

@@ -52,6 +52,7 @@ export const useCompanyStore = defineStore('company', () => {
     createCompany,
     getCompanyInfo,
     updateCompany,
+    uploadCompanyProfilePicture,
     updateCompanyData,
   };
 });
