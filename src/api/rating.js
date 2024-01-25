@@ -1,5 +1,5 @@
-import apiUtil from '@/utils/api.js';
-import config from '@/config/index.js';
+import apiUtil from '@/utils/api';
+import config from '@/config';
 
 export default {
   create: (data, token) => {

@@ -56,7 +56,7 @@ const validateField = (field) => {
     return;
   }
 
-  if (!validationUtil.validateForm(field, jobData[field])) {
+  if (!validationUtil.form(field, jobData[field])) {
     errors[field] = config.errors.form[field];
   } else {
     errors[field] = '';
@@ -73,7 +73,7 @@ const validateFormData = () => {
       continue;
     }
 
-    if (!validationUtil.validateForm(key, jobData[key])) {
+    if (!validationUtil.form(key, jobData[key])) {
       errors[key] = config.errors.form[key];
       isFormValid = false;
     }

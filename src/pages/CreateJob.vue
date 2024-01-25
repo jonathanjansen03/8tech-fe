@@ -34,7 +34,7 @@ const validateField = (field) => {
     return;
   }
 
-  if (!validationUtil.validateForm(field, formData[field])) {
+  if (!validationUtil.form(field, formData[field])) {
     errors[field] = config.errors.form[field];
   } else {
     errors[field] = '';
@@ -51,7 +51,7 @@ const validateFormData = () => {
       continue;
     }
 
-    if (!validationUtil.validateForm(key, formData[key])) {
+    if (!validationUtil.form(key, formData[key])) {
       errors[key] = config.errors.form[key];
       isFormValid = false;
     }

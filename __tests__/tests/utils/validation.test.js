@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import validationUtil from '@/utils/validation';
 
 describe('Validation util', () => {
@@ -15,18 +15,18 @@ describe('Validation util', () => {
   });
 
   it('should validate first name from form data', () => {
-    expect(validationUtil.validateForm('firstName', 'Test')).toBe(true);
+    expect(validationUtil.form('firstName', 'Test')).toBe(true);
   });
 
   it('should validate last name from form data', () => {
-    expect(validationUtil.validateForm('lastName', 'Test')).toBe(true);
+    expect(validationUtil.form('lastName', 'Test')).toBe(true);
   });
 
   it('should validate non-existent form field', () => {
-    expect(validationUtil.validateForm('test', 'Test')).toBe(true);
+    expect(validationUtil.form('test', 'Test')).toBe(true);
   });
 
   it('should validate email from form data', () => {
-    expect(validationUtil.validateForm('email', 'test@gmail.com')).toBe(true);
+    expect(validationUtil.form('email', 'test@gmail.com')).toBe(true);
   });
 });

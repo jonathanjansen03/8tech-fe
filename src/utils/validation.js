@@ -8,7 +8,7 @@ const validators = {
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(value),
 };
 
-const validateForm = (field, value) => {
+const form = (field, value) => {
   if (field === FIRST_NAME || field === LAST_NAME) {
     return validators.name(value);
   }
@@ -22,5 +22,5 @@ const validateForm = (field, value) => {
 
 export default {
   ...validators,
-  validateForm,
+  form,
 };

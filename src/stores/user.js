@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 
+import config from '@/config';
 import authApi from '@/api/auth';
 import userApi from '@/api/user';
-import ratingApi from '@/api/rating.js';
+import ratingApi from '@/api/rating';
 
 export const useUserStore = defineStore('user', () => {
   const currentUser = ref({});
@@ -21,13 +22,13 @@ export const useUserStore = defineStore('user', () => {
 
     return currentUser.value?.roles.includes('RECRUITER');
   });
-  const currentUserFullName = computed(
-    () => `${currentUser.value.firstName} ${currentUser.value.lastName}`
-  );
   const isUserPortfolioEmpty = computed(
     () =>
       !currentUser.value.portfolio?.length ||
       currentUser.value.portfolio?.[0] === ''
+  );
+  const currentUserFullName = computed(
+    () => `${currentUser.value.firstName} ${currentUser.value.lastName}`
   );
 
   const isTokenValid = async (token) => {
@@ -71,7 +72,7 @@ export const useUserStore = defineStore('user', () => {
     currentUserToken.value = '';
     localStorage.removeItem('Etoken');
     localStorage.removeItem('userData');
-    this.router.push('/');
+    this.router.push(config.pages.home.path);
   };
 
   const getUserInfo = async () => {
@@ -134,8 +135,8 @@ export const useUserStore = defineStore('user', () => {
     userRating,
     isLoggedIn,
     isRecruiter,
-    currentUserFullName,
     isUserPortfolioEmpty,
+    currentUserFullName,
     register,
     login,
     logout,
