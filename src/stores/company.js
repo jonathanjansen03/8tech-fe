@@ -14,7 +14,7 @@ export const useCompanyStore = defineStore('company', () => {
   };
 
   const getCompanyInfo = async (id) => {
-    return await companyApi.info(id);
+    return await companyApi.getInfo(id);
   };
 
   const updateCompany = async (data, token) => {

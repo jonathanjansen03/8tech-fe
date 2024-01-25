@@ -8,7 +8,7 @@ describe('Company API', () => {
     apiUtil.hitApi = vi.fn(() => Promise.resolve({}));
   });
 
-  it('should craete compoany successfully', () => {
+  it('should create company successfully', () => {
     companyApi.create({});
     expect(apiUtil.hitApi).toHaveBeenCalledOnce();
   });

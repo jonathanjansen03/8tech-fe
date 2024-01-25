@@ -9,7 +9,7 @@ export default {
       body: data,
     });
   },
-  info: (id) => {
+  getInfo: (id) => {
     return apiUtil.hitApi({
       method: config.api.method.get,
       path: config.api.company.info(id),

@@ -38,7 +38,7 @@ export default {
       headers: config.api.authTokenHeader(token),
     });
   },
-  applicant: (id, data, token) => {
+  getApplicants: (id, data, token) => {
     return apiUtil.hitApi({
       method: config.api.method.post,
       path: config.api.job.applicant + '/' + id,

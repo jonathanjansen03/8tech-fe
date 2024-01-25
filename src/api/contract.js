@@ -2,7 +2,7 @@ import apiUtil from '@/utils/api';
 import config from '@/config';
 
 export default {
-  info: (id, token) => {
+  getInfo: (id, token) => {
     return apiUtil.hitApi({
       method: config.api.method.get,
       path: config.api.contract.info(id),
@@ -17,7 +17,7 @@ export default {
       headers: config.api.authTokenHeader(token),
     });
   },
-  recruiterContractList: (data, token) => {
+  getRecruiterContractList: (data, token) => {
     return apiUtil.hitApi({
       method: config.api.method.post,
       path: config.api.contract.recruiterList,
@@ -39,7 +39,7 @@ export default {
       headers: config.api.authTokenHeader(token),
     });
   },
-  paymentRequest: (id, token) => {
+  createPaymentRequest: (id, token) => {
     return apiUtil.hitApi({
       method: config.api.method.post,
       path: config.api.contract.paymentRequest,

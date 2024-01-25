@@ -42,7 +42,7 @@ export const useContractStore = defineStore('contract', () => {
   };
 
   const fetchContract = async (id, token) => {
-    const res = await contractApi.info(id, token);
+    const res = await contractApi.getInfo(id, token);
     setContract(res.data);
     setContractCustomFields();
   };
@@ -64,12 +64,12 @@ export const useContractStore = defineStore('contract', () => {
   };
 
   const recruiterPayContract = async (id, token) => {
-    const res = await contractApi.paymentRequest(id, token);
+    const res = await contractApi.createPaymentRequest(id, token);
     return res.data?.paymentUrl;
   };
 
   const getRecruiterContractList = async (data, token) => {
-    const res = await contractApi.recruiterContractList(data, token);
+    const res = await contractApi.getRecruiterContractList(data, token);
     recruiterContractList.value = res.data.data ? res.data.data.slice(0) : [];
     recruiterContractListPagination.value = {
       totalPages: res.data.totalPages,
