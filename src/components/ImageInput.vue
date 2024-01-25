@@ -41,7 +41,7 @@ const uploadImage = () => {
       @change="uploadImage" />
     <img
       :src="displayedImage"
-      alt="User profile picture."
+      alt="User profile picture"
       class="brightness-100 drop-shadow duration-200 rounded-full transition w-36 hover:brightness-50 peer-hover:brightness-[.25]" />
     <span
       class="absolute bottom-20 duration-200 hidden left-6 peer text-center transition text-white hover:inline-block peer-hover:inline-block">

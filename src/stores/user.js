@@ -3,6 +3,7 @@ import { computed, ref } from 'vue';
 
 import authApi from '@/api/auth';
 import userApi from '@/api/user';
+import ratingApi from '@/api/rating.js';
 
 export const useUserStore = defineStore('user', () => {
   const currentUser = ref({});
@@ -10,6 +11,8 @@ export const useUserStore = defineStore('user', () => {
   const userProfile = ref({});
   const userAppliedJobs = ref([]);
   const userAppliedJobsPagination = ref({});
+  const userRatingAverage = ref(0);
+  const userRatingCount = ref(0);
 
   const isLoggedIn = computed(() => !!currentUser.value?.id);
   const isRecruiter = computed(() => {
@@ -115,12 +118,20 @@ export const useUserStore = defineStore('user', () => {
     };
   };
 
+  const getUserRating = async (id) => {
+    const res = await ratingApi.getAverageRating(id, currentUserToken.value);
+    userRatingAverage.value = res.data._avg.ratingOf10;
+    userRatingCount.value = res.data._count.ratingOf10;
+  };
+
   return {
     currentUser,
     currentUserToken,
     userProfile,
     userAppliedJobs,
     userAppliedJobsPagination,
+    userRatingAverage,
+    userRatingCount,
     isLoggedIn,
     isRecruiter,
     currentUserFullName,
@@ -134,5 +145,6 @@ export const useUserStore = defineStore('user', () => {
     updateUserData,
     setCurrentUser,
     getUserAppliedJobs,
+    getUserRating,
   };
 });

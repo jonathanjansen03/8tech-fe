@@ -125,7 +125,7 @@ export default {
     },
     rating: {
       create: '/rating/create',
-      update: '/rating/update',
+      getAverageRating: (id) => `/rating/averageCount/${id}`,
     },
   },
   errors: {

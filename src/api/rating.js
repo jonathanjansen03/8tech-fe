@@ -10,4 +10,11 @@ export default {
       headers: config.api.authTokenHeader(token),
     });
   },
+  getAverageRating: (id, token) => {
+    return apiUtil.hitApi({
+      method: config.api.method.get,
+      path: config.api.rating.getAverageRating(id),
+      headers: config.api.authTokenHeader(token),
+    });
+  },
 };

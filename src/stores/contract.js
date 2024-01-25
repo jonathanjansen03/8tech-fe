@@ -106,13 +106,10 @@ export const useContractStore = defineStore('contract', () => {
   const rateFreelancer = async (data, token) => {
     const res = await ratingApi.create(data, token);
 
-    await updateContract(
-      {
-        id: contract.value.id,
-        ratingId: res.data.id,
-      },
-      token
-    );
+    setContract({
+      ...contract.value,
+      ratingId: res.data.id,
+    });
   };
 
   return {
