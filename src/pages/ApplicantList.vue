@@ -1,9 +1,8 @@
 <script setup>
-import { onBeforeMount, onBeforeUnmount, reactive, ref, watch } from 'vue';
+import { onBeforeMount, reactive, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 
-import { useMainStore } from '@/stores/main';
 import { useUserStore } from '@/stores/user';
 import { useJobStore } from '@/stores/job';
 import config from '@/config';
@@ -15,7 +14,6 @@ const GET_APPLICANT_LIST = 'mendapatkan daftar pelamar';
 
 const route = useRoute();
 const router = useRouter();
-const mainStore = useMainStore();
 const userStore = useUserStore();
 const jobStore = useJobStore();
 
@@ -31,7 +29,6 @@ const isLoadingFetchApi = ref(false);
 
 const initPage = async () => {
   NProgress.start();
-  mainStore.setRecruiterPortal(true);
   isLoadingFetchApi.value = true;
 
   try {
@@ -55,17 +52,12 @@ const goCreateContract = (id) => {
   router.push({
     name: config.pages.editContract.name,
     params: {
-      id
+      id,
     },
   });
 };
 
 onBeforeMount(initPage);
-
-onBeforeUnmount(() => {
-  mainStore.setRecruiterPortal(false);
-  mainStore.closePortalNavbar();
-});
 
 watch(pagination, async (newPagination) => {
   if (newPagination.page < 1) {
@@ -130,7 +122,9 @@ watch(pagination, async (newPagination) => {
               </th>
               <th scope="row" class="px-6 py-4 flex flex-row-reverse">
                 <AppButton>
-                  <p @click.stop="goCreateContract(item.contractId)">Terima lamaran</p>
+                  <p @click.stop="goCreateContract(item.contractId)">
+                    Terima lamaran
+                  </p>
                 </AppButton>
               </th>
             </tr>

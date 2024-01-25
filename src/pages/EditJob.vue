@@ -1,16 +1,14 @@
 <script setup>
-import { onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue';
+import { onMounted, reactive, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import NProgress from 'nprogress';
 
-import { useMainStore } from '@/stores/main';
 import { useUserStore } from '@/stores/user';
 import { useJobStore } from '@/stores/job';
 import config from '@/config';
 import validationUtil from '@/utils/validation';
 
-import SideBar from '@/components/SideBar.vue';
 import AppCard from '@/components/AppCard.vue';
 import InputBox from '@/components/InputBox.vue';
 import AppButton from '@/components/AppButton.vue';
@@ -19,7 +17,6 @@ const GET_JOB_DATA = 'mendapatkan data pekerjaan';
 
 const route = useRoute();
 const router = useRouter();
-const mainStore = useMainStore();
 const userStore = useUserStore();
 const jobStore = useJobStore();
 
@@ -41,7 +38,6 @@ const isLoadingFetchApi = ref(false);
 
 const initPage = async () => {
   NProgress.start();
-  mainStore.setRecruiterPortal(true);
 
   try {
     await findJob(route.params.id);
@@ -138,11 +134,6 @@ const goToJobApplicantsPage = () => {
 
 onMounted(initPage);
 
-onBeforeUnmount(() => {
-  mainStore.setRecruiterPortal(false);
-  mainStore.closePortalNavbar();
-});
-
 watch(
   () => route.params.id,
   async (newId) => {
@@ -160,7 +151,6 @@ watch(
 
 <template>
   <div class="sm:px-20">
-    <SideBar v-if="mainStore.showPortalNavbar" class="sidebar" />
     <div>
       <AppCard class="px-5">
         <div class="flex flex-col items-center">
@@ -200,9 +190,3 @@ watch(
     </div>
   </div>
 </template>
-
-<style>
-.sidebar {
-  transition: 0.2s ease-in-out;
-}
-</style>

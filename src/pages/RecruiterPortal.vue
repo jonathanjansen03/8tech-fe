@@ -1,29 +1,23 @@
 <script setup>
-import { onBeforeMount, onBeforeUnmount, reactive, ref, watch } from 'vue';
+import { onBeforeMount, reactive, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
-import { PlusCircleIcon } from '@heroicons/vue/24/outline';
+import NProgress from 'nprogress';
 
-import { useMainStore } from '@/stores/main';
 import { useUserStore } from '@/stores/user';
 import { useJobStore } from '@/stores/job';
 import config from '@/config';
 
-import SideBar from '@/components/SideBar.vue';
+import AppButton from '@/components/AppButton.vue';
 import PaginationComponent from '@/components/PaginationComponent.vue';
-import NProgress from 'nprogress';
 
 const COMPANY_ID = 'companyId';
 const CREATED_AT = 'createdAt';
 const GET_JOB_LIST = 'mendapatkan daftar pekerjaan';
 
 const router = useRouter();
-const mainStore = useMainStore();
 const userStore = useUserStore();
 const jobStore = useJobStore();
-
-const { showPortalNavbar } = storeToRefs(mainStore);
-const { setRecruiterPortal, closePortalNavbar } = mainStore;
 
 const { currentUser, currentUserToken } = storeToRefs(userStore);
 
@@ -37,7 +31,6 @@ const pagination = reactive({
 const isLoadingFetchApi = ref(false);
 
 const initPage = async () => {
-  setRecruiterPortal(true);
   isLoadingFetchApi.value = true;
 
   try {
@@ -68,11 +61,6 @@ const goToJobEditPage = (id) => {
 };
 
 onBeforeMount(initPage);
-
-onBeforeUnmount(() => {
-  setRecruiterPortal(false);
-  closePortalNavbar();
-});
 
 watch(pagination, async (newPagination) => {
   if (newPagination.page < 1) {
@@ -107,7 +95,6 @@ watch(pagination, async (newPagination) => {
 
 <template>
   <div class="sm:px-20">
-    <SideBar v-if="showPortalNavbar" class="sidebar" />
     <div>
       <div class="flex justify-between">
         <h1 class="text-center font-bold mb-8 text-white text-2xl">
@@ -182,9 +169,3 @@ watch(pagination, async (newPagination) => {
     </div>
   </div>
 </template>
-
-<style>
-.sidebar {
-  transition: 0.2s ease-in-out;
-}
-</style>

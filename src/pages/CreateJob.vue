@@ -1,21 +1,18 @@
 <script setup>
-import { onBeforeUnmount, onMounted, reactive, ref } from 'vue';
+import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 
-import { useMainStore } from '@/stores/main';
 import { useUserStore } from '@/stores/user';
 import { useJobStore } from '@/stores/job';
 import config from '@/config';
 import validationUtil from '@/utils/validation';
 
-import SideBar from '@/components/SideBar.vue';
 import AppCard from '@/components/AppCard.vue';
 import InputBox from '@/components/InputBox.vue';
 import AppButton from '@/components/AppButton.vue';
 
 const router = useRouter();
-const mainStore = useMainStore();
 const userStore = useUserStore();
 const jobStore = useJobStore();
 
@@ -102,22 +99,10 @@ const doCreateJob = async () => {
   }
   isLoadingCreateJob.value = false;
 };
-
-const initPage = () => {
-  mainStore.setRecruiterPortal(true);
-};
-
-onMounted(initPage);
-
-onBeforeUnmount(() => {
-  mainStore.setRecruiterPortal(false);
-  mainStore.closePortalNavbar();
-});
 </script>
 
 <template>
   <div class="sm:px-20">
-    <SideBar class="sidebar" v-if="mainStore.showPortalNavbar" />
     <div>
       <AppCard class="px-5">
         <div class="flex flex-col items-center">
@@ -152,9 +137,3 @@ onBeforeUnmount(() => {
     </div>
   </div>
 </template>
-
-<style>
-.sidebar {
-  transition: 0.2s ease-in-out;
-}
-</style>

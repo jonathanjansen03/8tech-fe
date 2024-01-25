@@ -1,9 +1,8 @@
 <script setup>
-import { onBeforeMount, onBeforeUnmount, reactive, ref, watch } from 'vue';
+import { onBeforeMount, reactive, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 
-import { useMainStore } from '@/stores/main';
 import { useUserStore } from '@/stores/user';
 import { useContractStore } from '@/stores/contract';
 import config from '@/config';
@@ -13,7 +12,6 @@ import NProgress from 'nprogress';
 const GET_CONTRACT_LIST = 'mendapatkan daftar kontrak';
 
 const router = useRouter();
-const mainStore = useMainStore();
 const userStore = useUserStore();
 const contractStore = useContractStore();
 
@@ -30,7 +28,6 @@ const isLoadingFetchApi = ref(false);
 
 const initPage = async () => {
   NProgress.start();
-  mainStore.setRecruiterPortal(true);
   isLoadingFetchApi.value = true;
 
   try {
@@ -50,11 +47,6 @@ const initPage = async () => {
 };
 
 onBeforeMount(initPage);
-
-onBeforeUnmount(() => {
-  mainStore.setRecruiterPortal(false);
-  mainStore.closePortalNavbar();
-});
 
 watch(pagination, async (newPagination) => {
   if (newPagination.page < 1) {

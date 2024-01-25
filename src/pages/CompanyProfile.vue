@@ -1,19 +1,11 @@
 <script setup>
-import {
-  computed,
-  onBeforeMount,
-  onBeforeUnmount,
-  reactive,
-  ref,
-  watch,
-} from 'vue';
+import { computed, onBeforeMount, reactive, ref, watch } from 'vue';
 import { storeToRefs } from 'pinia';
 import NProgress from 'nprogress';
 import { PencilSquareIcon } from '@heroicons/vue/24/outline';
 
 import { useJobStore } from '@/stores/job';
 import { useUserStore } from '@/stores/user';
-import { useMainStore } from '@/stores/main';
 import { useCompanyStore } from '@/stores/company';
 
 import config from '@/config';
@@ -24,12 +16,11 @@ import { useRoute } from 'vue-router';
 import JobCard from '@/components/JobCard.vue';
 
 const route = useRoute();
-const mainStore = useMainStore();
 const userStore = useUserStore();
 const companyStore = useCompanyStore();
 const jobStore = useJobStore();
 
-const { currentUser, currentUserToken, isRecruiter } = storeToRefs(userStore);
+const { currentUser, currentUserToken } = storeToRefs(userStore);
 const isPrivateProfile = ref(true);
 const companyId = ref();
 const companyJobList = ref();
@@ -42,7 +33,6 @@ const companyProfile = reactive({
 const initPage = async () => {
   companyId.value = route.params.id;
   isPrivateProfile.value = companyId.value === currentUser.value?.companyId;
-  mainStore.setRecruiterPortal(isRecruiter.value);
 
   NProgress.start();
   const companyRes = await companyStore.getCompanyInfo(companyId.value);
@@ -67,13 +57,8 @@ onBeforeMount(async () => {
   await initPage();
 });
 
-onBeforeUnmount(() => {
-  mainStore.setRecruiterPortal(false);
-});
-
 watch(route, () => {
   isPrivateProfile.value = route.params.id === currentUser.value?.companyId;
-  mainStore.setRecruiterPortal(isRecruiter.value);
 });
 
 const userProfilePicture = computed(() => {
