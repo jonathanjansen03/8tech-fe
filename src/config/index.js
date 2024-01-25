@@ -136,7 +136,7 @@ export default {
       firstName: 'Minimal 2 karakter.',
       lastName: 'Minimal 2 karakter.',
       email: 'Masukkan email yang valid.',
-      password: 'Password harus memiliki minimal 8 karakter dan 1 angka.',
+      password: 'Minimal 8 karakter yang terdiri dari minimal 1 huruf besar, 1 huruf kecil, dan 1 angka.',
       confirmPassword: 'Harus sama dengan password.',
       unique: 'Email sudah terdaftar. Silakan gunakan email lain.',
       required: 'Harus diisi.',

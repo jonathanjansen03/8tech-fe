@@ -156,8 +156,7 @@ const toggleIsRecruiter = async () => {
     <AppCard class="px-5">
       <div @keydown.enter="doRegister" class="flex flex-col">
         <h1>Daftar</h1>
-        &nbsp;
-        <h2>Profil pribadi</h2>
+        <h2 class="mt-5">Profil pribadi</h2>
         <div class="md:flex md:justify-center md:gap-x-8">
           <InputBox
             id="first-name"
@@ -187,6 +186,7 @@ const toggleIsRecruiter = async () => {
           v-model="formData.username"
           :error="errors.username"
           class="mt-8"
+          :class="{ 'min-[320px]:mt-20': errors.email }"
           @blur="validateField('username')" />
         <InputBox
           id="password"
@@ -195,6 +195,7 @@ const toggleIsRecruiter = async () => {
           v-model="formData.password"
           :error="errors.password"
           class="mt-8"
+          :class="{ 'min-[320px]:mt-20': errors.username }"
           @blur="validateField('password')" />
         <InputBox
           id="confirm-password"
@@ -203,6 +204,7 @@ const toggleIsRecruiter = async () => {
           v-model="formData.confirmPassword"
           :error="errors.confirmPassword"
           class="mt-8"
+          :class="{ 'min-[320px]:mt-20': errors.password }"
           @blur="validateConfirmPassword" />
         &nbsp;
         <h2 v-if="isRecruiter">Profil perusahaan</h2>
