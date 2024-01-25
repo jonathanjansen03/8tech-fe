@@ -2,6 +2,7 @@
 import { onBeforeMount, reactive, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
+import { PlusIcon } from '@heroicons/vue/24/outline';
 import NProgress from 'nprogress';
 
 import { useUserStore } from '@/stores/user';
@@ -103,11 +104,12 @@ watch(pagination, async (newPagination) => {
         <h1
           class="text-center font-bold mb-8 text-white text-base"
           title="Tambahkan lowongan pekerjaan baru">
-          <a
-            class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+          <AppButton
+            class="flex gap-x-3 items-center"
             @click="router.push(config.pages.createJob.path)">
-            <PlusCircleIcon class="cursor-pointer w-10 text-gray-500" />
-          </a>
+            <PlusIcon class="w-5" />
+            Buat lowongan pekerjaan baru
+          </AppButton>
         </h1>
       </div>
 
