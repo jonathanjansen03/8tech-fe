@@ -2,8 +2,8 @@
 import { computed, reactive, ref } from 'vue';
 import { RouterLink, useRoute, useRouter } from 'vue-router';
 
-import { useUserStore } from '@/stores/user';
 import config from '@/config';
+import { userStore } from '@/data/stores';
 import { AppButton, AppCard, AppTicker, InputBox } from '@/data/components';
 
 const LOGIN = 'login';
@@ -11,7 +11,6 @@ const NOT_MATCH = 'NOT_MATCH';
 
 const route = useRoute();
 const router = useRouter();
-const userStore = useUserStore();
 
 const { login } = userStore;
 

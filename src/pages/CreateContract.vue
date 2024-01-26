@@ -4,19 +4,16 @@ import { useRoute, useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import NProgress from 'nprogress';
 
-import { useUserStore } from '@/stores/user';
-import { useContractStore } from '@/stores/contract';
 import config from '@/config';
 import validationUtil from '@/utils/validation';
 import contractTemplate from '@/assets/docs/contractTemplate.json';
+import { contractStore, userStore } from '@/data/stores';
 import { AppButton, AppCard, InputBox } from '@/data/components';
 
 const RATE_FREELANCER = 'memberikan penilaian';
 
 const route = useRoute();
 const router = useRouter();
-const userStore = useUserStore();
-const contractStore = useContractStore();
 
 const { currentUser, currentUserToken } = storeToRefs(userStore);
 

@@ -4,16 +4,13 @@ import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import NProgress from 'nprogress';
 
-import { useUserStore } from '@/stores/user';
-import { useContractStore } from '@/stores/contract';
 import config from '@/config';
+import { contractStore, userStore } from '@/data/stores';
 import { PaginationComponent } from '@/data/components';
 
 const GET_CONTRACT_LIST = 'mendapatkan daftar kontrak';
 
 const router = useRouter();
-const userStore = useUserStore();
-const contractStore = useContractStore();
 
 const { currentUserToken } = storeToRefs(userStore);
 const { recruiterContractList, recruiterContractListPagination } =

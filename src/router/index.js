@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import NProgress from 'nprogress';
 
-import { useUserStore } from '@/stores/user';
 import config from '@/config';
+import { userStore } from '@/data/stores';
 
 const HomePage = () => import('@/pages/HomePage.vue');
 const AboutUs = () => import('@/pages/AboutUs.vue');
@@ -208,7 +208,6 @@ router.afterEach(() => {
 router.beforeEach(async (to) => {
   document.title = `${to.meta.title} | ${config.appName}`;
 
-  const userStore = useUserStore();
   userStore.setCurrentUser();
   const loginPage = {
     path: config.pages.login.path,

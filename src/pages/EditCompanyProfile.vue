@@ -4,10 +4,9 @@ import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { CheckIcon, TrashIcon } from '@heroicons/vue/24/outline';
 
-import { useUserStore } from '@/stores/user';
-import { useCompanyStore } from '@/stores/company';
 import config from '@/config';
 import defaultUserProfilePicture from '@/assets/images/default-user-profile-picture.png';
+import { companyStore, userStore } from '@/data/stores';
 import {
   AppCard,
   AppButton,
@@ -17,8 +16,6 @@ import {
 } from '@/data/components';
 
 const router = useRouter();
-const userStore = useUserStore();
-const companyStore = useCompanyStore();
 const { currentUser, currentUserToken } = storeToRefs(userStore);
 
 const isLoading = ref(false);

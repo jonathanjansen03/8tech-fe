@@ -3,13 +3,10 @@ import { ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import { MagnifyingGlassIcon } from '@heroicons/vue/24/outline';
 
-import { useUserStore } from '@/stores/user';
-import { useJobStore } from '@/stores/job';
 import config from '@/config';
+import { jobStore, userStore } from '@/data/stores';
 import { AppButton, DropdownList } from '@/data/components';
 
-const userStore = useUserStore();
-const jobStore = useJobStore();
 const { currentUserToken } = storeToRefs(userStore);
 const { searchJobs } = jobStore;
 const searchTerm = ref('');

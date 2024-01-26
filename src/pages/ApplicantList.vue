@@ -4,17 +4,14 @@ import { useRoute, useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import NProgress from 'nprogress';
 
-import { useUserStore } from '@/stores/user';
-import { useJobStore } from '@/stores/job';
 import config from '@/config';
+import { jobStore, userStore } from '@/data/stores';
 import { AppButton, PaginationComponent } from '@/data/components';
 
 const GET_APPLICANT_LIST = 'mendapatkan daftar pelamar';
 
 const route = useRoute();
 const router = useRouter();
-const userStore = useUserStore();
-const jobStore = useJobStore();
 
 const { currentUserToken } = storeToRefs(userStore);
 const { jobApplicants, jobApplicantsPagination } = storeToRefs(jobStore);

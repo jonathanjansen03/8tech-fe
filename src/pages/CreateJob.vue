@@ -3,15 +3,12 @@ import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 
-import { useUserStore } from '@/stores/user';
-import { useJobStore } from '@/stores/job';
 import config from '@/config';
 import validationUtil from '@/utils/validation';
+import { jobStore, userStore } from '@/data/stores';
 import { AppButton, AppCard, InputBox } from '@/data/components';
 
 const router = useRouter();
-const userStore = useUserStore();
-const jobStore = useJobStore();
 
 const { currentUser, currentUserToken } = storeToRefs(userStore);
 const { createJob } = jobStore;

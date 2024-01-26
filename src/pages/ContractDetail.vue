@@ -5,9 +5,8 @@ import { storeToRefs } from 'pinia';
 import { ChevronLeftIcon } from '@heroicons/vue/24/outline';
 import NProgress from 'nprogress';
 
-import { useUserStore } from '@/stores/user';
-import { useContractStore } from '@/stores/contract';
 import config from '@/config';
+import { contractStore, userStore } from '@/data/stores';
 import { AppButton, AppCard } from '@/data/components';
 
 const GET_CONTRACT_DETAIL = 'mendapatkan detail kontrak';
@@ -17,8 +16,6 @@ const ALREADY_PAID = 'ALREADY_PAID';
 
 const route = useRoute();
 const router = useRouter();
-const userStore = useUserStore();
-const contractStore = useContractStore();
 
 const { currentUserToken } = storeToRefs(userStore);
 

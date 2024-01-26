@@ -9,9 +9,9 @@ import {
 } from '@heroicons/vue/24/solid';
 import NProgress from 'nprogress';
 
-import { useUserStore } from '@/stores/user';
 import config from '@/config';
 import defaultUserProfilePicture from '@/assets/images/default-user-profile-picture.png';
+import { userStore } from '@/data/stores';
 import {
   AppButton,
   AppCard,
@@ -21,7 +21,6 @@ import {
 } from '@/data/components';
 
 const router = useRouter();
-const userStore = useUserStore();
 const { currentUser } = storeToRefs(userStore);
 
 const formData = ref({
