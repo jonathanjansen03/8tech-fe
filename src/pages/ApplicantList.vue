@@ -7,9 +7,7 @@ import NProgress from 'nprogress';
 import { useUserStore } from '@/stores/user';
 import { useJobStore } from '@/stores/job';
 import config from '@/config';
-
-import AppButton from '@/components/AppButton.vue';
-import PaginationComponent from '@/components/PaginationComponent.vue';
+import { AppButton, PaginationComponent } from '@/data/components';
 
 const GET_APPLICANT_LIST = 'mendapatkan daftar pelamar';
 

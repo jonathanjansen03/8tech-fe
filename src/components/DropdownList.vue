@@ -23,7 +23,7 @@ const select = (value) => {
 </script>
 
 <template>
-  <div class="flex flex-col">
+  <div class="flex flex-col hover:cursor-pointer">
     <div
       class="bg-white flex justify-between px-3 py-2 rounded-xl shadow-md"
       @click="showDropdown = !showDropdown">

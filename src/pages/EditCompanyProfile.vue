@@ -8,12 +8,13 @@ import { useUserStore } from '@/stores/user';
 import { useCompanyStore } from '@/stores/company';
 import config from '@/config';
 import defaultUserProfilePicture from '@/assets/images/default-user-profile-picture.png';
-
-import AppCard from '@/components/AppCard.vue';
-import AppButton from '@/components/AppButton.vue';
-import AppTicker from '@/components/AppTicker.vue';
-import InputBox from '@/components/InputBox.vue';
-import ImageInput from '@/components/ImageInput.vue';
+import {
+  AppCard,
+  AppButton,
+  AppTicker,
+  ImageInput,
+  InputBox,
+} from '@/data/components';
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -90,7 +91,6 @@ const handleFailedUpdateProfile = (err) => {
 const returnToHome = () => {
   router.push(config.pages.home.path);
 };
-
 
 onMounted(async () => {
   await initPage();

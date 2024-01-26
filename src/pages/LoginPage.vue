@@ -4,11 +4,7 @@ import { RouterLink, useRoute, useRouter } from 'vue-router';
 
 import { useUserStore } from '@/stores/user';
 import config from '@/config';
-
-import AppCard from '@/components/AppCard.vue';
-import AppButton from '@/components/AppButton.vue';
-import AppTicker from '@/components/AppTicker.vue';
-import InputBox from '@/components/InputBox.vue';
+import { AppButton, AppCard, AppTicker, InputBox } from '@/data/components';
 
 const LOGIN = 'login';
 const NOT_MATCH = 'NOT_MATCH';

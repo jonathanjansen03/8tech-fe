@@ -6,9 +6,7 @@ import { storeToRefs } from 'pinia';
 import { useUserStore } from '@/stores/user';
 import { useJobStore } from '@/stores/job';
 import config from '@/config';
-
-import SearchBar from '@/components/SearchBar.vue';
-import JobCard from '@/components/JobCard.vue';
+import { JobCard, SearchBar } from '@/data/components';
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -20,7 +18,7 @@ const { searchJobs } = jobStore;
 
 const initPage = async () => {
   JSON.parse(localStorage.getItem('userData'))?.roles?.includes('RECRUITER') &&
-  router.push('/portal');
+    router.push('/portal');
   await searchJobs(
     {
       page: 1,

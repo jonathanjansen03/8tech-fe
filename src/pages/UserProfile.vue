@@ -11,9 +11,7 @@ import NProgress from 'nprogress';
 import { useUserStore } from '@/stores/user';
 import config from '@/config';
 import defaultUserProfilePicture from '@/assets/images/default-user-profile-picture.png';
-
-import AppCard from '@/components/AppCard.vue';
-import AppButton from '@/components/AppButton.vue';
+import { AppButton, AppCard } from '@/data/components';
 
 const NO_DESCRIPTION = 'Belum ada deskripsi.';
 const NO_PORTFOLIO = 'Belum ada portofolio.';

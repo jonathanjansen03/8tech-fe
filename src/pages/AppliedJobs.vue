@@ -7,9 +7,7 @@ import NProgress from 'nprogress';
 import { useUserStore } from '@/stores/user';
 import { useContractStore } from '@/stores/contract';
 import config from '@/config';
-
-import PaginationComponent from '@/components/PaginationComponent.vue';
-import AppButton from '@/components/AppButton.vue';
+import { AppButton, PaginationComponent } from '@/data/components';
 
 const GET_APPLIED_JOBS = 'mendapatkan daftar pekerjaan';
 const REJECT_CONTRACT = 'membatalkan lamaran pekerjaan';
