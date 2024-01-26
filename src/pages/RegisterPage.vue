@@ -30,7 +30,6 @@ const formData = reactive({
   confirmPassword: '',
 });
 const companyFormData = reactive({
-  profilePicture: '',
   name: '',
   description: '',
 });
@@ -41,7 +40,6 @@ const errors = reactive({
   username: '',
   password: '',
   confirmPassword: '',
-  profilePicture: '',
   name: '',
   description: '',
 });
@@ -215,14 +213,6 @@ const toggleIsRecruiter = async () => {
             :error="errors.username"
             class="mt-8"
             @blur="validateField('email')" />
-          <InputBox
-            id="company-profile-picture"
-            type="text"
-            label="Profile Picture (Opsional)"
-            v-model="companyFormData.profilePicture"
-            :error="errors.profilePicture"
-            class="mt-8"
-            @blur="validateField('username')" />
           <InputBox
             id="company-description"
             label="Deskripsi Perusahaan"
