@@ -1,6 +1,5 @@
 <script setup>
 import { computed, ref } from 'vue';
-
 import { CameraIcon } from '@heroicons/vue/24/solid';
 
 const props = defineProps({

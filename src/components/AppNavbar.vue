@@ -13,9 +13,7 @@ import { useUserStore } from '@/stores/user';
 import config from '@/config';
 import logo from '@/assets/images/8tech-logo.png';
 import defaultUserProfilePicture from '@/assets/images/default-user-profile-picture.png';
-
-import AppButton from '@/components/AppButton.vue';
-import AppCard from '@/components/AppCard.vue';
+import { AppButton, AppCard } from '@/data/components';
 
 const userStore = useUserStore();
 const router = useRouter();
