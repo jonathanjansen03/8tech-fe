@@ -10,10 +10,7 @@ import { useUserStore } from '@/stores/user';
 import { useCompanyStore } from '@/stores/company';
 import config from '@/config';
 import DefaultUserProfilePicture from '@/assets/images/default-user-profile-picture.png';
-
-import AppCard from '@/components/AppCard.vue';
-import AppButton from '@/components/AppButton.vue';
-import JobCard from '@/components/JobCard.vue';
+import { AppButton, AppCard, JobCard } from '@/data/components';
 
 const route = useRoute();
 const userStore = useUserStore();

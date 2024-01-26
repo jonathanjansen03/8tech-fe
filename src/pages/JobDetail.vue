@@ -10,10 +10,7 @@ import { useJobStore } from '@/stores/job';
 import { useContractStore } from '@/stores/contract';
 import config from '@/config/';
 import defaultUserProfilePicture from '@/assets/images/default-user-profile-picture.png';
-
-import AppCard from '@/components/AppCard.vue';
-import AppButton from '@/components/AppButton.vue';
-import AppTicker from '@/components/AppTicker.vue';
+import { AppButton, AppCard, AppTicker } from '@/data/components';
 
 const GET_JOB_DETAIL = 'mendapatkan detail pekerjaan';
 const APPLY_JOB = 'melamar pekerjaan';
@@ -98,7 +95,9 @@ onBeforeMount(initPage);
     <AppCard class="px-5">
       <div class="flex flex-col">
         <h1 class="flex items-center">
-          <ChevronLeftIcon class="cursor-pointer mr-3 stroke-2 w-6" @click="router.back" />
+          <ChevronLeftIcon
+            class="cursor-pointer mr-3 stroke-2 w-6"
+            @click="router.back" />
           Detail Pekerjaan
         </h1>
         <div class="mt-5 px-24">

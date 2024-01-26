@@ -7,8 +7,7 @@ import NProgress from 'nprogress';
 import { useUserStore } from '@/stores/user';
 import { useContractStore } from '@/stores/contract';
 import config from '@/config';
-
-import PaginationComponent from '@/components/PaginationComponent.vue';
+import { PaginationComponent } from '@/data/components';
 
 const GET_CONTRACT_LIST = 'mendapatkan daftar kontrak';
 

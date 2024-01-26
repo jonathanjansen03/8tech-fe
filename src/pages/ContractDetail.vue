@@ -8,9 +8,7 @@ import NProgress from 'nprogress';
 import { useUserStore } from '@/stores/user';
 import { useContractStore } from '@/stores/contract';
 import config from '@/config';
-
-import AppCard from '@/components/AppCard.vue';
-import AppButton from '@/components/AppButton.vue';
+import { AppButton, AppCard } from '@/data/components';
 
 const GET_CONTRACT_DETAIL = 'mendapatkan detail kontrak';
 const ACCEPT_CONTRACT = 'menerima kontrak';

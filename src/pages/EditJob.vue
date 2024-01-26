@@ -8,10 +8,7 @@ import { useUserStore } from '@/stores/user';
 import { useJobStore } from '@/stores/job';
 import config from '@/config';
 import validationUtil from '@/utils/validation';
-
-import AppCard from '@/components/AppCard.vue';
-import AppButton from '@/components/AppButton.vue';
-import InputBox from '@/components/InputBox.vue';
+import { AppCard, AppButton, InputBox } from '@/data/components';
 
 const GET_JOB_DATA = 'mendapatkan data pekerjaan';
 

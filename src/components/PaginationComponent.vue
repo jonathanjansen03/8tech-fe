@@ -1,5 +1,8 @@
 <script setup>
-import { ChevronDoubleLeftIcon, ChevronDoubleRightIcon } from '@heroicons/vue/24/outline';
+import {
+  ChevronDoubleLeftIcon,
+  ChevronDoubleRightIcon,
+} from '@heroicons/vue/24/outline';
 
 const props = defineProps({
   page: {
@@ -20,26 +23,27 @@ const goBack = () => {
 const goNext = () => {
   emit('goNext');
 };
-
 </script>
 
 <template>
-
   <div class="flex flex-col items-center mt-5">
     <slot></slot>
     <div class="flex flex-row gap-x-3">
-      <button class="flex items-center justify-center px-3 py-2 font-medium text-white bg-gray-800 rounded-md hover:bg-gray-900"
-              @click="goBack">
-        <ChevronDoubleLeftIcon class="cursor-pointer w-5"/>
+      <button
+        class="flex items-center justify-center px-3 py-2 font-medium text-white bg-gray-800 rounded-md hover:bg-gray-900"
+        @click="goBack">
+        <ChevronDoubleLeftIcon class="cursor-pointer w-5" />
         Prev
       </button>
       <p
         class="flex items-center justify-center px-3 py-2 font-medium text-white bg-gray-800 rounded-md hover:bg-gray-900">
-        Page {{ props.page }} of {{ props.totalPages }}</p>
-      <button class="flex items-center justify-center px-3 py-2 font-medium text-white bg-gray-800 rounded-md hover:bg-gray-900"
-              @click="goNext">
+        Page {{ props.page }} of {{ props.totalPages }}
+      </p>
+      <button
+        class="flex items-center justify-center px-3 py-2 font-medium text-white bg-gray-800 rounded-md hover:bg-gray-900"
+        @click="goNext">
         Next
-        <ChevronDoubleRightIcon class="cursor-pointer w-5"/>
+        <ChevronDoubleRightIcon class="cursor-pointer w-5" />
       </button>
     </div>
   </div>

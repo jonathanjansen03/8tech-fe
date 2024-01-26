@@ -9,10 +9,7 @@ import { useContractStore } from '@/stores/contract';
 import config from '@/config';
 import validationUtil from '@/utils/validation';
 import contractTemplate from '@/assets/docs/contractTemplate.json';
-
-import AppCard from '@/components/AppCard.vue';
-import AppButton from '@/components/AppButton.vue';
-import InputBox from '@/components/InputBox.vue';
+import { AppButton, AppCard, InputBox } from '@/data/components';
 
 const RATE_FREELANCER = 'memberikan penilaian';
 

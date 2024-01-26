@@ -6,8 +6,7 @@ import { MagnifyingGlassIcon } from '@heroicons/vue/24/outline';
 import { useUserStore } from '@/stores/user';
 import { useJobStore } from '@/stores/job';
 import config from '@/config';
-import AppButton from '@/components/AppButton.vue';
-import DropdownList from '@/components/DropdownList.vue';
+import { AppButton, DropdownList } from '@/data/components';
 
 const userStore = useUserStore();
 const jobStore = useJobStore();

@@ -1,7 +1,8 @@
 <script setup>
 import { computed } from 'vue';
-import AppCard from '@/components/AppCard.vue';
+
 import defaultUserProfilePicture from '@/assets/images/default-user-profile-picture.png';
+import { AppCard } from '@/data/components';
 
 const props = defineProps({
   job: Object,
