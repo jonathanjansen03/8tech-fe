@@ -194,7 +194,7 @@ const doRateFreelancer = async () => {
       {
         userId: contract.value.userId,
         recruiterUserId: currentUser.value.id,
-        ratingOf10: freelancerRating.value,
+        ratingOf10: parseInt(freelancerRating.value),
         contractId: contract.value.id,
       },
       currentUserToken.value

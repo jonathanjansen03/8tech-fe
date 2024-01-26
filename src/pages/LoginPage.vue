@@ -11,7 +11,7 @@ import AppTicker from '@/components/AppTicker.vue';
 import InputBox from '@/components/InputBox.vue';
 
 const LOGIN = 'login';
-const NOT_FOUND = 'NOT_FOUND';
+const NOT_MATCH = 'NOT_MATCH';
 
 const route = useRoute();
 const router = useRouter();
@@ -87,7 +87,7 @@ const handleFailedLogin = (err) => {
     errorMessage.value = config.errors.server;
   } else {
     errorMessage.value =
-      err.message.user === NOT_FOUND
+      err.message.user === NOT_MATCH
         ? config.errors.invalidCredentials
         : config.errors.general(LOGIN);
   }
