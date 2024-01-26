@@ -8,9 +8,9 @@ import {
 } from '@heroicons/vue/24/outline';
 import NProgress from 'nprogress';
 
-import { useUserStore } from '@/stores/user';
 import config from '@/config';
 import defaultUserProfilePicture from '@/assets/images/default-user-profile-picture.png';
+import { userStore } from '@/data/stores';
 import { AppButton, AppCard } from '@/data/components';
 
 const NO_DESCRIPTION = 'Belum ada deskripsi.';
@@ -20,7 +20,6 @@ const GET_PROFILE_DATA = 'mendapatkan profil';
 
 const route = useRoute();
 const router = useRouter();
-const userStore = useUserStore();
 
 const {
   currentUser,
@@ -74,6 +73,11 @@ const goToCompanyProfile = () => {
     name: config.pages.companyProfile.name,
     params: { id: currentUser.value.companyId },
   });
+};
+
+const doLogout = () => {
+  logout();
+  router.push({ name: config.pages.login.name });
 };
 
 onBeforeMount(initPage);
@@ -165,7 +169,7 @@ watch(route, () => {
         </p>
       </div>
       <div v-if="isPrivateProfile" class="flex justify-center mt-5">
-        <AppButton outline class="flex items-center py-3" @click="logout">
+        <AppButton outline class="flex items-center py-3" @click="doLogout">
           <ArrowLeftOnRectangleIcon class="mr-2 w-5" />
           Keluar
         </AppButton>

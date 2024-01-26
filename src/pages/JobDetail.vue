@@ -5,11 +5,9 @@ import { storeToRefs } from 'pinia';
 import NProgress from 'nprogress';
 import { ChevronLeftIcon } from '@heroicons/vue/24/outline';
 
-import { useUserStore } from '@/stores/user';
-import { useJobStore } from '@/stores/job';
-import { useContractStore } from '@/stores/contract';
 import config from '@/config/';
 import defaultUserProfilePicture from '@/assets/images/default-user-profile-picture.png';
+import { contractStore, jobStore, userStore } from '@/data/stores';
 import { AppButton, AppCard, AppTicker } from '@/data/components';
 
 const GET_JOB_DETAIL = 'mendapatkan detail pekerjaan';
@@ -18,9 +16,7 @@ const SUCCESS_APPLY_JOB = 'Berhasil melamar pekerjaan!';
 
 const route = useRoute();
 const router = useRouter();
-const userStore = useUserStore();
-const jobStore = useJobStore();
-const contractStore = useContractStore();
+
 const { currentUserToken, isLoggedIn } = storeToRefs(userStore);
 const { findJob, applyJob } = jobStore;
 const { job } = storeToRefs(jobStore);

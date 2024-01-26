@@ -9,13 +9,12 @@ import {
   XMarkIcon,
 } from '@heroicons/vue/24/outline';
 
-import { useUserStore } from '@/stores/user';
 import config from '@/config';
 import logo from '@/assets/images/8tech-logo.png';
 import defaultUserProfilePicture from '@/assets/images/default-user-profile-picture.png';
+import { userStore } from '@/data/stores';
 import { AppButton, AppCard } from '@/data/components';
 
-const userStore = useUserStore();
 const router = useRouter();
 const { currentUser, isLoggedIn, isRecruiter, currentUserFullName } =
   storeToRefs(userStore);
@@ -45,6 +44,11 @@ const getPath = (type) => {
   };
 
   return config.pages[paths[type]].path || '';
+};
+
+const doLogout = () => {
+  logout();
+  router.push(config.pages.home.path);
 };
 </script>
 
@@ -143,7 +147,7 @@ const getPath = (type) => {
               </div>
               <span
                 class="flex mt-2 text-black hover:text-blue-800"
-                @click="logout">
+                @click="doLogout">
                 <ArrowLeftOnRectangleIcon class="mr-2 w-5" />
                 Keluar
               </span>

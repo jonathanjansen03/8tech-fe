@@ -4,18 +4,15 @@ import { useRoute, useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import NProgress from 'nprogress';
 
-import { useUserStore } from '@/stores/user';
-import { useJobStore } from '@/stores/job';
 import config from '@/config';
 import validationUtil from '@/utils/validation';
+import { jobStore, userStore } from '@/data/stores';
 import { AppCard, AppButton, InputBox } from '@/data/components';
 
 const GET_JOB_DATA = 'mendapatkan data pekerjaan';
 
 const route = useRoute();
 const router = useRouter();
-const userStore = useUserStore();
-const jobStore = useJobStore();
 
 const { currentUserToken } = storeToRefs(userStore);
 const { job } = storeToRefs(jobStore);

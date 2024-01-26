@@ -5,9 +5,8 @@ import { storeToRefs } from 'pinia';
 import { PlusIcon } from '@heroicons/vue/24/outline';
 import NProgress from 'nprogress';
 
-import { useUserStore } from '@/stores/user';
-import { useJobStore } from '@/stores/job';
 import config from '@/config';
+import { jobStore, userStore } from '@/data/stores';
 import { AppButton, PaginationComponent } from '@/data/components';
 
 const COMPANY_ID = 'companyId';
@@ -15,8 +14,6 @@ const CREATED_AT = 'createdAt';
 const GET_JOB_LIST = 'mendapatkan daftar pekerjaan';
 
 const router = useRouter();
-const userStore = useUserStore();
-const jobStore = useJobStore();
 
 const { currentUser, currentUserToken } = storeToRefs(userStore);
 

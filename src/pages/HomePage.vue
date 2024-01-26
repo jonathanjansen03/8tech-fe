@@ -3,14 +3,11 @@ import { onBeforeMount } from 'vue';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 
-import { useUserStore } from '@/stores/user';
-import { useJobStore } from '@/stores/job';
 import config from '@/config';
+import { jobStore, userStore } from '@/data/stores';
 import { JobCard, SearchBar } from '@/data/components';
 
 const router = useRouter();
-const userStore = useUserStore();
-const jobStore = useJobStore();
 
 const { currentUserToken } = storeToRefs(userStore);
 const { jobList } = storeToRefs(jobStore);

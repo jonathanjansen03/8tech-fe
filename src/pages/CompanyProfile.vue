@@ -5,17 +5,12 @@ import { storeToRefs } from 'pinia';
 import NProgress from 'nprogress';
 import { PencilSquareIcon } from '@heroicons/vue/24/outline';
 
-import { useJobStore } from '@/stores/job';
-import { useUserStore } from '@/stores/user';
-import { useCompanyStore } from '@/stores/company';
 import config from '@/config';
 import DefaultUserProfilePicture from '@/assets/images/default-user-profile-picture.png';
+import { companyStore, jobStore, userStore } from '@/data/stores';
 import { AppButton, AppCard, JobCard } from '@/data/components';
 
 const route = useRoute();
-const userStore = useUserStore();
-const companyStore = useCompanyStore();
-const jobStore = useJobStore();
 
 const { currentUser, currentUserToken } = storeToRefs(userStore);
 
