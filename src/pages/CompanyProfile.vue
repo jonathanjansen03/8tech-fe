@@ -1,5 +1,6 @@
 <script setup>
 import { computed, onBeforeMount, reactive, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import NProgress from 'nprogress';
 import { PencilSquareIcon } from '@heroicons/vue/24/outline';
@@ -7,12 +8,11 @@ import { PencilSquareIcon } from '@heroicons/vue/24/outline';
 import { useJobStore } from '@/stores/job';
 import { useUserStore } from '@/stores/user';
 import { useCompanyStore } from '@/stores/company';
-
 import config from '@/config';
 import DefaultUserProfilePicture from '@/assets/images/default-user-profile-picture.png';
+
 import AppCard from '@/components/AppCard.vue';
 import AppButton from '@/components/AppButton.vue';
-import { useRoute } from 'vue-router';
 import JobCard from '@/components/JobCard.vue';
 
 const route = useRoute();
@@ -21,9 +21,10 @@ const companyStore = useCompanyStore();
 const jobStore = useJobStore();
 
 const { currentUser, currentUserToken } = storeToRefs(userStore);
+
 const isPrivateProfile = ref(true);
-const companyId = ref();
-const companyJobList = ref();
+const companyId = ref('');
+const companyJobList = ref([]);
 const companyProfile = reactive({
   name: '',
   description: '',
@@ -53,16 +54,16 @@ const initPage = async () => {
   companyProfile.profilePicture = companyRes.data.profilePicture;
 };
 
+const userProfilePicture = computed(() => {
+  return companyProfile.profilePicture || DefaultUserProfilePicture;
+});
+
 onBeforeMount(async () => {
   await initPage();
 });
 
 watch(route, () => {
   isPrivateProfile.value = route.params.id === currentUser.value?.companyId;
-});
-
-const userProfilePicture = computed(() => {
-  return companyProfile.profilePicture || DefaultUserProfilePicture;
 });
 </script>
 

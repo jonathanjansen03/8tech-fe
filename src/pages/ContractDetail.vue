@@ -24,8 +24,13 @@ const contractStore = useContractStore();
 
 const { currentUserToken } = storeToRefs(userStore);
 
-const { contract, contractCustomFields, payout, isContractCompleted, isContractPaid } =
-  storeToRefs(contractStore);
+const {
+  contract,
+  contractCustomFields,
+  payout,
+  isContractCompleted,
+  isContractPaid,
+} = storeToRefs(contractStore);
 const { fetchContract, updateContract, rejectContract, getContractPayoutLink } =
   contractStore;
 
@@ -80,7 +85,7 @@ const doRejectContract = async () => {
 
 const goToAppliedJobsPage = () => {
   router.push({
-    name: config.pages.appliedJobs.name
+    name: config.pages.appliedJobs.name,
   });
 };
 
@@ -159,7 +164,11 @@ onBeforeMount(initPage);
             </AppButton>
           </div>
           <AppButton
-            v-if="isContractCompleted && isContractPaid && Object.keys(payout).length"
+            v-if="
+              isContractCompleted &&
+              isContractPaid &&
+              Object.keys(payout).length
+            "
             class="mt-8"
             @click="goToPayoutLink">
             Terima Pembayaran

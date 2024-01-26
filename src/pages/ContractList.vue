@@ -2,12 +2,13 @@
 import { onBeforeMount, reactive, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
+import NProgress from 'nprogress';
 
 import { useUserStore } from '@/stores/user';
 import { useContractStore } from '@/stores/contract';
 import config from '@/config';
+
 import PaginationComponent from '@/components/PaginationComponent.vue';
-import NProgress from 'nprogress';
 
 const GET_CONTRACT_LIST = 'mendapatkan daftar kontrak';
 
@@ -46,6 +47,18 @@ const initPage = async () => {
   NProgress.done();
 };
 
+const goToEditContractPage = (id) => {
+  router.push({
+    name: config.pages.editContract.name,
+    params: {
+      id,
+    },
+    query: {
+      update: true,
+    },
+  });
+};
+
 onBeforeMount(initPage);
 
 watch(pagination, async (newPagination) => {
@@ -75,18 +88,6 @@ watch(pagination, async (newPagination) => {
 
   isLoadingFetchApi.value = false;
 });
-
-const goEditContract = (id) => {
-  router.push({
-    name: config.pages.editContract.name,
-    params: {
-      id,
-    },
-    query: {
-      update: true,
-    },
-  });
-};
 </script>
 
 <template>
@@ -114,7 +115,7 @@ const goEditContract = (id) => {
               v-for="(item, index) in recruiterContractList"
               :key="index"
               class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-blue-950"
-              @click="goEditContract(item.id)">
+              @click="goToEditContractPage(item.id)">
               <td class="px-6 py-4">
                 {{ (pagination.page - 1) * pagination.size + index + 1 }}
               </td>

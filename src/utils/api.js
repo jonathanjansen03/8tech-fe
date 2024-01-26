@@ -1,6 +1,5 @@
 import config from '@/config';
 
-const INVALID_METHOD_ERROR = 'Method must be GET, POST, PUT or DELETE';
 const BASE_PATH = config.api.basePath;
 const BASE_HEADERS = {
   'Content-Type': 'application/json',
@@ -54,7 +53,7 @@ export default {
     isUploadingFile = false,
   }) => {
     if (!_isValidMethod(method)) {
-      throw new Error(INVALID_METHOD_ERROR);
+      throw new Error(config.errors.invalidMethod);
     }
 
     const res = await fetch(

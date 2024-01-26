@@ -131,6 +131,7 @@ export default {
   errors: {
     general: (action) => `Gagal ${action}. Silakan coba lagi nanti.`,
     server: 'Terjadi kesalahan pada server. Silakan coba lagi nanti.',
+    invalidMethod: 'Method must be GET, POST, PUT or DELETE.',
     invalidCredentials: 'Email atau password salah.',
     form: {
       firstName: 'Minimal 2 karakter.',

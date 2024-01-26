@@ -12,8 +12,10 @@ export const useContractStore = defineStore('contract', () => {
   const recruiterContractListPagination = ref({});
   const payout = ref({});
 
-  const isContractPending = computed(
-    () => contract.value.status === config.constants.contractStatus.pending
+  const isContractEditable = computed(
+    () =>
+      contract.value.status === config.constants.contractStatus.pending ||
+      contract.value.status === config.constants.contractStatus.accepted
   );
 
   const isContractCompleted = computed(
@@ -117,7 +119,7 @@ export const useContractStore = defineStore('contract', () => {
     recruiterContractList,
     recruiterContractListPagination,
     payout,
-    isContractPending,
+    isContractEditable,
     isContractCompleted,
     isContractPaid,
     isContractRated,

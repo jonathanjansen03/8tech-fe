@@ -1,28 +1,29 @@
 <script setup>
 import { onMounted, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { storeToRefs } from 'pinia';
+import NProgress from 'nprogress';
 
 import { useUserStore } from '@/stores/user';
 import { useContractStore } from '@/stores/contract';
 import config from '@/config';
 import validationUtil from '@/utils/validation';
-import AppCard from '@/components/AppCard.vue';
-import InputBox from '@/components/InputBox.vue';
-import AppButton from '@/components/AppButton.vue';
 import contractTemplate from '@/assets/docs/contractTemplate.json';
-import NProgress from 'nprogress';
-import { storeToRefs } from 'pinia';
+
+import AppCard from '@/components/AppCard.vue';
+import AppButton from '@/components/AppButton.vue';
+import InputBox from '@/components/InputBox.vue';
 
 const RATE_FREELANCER = 'memberikan penilaian';
 
-const userStore = useUserStore();
-const router = useRouter();
 const route = useRoute();
+const router = useRouter();
+const userStore = useUserStore();
 const contractStore = useContractStore();
 
 const { currentUser, currentUserToken } = storeToRefs(userStore);
 
-const { contract, isContractPending, isContractCompleted, isContractRated } =
+const { contract, isContractEditable, isContractCompleted, isContractRated } =
   storeToRefs(contractStore);
 const { fetchContract, recruiterRejectContract, rateFreelancer } =
   contractStore;
@@ -31,7 +32,7 @@ const formData = reactive({
   title: '',
   description: '',
   details: '',
-  paymentRate: '',
+  paymentRate: 0,
 });
 const errors = reactive({
   title: '',
@@ -68,8 +69,6 @@ const initPage = async () => {
   template.value = contractTemplate.default;
   NProgress.done();
 };
-
-onMounted(initPage);
 
 const validateField = (field) => {
   if (!formData[field]) {
@@ -205,6 +204,8 @@ const doRateFreelancer = async () => {
     handleFail(err, RATE_FREELANCER);
   }
 };
+
+onMounted(initPage);
 </script>
 
 <template>
@@ -221,7 +222,7 @@ const doRateFreelancer = async () => {
             class="mt-8 w-full"
             label="Judul Kontrak"
             type="text"
-            :disabled="!isContractPending"
+            :disabled="!isContractEditable"
             @blur="validateField('title')" />
           <InputBox
             id="create-contract-description"
@@ -231,7 +232,7 @@ const doRateFreelancer = async () => {
             label="Deskripsi Kontrak"
             text-area
             text-area-height="h-40"
-            :disabled="!isContractPending"
+            :disabled="!isContractEditable"
             @blur="validateField('description')" />
           <InputBox
             id="create-contract-details"
@@ -241,7 +242,7 @@ const doRateFreelancer = async () => {
             label="Detail Kontrak"
             text-area
             text-area-height="h-40"
-            :disabled="!isContractPending"
+            :disabled="!isContractEditable"
             @blur="validateField('details')" />
           <InputBox
             id="create-contract-paymentRate"
@@ -251,7 +252,7 @@ const doRateFreelancer = async () => {
             min="10000"
             :error="errors.paymentRate"
             class="mt-8 w-full"
-            :disabled="!isContractPending"
+            :disabled="!isContractEditable"
             @blur="validateField('paymentRate')" />
           <div class="flex flex-row w-full gap-x-5">
             <AppButton

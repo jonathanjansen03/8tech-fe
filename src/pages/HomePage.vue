@@ -18,16 +18,9 @@ const { currentUserToken } = storeToRefs(userStore);
 const { jobList } = storeToRefs(jobStore);
 const { searchJobs } = jobStore;
 
-const goToJobDetail = (id) => {
-  router.push({
-    name: config.pages.jobDetail.name,
-    params: { id },
-  });
-};
-
 const initPage = async () => {
   JSON.parse(localStorage.getItem('userData'))?.roles?.includes('RECRUITER') &&
-    router.push('/portal');
+  router.push('/portal');
   await searchJobs(
     {
       page: 1,
@@ -35,6 +28,13 @@ const initPage = async () => {
     },
     currentUserToken.value
   );
+};
+
+const goToJobDetail = (id) => {
+  router.push({
+    name: config.pages.jobDetail.name,
+    params: { id },
+  });
 };
 
 onBeforeMount(initPage);

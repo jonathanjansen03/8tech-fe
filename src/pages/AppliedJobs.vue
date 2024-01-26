@@ -2,6 +2,7 @@
 import { onBeforeMount, reactive, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
+import NProgress from 'nprogress';
 
 import { useUserStore } from '@/stores/user';
 import { useContractStore } from '@/stores/contract';
@@ -9,7 +10,6 @@ import config from '@/config';
 
 import PaginationComponent from '@/components/PaginationComponent.vue';
 import AppButton from '@/components/AppButton.vue';
-import NProgress from 'nprogress';
 
 const GET_APPLIED_JOBS = 'mendapatkan daftar pekerjaan';
 const REJECT_CONTRACT = 'membatalkan lamaran pekerjaan';

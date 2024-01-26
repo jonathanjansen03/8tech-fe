@@ -35,6 +35,17 @@ const errorMessage = ref('');
 
 const isInvisibleApplyButton = computed(() => !!route.query.ref);
 
+const initPage = async () => {
+  NProgress.start();
+  try {
+    await findJob(route.params.id);
+  } catch (err) {
+    console.error(err);
+    alert(config.errors.general(GET_JOB_DETAIL));
+  }
+  NProgress.done();
+};
+
 const doApplyJob = async () => {
   if (!isLoggedIn.value) {
     goToLoginPage();
@@ -77,17 +88,6 @@ const goToCompanyProfile = () => {
 
 const goToLoginPage = () => {
   router.push(config.pages.login.path);
-};
-
-const initPage = async () => {
-  NProgress.start();
-  try {
-    await findJob(route.params.id);
-  } catch (err) {
-    console.error(err);
-    alert(config.errors.general(GET_JOB_DETAIL));
-  }
-  NProgress.done();
 };
 
 onBeforeMount(initPage);

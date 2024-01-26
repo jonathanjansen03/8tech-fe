@@ -15,7 +15,7 @@ const emit = defineEmits(['change']);
 
 const imageInput = ref(null);
 
-const displayedImage = computed(() => props.image ?? props.defaultImage);
+const displayedImage = computed(() => props.image || props.defaultImage);
 
 const uploadImage = () => {
   const fileReader = new FileReader();

@@ -2,13 +2,14 @@
 import { onBeforeMount, reactive, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
+import NProgress from 'nprogress';
 
 import { useUserStore } from '@/stores/user';
 import { useJobStore } from '@/stores/job';
 import config from '@/config';
+
 import AppButton from '@/components/AppButton.vue';
 import PaginationComponent from '@/components/PaginationComponent.vue';
-import NProgress from 'nprogress';
 
 const GET_APPLICANT_LIST = 'mendapatkan daftar pelamar';
 
@@ -48,7 +49,7 @@ const initPage = async () => {
   NProgress.done();
 };
 
-const goCreateContract = (id) => {
+const goToCreateContractPage = (id) => {
   router.push({
     name: config.pages.editContract.name,
     params: {
@@ -122,7 +123,7 @@ watch(pagination, async (newPagination) => {
               </th>
               <th scope="row" class="px-6 py-4 flex flex-row-reverse">
                 <AppButton>
-                  <p @click.stop="goCreateContract(item.contractId)">
+                  <p @click.stop="goToCreateContractPage(item.contractId)">
                     Terima lamaran
                   </p>
                 </AppButton>

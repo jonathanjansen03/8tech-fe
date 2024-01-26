@@ -32,15 +32,29 @@ const formData = ref({
   portfolio: '',
 });
 const base64UserProfileImage = ref('');
+const isLoading = ref(false);
 const isError = ref(false);
 const errorMessage = ref('');
-const isLoading = ref(false);
 
 const userProfilePicture = computed(() => {
   return base64UserProfileImage.value
     ? base64UserProfileImage.value
     : currentUser.value.profilePicture || defaultUserProfilePicture;
 });
+
+const initPage = () => {
+  NProgress.start();
+
+  formData.value = {
+    ...currentUser.value,
+  };
+
+  if (!formData.value.portfolio?.length) {
+    formData.value.portfolio = [''];
+  }
+
+  NProgress.done();
+};
 
 const updateUserProfilePicture = (image) => {
   formData.value.profilePicture = image.file;
@@ -86,20 +100,6 @@ const decrementPortfolio = () => {
     return;
   }
   formData.value.portfolio.pop();
-};
-
-const initPage = () => {
-  NProgress.start();
-
-  formData.value = {
-    ...currentUser.value,
-  };
-
-  if (!formData.value.portfolio?.length) {
-    formData.value.portfolio = [''];
-  }
-
-  NProgress.done();
 };
 
 onMounted(initPage);

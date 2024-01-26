@@ -9,8 +9,8 @@ import config from '@/config';
 import validationUtil from '@/utils/validation';
 
 import AppCard from '@/components/AppCard.vue';
-import InputBox from '@/components/InputBox.vue';
 import AppButton from '@/components/AppButton.vue';
+import InputBox from '@/components/InputBox.vue';
 
 const router = useRouter();
 const userStore = useUserStore();

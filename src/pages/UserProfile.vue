@@ -52,13 +52,6 @@ const userProfilePicture = computed(() => {
   return publicUserProfile.profilePicture || defaultUserProfilePicture;
 });
 
-const goToCompanyProfile = () => {
-  router.push({
-    name: config.pages.companyProfile.name,
-    params: { id: currentUser.value.companyId },
-  });
-};
-
 const initPage = async () => {
   NProgress.start();
   try {
@@ -76,6 +69,13 @@ const initPage = async () => {
     alert(config.errors.general(GET_PROFILE_DATA));
   }
   NProgress.done();
+};
+
+const goToCompanyProfile = () => {
+  router.push({
+    name: config.pages.companyProfile.name,
+    params: { id: currentUser.value.companyId },
+  });
 };
 
 onBeforeMount(initPage);

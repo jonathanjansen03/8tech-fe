@@ -1,18 +1,19 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { useUserStore } from '@/stores/user';
 import { storeToRefs } from 'pinia';
 import { CheckIcon, TrashIcon } from '@heroicons/vue/24/outline';
 
+import { useUserStore } from '@/stores/user';
+import { useCompanyStore } from '@/stores/company';
 import config from '@/config';
 import defaultUserProfilePicture from '@/assets/images/default-user-profile-picture.png';
+
 import AppCard from '@/components/AppCard.vue';
-import AppTicker from '@/components/AppTicker.vue';
 import AppButton from '@/components/AppButton.vue';
+import AppTicker from '@/components/AppTicker.vue';
 import InputBox from '@/components/InputBox.vue';
 import ImageInput from '@/components/ImageInput.vue';
-import { useCompanyStore } from '@/stores/company';
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -38,6 +39,17 @@ const userProfilePicture = computed(() => {
 const updateUserProfilePicture = (image) => {
   formData.value.profilePicture = image.file;
   base64UserProfileImage.value = image.base64;
+};
+
+const initPage = async () => {
+  const company = await companyStore.getCompanyInfo(
+    currentUser.value.companyId
+  );
+  formData.value = {
+    name: company.data.name,
+    description: company.data.description,
+    profilePicture: company.data.profilePicture,
+  };
 };
 
 const updateProfile = async () => {
@@ -79,16 +91,6 @@ const returnToHome = () => {
   router.push(config.pages.home.path);
 };
 
-const initPage = async () => {
-  const company = await companyStore.getCompanyInfo(
-    currentUser.value.companyId
-  );
-  formData.value = {
-    name: company.data.name,
-    description: company.data.description,
-    profilePicture: company.data.profilePicture,
-  };
-};
 
 onMounted(async () => {
   await initPage();
@@ -107,7 +109,10 @@ onMounted(async () => {
           @change="updateUserProfilePicture" />
       </div>
       <div class="flex flex-col">
-        <InputBox id="firstName" v-model="formData.name" label="Nama Perusahaan" />
+        <InputBox
+          id="firstName"
+          v-model="formData.name"
+          label="Nama Perusahaan" />
       </div>
       <div class="flex flex-col mt-5">
         <InputBox
