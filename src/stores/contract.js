@@ -89,7 +89,7 @@ export const useContractStore = defineStore('contract', () => {
       case config.constants.contractStatus.completed:
         return 'Selesai';
       case config.constants.contractStatus.ongoing:
-        return 'Masih dalah proses';
+        return 'Masih sedang berjalan';
       default:
         return 'Unknown';
     }
