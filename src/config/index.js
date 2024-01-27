@@ -141,6 +141,7 @@ export default {
       password:
         'Minimal 8 karakter yang terdiri dari minimal 1 huruf besar, 1 huruf kecil, dan 1 angka.',
       confirmPassword: 'Harus sama dengan password.',
+      description: 'Minimal 10 karakter.',
       unique: 'Email sudah terdaftar. Silakan gunakan email lain.',
       required: 'Harus diisi.',
       paymentRate: 'Harus diisi.',
