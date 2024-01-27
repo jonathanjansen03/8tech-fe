@@ -119,6 +119,7 @@ export default {
       create: '/job/create',
       filter: '/job/filter',
       update: '/job/update',
+      delete: (id) => `/job/delete/${id}`,
       findOne: (id) => `/job/${id}`,
       apply: (id) => `/job/apply/${id}`,
       applicant: '/job/applicants',
@@ -137,7 +138,8 @@ export default {
       firstName: 'Minimal 2 karakter.',
       lastName: 'Minimal 2 karakter.',
       email: 'Masukkan email yang valid.',
-      password: 'Minimal 8 karakter yang terdiri dari minimal 1 huruf besar, 1 huruf kecil, dan 1 angka.',
+      password:
+        'Minimal 8 karakter yang terdiri dari minimal 1 huruf besar, 1 huruf kecil, dan 1 angka.',
       confirmPassword: 'Harus sama dengan password.',
       unique: 'Email sudah terdaftar. Silakan gunakan email lain.',
       required: 'Harus diisi.',

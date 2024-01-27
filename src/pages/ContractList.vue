@@ -123,7 +123,11 @@ watch(pagination, async (newPagination) => {
               <th
                 class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center"
                 scope="row">
-                {{ item.updatedAt }}
+                {{
+                  new Date(job.createdAt).toLocaleDateString() +
+                  ' ' +
+                  new Date(job.createdAt).toLocaleTimeString()
+                }}
               </th>
               <th
                 class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center"

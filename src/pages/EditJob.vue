@@ -16,7 +16,7 @@ const router = useRouter();
 
 const { currentUserToken } = storeToRefs(userStore);
 const { job } = storeToRefs(jobStore);
-const { findJob, updateJob } = jobStore;
+const { findJob, updateJob, deleteJob} = jobStore;
 
 const jobData = reactive({
   title: '',
@@ -29,6 +29,7 @@ const errors = reactive({
 });
 
 const isLoadingFetchApi = ref(false);
+const isLoadingDelete = ref(false);
 
 const initPage = async () => {
   NProgress.start();
@@ -88,6 +89,25 @@ const handleFail = (error) => {
   for (const key in error.message) {
     errors[key] = error.message[key];
   }
+};
+
+const doDeleteJob = async () => {
+  if (isLoadingDelete.value) {
+    return;
+  }
+
+  isLoadingDelete.value = true;
+
+  try {
+    await deleteJob(
+      route.params.id,
+      currentUserToken.value
+    );
+    handleSuccess();
+  } catch (err) {
+    handleFail(err);
+  }
+  isLoadingDelete.value = false;
 };
 
 const doUpdateJob = async () => {
@@ -167,6 +187,14 @@ watch(
             text-area-height="h-40"
             @blur="validateField('description')" />
           <div class="flex flex-row justify-around w-full">
+            <AppButton  class="mt-12 w-1/2 m-5" @click="doDeleteJob" type="danger">
+              <p>Hapus Lowongan</p>
+              <img
+                v-if="isLoadingDelete"
+                alt="loading"
+                class="h-6"
+                src="@/assets/images/loading.svg" />
+            </AppButton>
             <AppButton class="mt-12 w-1/2 m-5" @click="doUpdateJob">
               <p>Simpan perubahan informasi</p>
               <img
