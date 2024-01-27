@@ -124,9 +124,9 @@ watch(pagination, async (newPagination) => {
                 class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center"
                 scope="row">
                 {{
-                  new Date(job.createdAt).toLocaleDateString() +
+                  new Date(item.updatedAt).toLocaleDateString() +
                   ' ' +
-                  new Date(job.createdAt).toLocaleTimeString()
+                  new Date(item.updatedAt).toLocaleTimeString()
                 }}
               </th>
               <th
