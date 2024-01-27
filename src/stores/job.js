@@ -24,6 +24,10 @@ export const useJobStore = defineStore('job', () => {
     await jobApi.update(data, token);
   };
 
+  const deleteJob = async (id, token) => {
+    await jobApi.delete(id, token);
+  };
+
   const searchJobs = async (data, token) => {
     const res = await jobApi.search(data, token);
 
@@ -68,5 +72,6 @@ export const useJobStore = defineStore('job', () => {
     searchJobs,
     applyJob,
     getApplicants,
+    deleteJob,
   };
 });

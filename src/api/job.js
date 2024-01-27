@@ -18,6 +18,13 @@ export default {
       headers: config.api.authTokenHeader(token),
     });
   },
+  delete: (id, token) => {
+    return apiUtil.hitApi({
+      method: config.api.method.get,
+      path: config.api.job.delete(id),
+      headers: config.api.authTokenHeader(token),
+    });
+  },
   search: (data) => {
     return apiUtil.hitApi({
       method: config.api.method.post,
