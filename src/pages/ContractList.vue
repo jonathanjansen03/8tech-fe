@@ -110,7 +110,7 @@ watch(pagination, async (newPagination) => {
             <tr
               v-for="(item, index) in recruiterContractList"
               :key="index"
-              class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-blue-950"
+              class="bg-white border-b cursor-pointer transition dark:bg-gray-800 dark:border-gray-700 hover:bg-blue-950"
               @click="goToEditContractPage(item.id)">
               <td class="px-6 py-4">
                 {{ (pagination.page - 1) * pagination.size + index + 1 }}
