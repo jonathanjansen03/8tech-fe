@@ -48,7 +48,7 @@ const getPath = (type) => {
 
 const doLogout = () => {
   logout();
-  router.push(config.pages.home.path);
+  router.push(config.pages.login.path);
 };
 </script>
 
