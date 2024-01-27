@@ -6,6 +6,7 @@ import { CheckIcon, TrashIcon } from '@heroicons/vue/24/outline';
 
 import config from '@/config';
 import defaultUserProfilePicture from '@/assets/images/default-user-profile-picture.png';
+import validationUtil from '@/utils/validation';
 import { companyStore, userStore } from '@/data/stores';
 import {
   AppCard,
@@ -23,6 +24,10 @@ const formData = ref({
   name: '',
   description: '',
   profilePicture: null,
+});
+const errors = ref({
+  name: '',
+  description: '',
 });
 const base64UserProfileImage = ref(null);
 const isError = ref(false);
@@ -50,12 +55,48 @@ const initPage = async () => {
   };
 };
 
+const validateField = (field) => {
+  if (!formData.value[field]) {
+    return;
+  }
+
+  if (!validationUtil.form(field, formData.value[field])) {
+    errors.value[field] = config.errors.form[field];
+  } else {
+    errors.value[field] = '';
+  }
+};
+
+const validateFormData = () => {
+  let isFormValid = true;
+
+  for (const key in formData.value) {
+    if (!formData.value[key]) {
+      errors.value[key] = config.errors.form.required;
+      isFormValid = false;
+      continue;
+    }
+
+    if (!validationUtil.form(key, formData.value[key])) {
+      errors.value[key] = config.errors.form[key];
+      isFormValid = false;
+    }
+  }
+  return isFormValid;
+};
+
 const updateProfile = async () => {
   if (isLoading.value) {
     return;
   }
+
+  isLoading.value = true;
+  if (!validateFormData()) {
+    isLoading.value = false;
+    return;
+  }
+
   try {
-    isLoading.value = true;
     await companyStore.updateCompanyData(
       {
         ...formData.value,
@@ -109,13 +150,13 @@ onMounted(async () => {
         <InputBox
           id="firstName"
           v-model="formData.name"
-          label="Nama Perusahaan" />
+          label="Nama Perusahaan" :error="errors.name" @blur="validateField('name')" />
       </div>
       <div class="flex flex-col mt-5">
         <InputBox
           id="description"
           v-model="formData.description"
-          label="Deskripsi" />
+          label="Deskripsi" :error="errors.description" @blur="validateField('description')" />
       </div>
       <AppTicker
         v-if="isError"

@@ -11,6 +11,7 @@ import NProgress from 'nprogress';
 
 import config from '@/config';
 import defaultUserProfilePicture from '@/assets/images/default-user-profile-picture.png';
+import validationUtil from '@/utils/validation';
 import { userStore } from '@/data/stores';
 import {
   AppButton,
@@ -30,6 +31,12 @@ const formData = ref({
   email: '',
   description: '',
   portfolio: '',
+});
+const errors = ref({
+  firstName: '',
+  lastName: '',
+  username: '',
+  email: '',
 });
 const base64UserProfileImage = ref('');
 const isLoading = ref(false);
@@ -61,8 +68,47 @@ const updateUserProfilePicture = (image) => {
   base64UserProfileImage.value = image.base64;
 };
 
+const validateField = (field) => {
+  if (!formData.value[field]) {
+    return;
+  }
+
+  if (!validationUtil.form(field, formData.value[field])) {
+    errors.value[field] = config.errors.form[field];
+  } else {
+    errors.value[field] = '';
+  }
+};
+
+const validateFormData = () => {
+  let isFormValid = true;
+
+  for (const key in formData.value) {
+    if (key !== 'description' && key !== 'portfolio' && !formData.value[key]) {
+      errors.value[key] = config.errors.form.required;
+      isFormValid = false;
+      continue;
+    }
+
+    if (!validationUtil.form(key, formData.value[key])) {
+      errors.value[key] = config.errors.form[key];
+      isFormValid = false;
+    }
+  }
+  return isFormValid;
+};
+
 const updateProfile = async () => {
+  if (isLoading.value) {
+    return;
+  }
+
   isLoading.value = true;
+  if (!validateFormData()) {
+    isLoading.value = false;
+    return;
+  }
+
   try {
     await userStore.updateUserData(formData.value);
     handleSucccessfulUpdateProfile();
@@ -116,27 +162,41 @@ onMounted(initPage);
           :defaultImage="defaultUserProfilePicture"
           @change="updateUserProfilePicture" />
       </div>
-      <div class="flex justify-between mt-5">
+      <div class="flex justify-between mt-8">
         <div class="flex flex-col">
           <InputBox
             id="firstName"
             label="Nama Depan"
-            v-model="formData.firstName" />
+            v-model="formData.firstName"
+            :error="errors.firstName"
+            @blur="validateField('firstName')" />
         </div>
         <div class="flex flex-col">
           <InputBox
             id="lastName"
             label="Nama Belakang"
-            v-model="formData.lastName" />
+            v-model="formData.lastName"
+            :error="errors.lastName"
+            @blur="validateField('lastName')" />
         </div>
       </div>
-      <div class="flex flex-col mt-5">
-        <InputBox id="username" label="Username" v-model="formData.username" />
+      <div class="flex flex-col mt-8">
+        <InputBox
+          id="username"
+          label="Username"
+          v-model="formData.username"
+          :error="errors.username"
+          @blur="validateField('username')" />
       </div>
-      <div class="flex flex-col mt-5">
-        <InputBox id="email" label="Email" v-model="formData.email" />
+      <div class="flex flex-col mt-8">
+        <InputBox
+          id="email"
+          label="Email"
+          v-model="formData.email"
+          :error="errors.email"
+          @blur="validateField('email')" />
       </div>
-      <div class="flex flex-col mt-5">
+      <div class="flex flex-col mt-8">
         <InputBox
           id="description"
           label="Deskripsi"
@@ -145,7 +205,7 @@ onMounted(initPage);
       </div>
       <div>
         <div
-          class="flex mt-5"
+          class="flex mt-8"
           v-for="(i, index) in formData.portfolio.length"
           :key="index">
           <InputBox
@@ -157,7 +217,7 @@ onMounted(initPage);
             class="cursor-pointer ml-3 w-6"
             @click="decrementPortfolio" />
         </div>
-        <div class="flex justify-center mt-5">
+        <div class="flex justify-center mt-3">
           <PlusCircleIcon
             class="cursor-pointer w-6"
             @click="incrementPortfolio" />
