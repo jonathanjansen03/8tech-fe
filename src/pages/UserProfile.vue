@@ -49,6 +49,14 @@ const userProfilePicture = computed(() => {
   return publicUserProfile.profilePicture || defaultUserProfilePicture;
 });
 
+const isPortfolioEmpty = computed(() => {
+  if (isPrivateProfile.value) {
+    return isUserPortfolioEmpty.value;
+  }
+  return !publicUserProfile.portfolio.length ||
+    publicUserProfile.portfolio[0] === '';
+});
+
 const initPage = async () => {
   NProgress.start();
   try {
@@ -92,7 +100,7 @@ watch(route, () => {
     class="mt-8 px-3 min-[420px]:px-10 sm:px-20 md:px-32 lg:px-40 xl:px-52 2xl:px-72">
     <AppCard class="user-profile px-8 py-8">
       <div class="flex flex-row justify-between mb-2">
-        <h1>Profil</h1>
+        <h1 @click="console.log(currentUser.portfolio)">Profil</h1>
         <h3
           v-if="isPrivateProfile && isRecruiter"
           @click="goToCompanyProfile"
@@ -154,7 +162,7 @@ watch(route, () => {
           :key="index">
           {{ i }}
         </p>
-        <p v-if="isUserPortfolioEmpty">
+        <p v-if="isPortfolioEmpty">
           {{ NO_PORTFOLIO }}
         </p>
       </div>

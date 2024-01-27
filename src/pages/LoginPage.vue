@@ -7,6 +7,7 @@ import { userStore } from '@/data/stores';
 import { AppButton, AppCard, AppTicker, InputBox } from '@/data/components';
 
 const LOGIN = 'login';
+const NOT_FOUND = 'NOT_FOUND';
 const NOT_MATCH = 'NOT_MATCH';
 
 const route = useRoute();
@@ -82,7 +83,7 @@ const handleFailedLogin = (err) => {
     errorMessage.value = config.errors.server;
   } else {
     errorMessage.value =
-      err.message.user === NOT_MATCH
+      err.message.user === NOT_FOUND || err.message.password === NOT_MATCH
         ? config.errors.invalidCredentials
         : config.errors.general(LOGIN);
   }

@@ -23,6 +23,10 @@ const companyProfile = reactive({
   profilePicture: '',
 });
 
+const userProfilePicture = computed(() => {
+  return companyProfile.profilePicture || DefaultUserProfilePicture;
+});
+
 const initPage = async () => {
   companyId.value = route.params.id;
   isPrivateProfile.value = companyId.value === currentUser.value?.companyId;
@@ -45,10 +49,6 @@ const initPage = async () => {
   companyProfile.description = companyRes.data.description;
   companyProfile.profilePicture = companyRes.data.profilePicture;
 };
-
-const userProfilePicture = computed(() => {
-  return companyProfile.profilePicture || DefaultUserProfilePicture;
-});
 
 onBeforeMount(async () => {
   await initPage();

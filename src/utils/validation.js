@@ -6,6 +6,7 @@ const validators = {
   email: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
   password: (value) =>
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(value),
+  description: (value) => value.length > 10,
 };
 
 const form = (field, value) => {

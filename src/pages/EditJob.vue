@@ -91,25 +91,6 @@ const handleFail = (error) => {
   }
 };
 
-const doDeleteJob = async () => {
-  if (isLoadingDelete.value) {
-    return;
-  }
-
-  isLoadingDelete.value = true;
-
-  try {
-    await deleteJob(
-      route.params.id,
-      currentUserToken.value
-    );
-    handleSuccess();
-  } catch (err) {
-    handleFail(err);
-  }
-  isLoadingDelete.value = false;
-};
-
 const doUpdateJob = async () => {
   if (isLoadingFetchApi.value) {
     return;
@@ -135,6 +116,25 @@ const doUpdateJob = async () => {
     handleFail(err);
   }
   isLoadingFetchApi.value = false;
+};
+
+const doDeleteJob = async () => {
+  if (isLoadingDelete.value) {
+    return;
+  }
+
+  isLoadingDelete.value = true;
+
+  try {
+    await deleteJob(
+      route.params.id,
+      currentUserToken.value
+    );
+    handleSuccess();
+  } catch (err) {
+    handleFail(err);
+  }
+  isLoadingDelete.value = false;
 };
 
 const goToJobApplicantsPage = () => {

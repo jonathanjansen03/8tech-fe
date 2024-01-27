@@ -23,8 +23,8 @@ export const useUserStore = defineStore('user', () => {
   });
   const isUserPortfolioEmpty = computed(
     () =>
-      !currentUser.value.portfolio?.length ||
-      currentUser.value.portfolio?.[0] === ''
+      !currentUser.value.portfolio.length ||
+      currentUser.value.portfolio[0] === ''
   );
   const currentUserFullName = computed(
     () => `${currentUser.value.firstName} ${currentUser.value.lastName}`
