@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, reactive, ref } from 'vue';
+import { computed, onMounted, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import NProgress from 'nprogress';
@@ -63,6 +63,8 @@ const initPage = async () => {
   template.value = contractTemplate.default;
   NProgress.done();
 };
+
+const canRejectContract = computed(() => isUpdating.value && !statusOngoing.value && !isContractCompleted.value);
 
 const validateField = (field) => {
   if (!formData[field]) {
@@ -251,7 +253,7 @@ onMounted(initPage);
           <div class="flex flex-row w-full gap-x-5">
             <AppButton
               class="mt-12"
-              :class="{ 'w-1/2': !statusOngoing, 'w-full': statusOngoing }"
+              :class="{ 'w-1/2': canRejectContract, 'w-full': !canRejectContract }"
               @click="doUpdateContract"
               v-if="!statusOngoing && !isContractCompleted">
               <p v-if="!isUpdating">Ajukan Kontrak</p>
@@ -263,7 +265,7 @@ onMounted(initPage);
                 src="@/assets/images/loading.svg" />
             </AppButton>
             <AppButton
-              v-if="isUpdating && !statusOngoing && !isContractCompleted"
+              v-if="canRejectContract"
               type="danger"
               class="mt-12 w-1/2"
               @click="rejectContract">
