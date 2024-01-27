@@ -56,6 +56,7 @@ const capitalizeEveryWord = (str) => {
 };
 
 const doAcceptContract = async () => {
+  NProgress.start();
   try {
     await updateContract(
       {
@@ -64,9 +65,11 @@ const doAcceptContract = async () => {
       },
       currentUserToken.value
     );
+    NProgress.done();
     goToAppliedJobsPage();
   } catch (err) {
     handleError(err, ACCEPT_CONTRACT);
+    NProgress.done();
   }
 };
 
