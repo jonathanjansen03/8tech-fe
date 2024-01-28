@@ -54,9 +54,9 @@ const userProfilePicture = computed(() => {
 const initPage = () => {
   NProgress.start();
 
-  formData.value = {
-    ...currentUser.value,
-  };
+  for (const key in formData.value) {
+    formData.value[key] = currentUser.value[key];
+  }
 
   if (!formData.value.portfolio?.length) {
     formData.value.portfolio = [''];
@@ -90,7 +90,7 @@ const validateFormData = () => {
       key !== 'description' &&
       key !== 'cv' &&
       key !== 'portfolio' &&
-      key !== 'hasGoogleAccount' &&
+      key !== 'profilePicture' &&
       !formData.value[key]
     ) {
       errors.value[key] = config.errors.form.required;
@@ -215,11 +215,7 @@ onMounted(initPage);
           textArea />
       </div>
       <div class="flex flex-col mt-8">
-        <InputBox
-          id="description"
-          label="Link CV"
-          v-model="formData.cv"
-          textArea />
+        <InputBox id="description" label="Link CV" v-model="formData.cv" />
       </div>
       <div>
         <div

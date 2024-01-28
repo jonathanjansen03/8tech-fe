@@ -88,7 +88,7 @@ export const useUserStore = defineStore('user', () => {
   };
 
   const updateUserData = async (data) => {
-    if (typeof data.profilePicture !== 'string') {
+    if (data.profilePicture && typeof data.profilePicture !== 'string') {
       const formData = new FormData();
       formData.append('file', data.profilePicture);
 
@@ -118,10 +118,13 @@ export const useUserStore = defineStore('user', () => {
 
   const getUserRating = async (id) => {
     const res = await ratingApi.getAverageRating(id, currentUserToken.value);
-    userRating.value = Object.assign({}, {
-      average: res.data._avg.ratingOf10,
-      count: res.data._count.ratingOf10,
-    });
+    userRating.value = Object.assign(
+      {},
+      {
+        average: res.data._avg.ratingOf10,
+        count: res.data._count.ratingOf10,
+      }
+    );
   };
 
   return {
