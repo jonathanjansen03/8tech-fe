@@ -84,7 +84,7 @@ watch(route, () => {
         <RouterLink :to="{ name: config.pages.companyProfileEdit.name }">
           <AppButton class="flex items-center py-3">
             <PencilSquareIcon class="w-5 mr-3" />
-            Edit Company Profile
+            Edit profil perusahaan
           </AppButton>
         </RouterLink>
       </div>
