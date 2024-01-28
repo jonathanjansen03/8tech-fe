@@ -67,7 +67,7 @@ export default {
     },
     editContract: {
       name: 'contract-edit',
-      path: '/contract-edit/:id',
+      path: '/contract/:id/edit',
     },
     contractDetail: {
       name: 'contract-detail',
