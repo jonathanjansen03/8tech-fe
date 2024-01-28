@@ -87,7 +87,7 @@ const router = createRouter({
       name: config.pages.companyProfileEdit.name,
       component: EditCompanyProfile,
       meta: {
-        title: 'Ubah Profil Perusahaan',
+        title: 'Edit Profil Perusahaan',
         requiresAuth: true,
         recruiterRole: true,
       },
@@ -134,7 +134,7 @@ const router = createRouter({
       name: config.pages.jobEditDetail.name,
       component: EditJob,
       meta: {
-        title: 'Ubah Detail Pekerjaan',
+        title: 'Edit Detail Pekerjaan',
       },
     },
     {

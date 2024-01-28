@@ -74,9 +74,7 @@ const doRejectContract = async () => {
   NProgress.start();
   try {
     await rejectContract(route.params.id, currentUserToken.value);
-    await router.push({
-      name: config.pages.appliedJobs.name,
-    });
+    goToAppliedJobsPage();
   } catch (err) {
     handleError(err, REJECT_CONTRACT);
   }
