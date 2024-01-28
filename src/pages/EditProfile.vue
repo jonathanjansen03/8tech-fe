@@ -90,6 +90,7 @@ const validateFormData = () => {
       key !== 'description' &&
       key !== 'cv' &&
       key !== 'portfolio' &&
+      key !== 'hasGoogleAccount' &&
       !formData.value[key]
     ) {
       errors.value[key] = config.errors.form.required;
@@ -97,7 +98,10 @@ const validateFormData = () => {
       continue;
     }
 
-    if (!validationUtil.form(key, formData.value[key])) {
+    if (
+      key !== 'description' &&
+      !validationUtil.form(key, formData.value[key])
+    ) {
       errors.value[key] = config.errors.form[key];
       isFormValid = false;
     }
