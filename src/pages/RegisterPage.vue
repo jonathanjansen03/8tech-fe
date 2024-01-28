@@ -178,7 +178,7 @@ const toggleIsRecruiter = async () => {
           v-model="formData.username"
           :error="errors.username"
           class="mt-8"
-          :class="{ 'min-[320px]:mt-20': errors.email }"
+          :class="{ 'max-[480px]:mt-14': errors.email }"
           @blur="validateField('username')" />
         <InputBox
           id="password"
@@ -187,7 +187,7 @@ const toggleIsRecruiter = async () => {
           v-model="formData.password"
           :error="errors.password"
           class="mt-8"
-          :class="{ 'min-[320px]:mt-20': errors.username }"
+          :class="{ 'max-[480px]:mt-20': errors.username }"
           @blur="validateField('password')" />
         <InputBox
           id="confirm-password"
@@ -196,7 +196,7 @@ const toggleIsRecruiter = async () => {
           v-model="formData.confirmPassword"
           :error="errors.confirmPassword"
           class="mt-8"
-          :class="{ 'min-[320px]:mt-20': errors.password }"
+          :class="{ 'max-[480px]:mt-[5.5rem]': errors.password }"
           @blur="validateConfirmPassword" />
         &nbsp;
         <h2 v-if="isRecruiter">Profil perusahaan</h2>

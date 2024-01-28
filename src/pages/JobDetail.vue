@@ -5,7 +5,7 @@ import { storeToRefs } from 'pinia';
 import NProgress from 'nprogress';
 import { ChevronLeftIcon } from '@heroicons/vue/24/outline';
 
-import config from '@/config/';
+import config from '@/config';
 import defaultUserProfilePicture from '@/assets/images/default-user-profile-picture.png';
 import { contractStore, jobStore, userStore } from '@/data/stores';
 import { AppButton, AppCard, AppTicker } from '@/data/components';

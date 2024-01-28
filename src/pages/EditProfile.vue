@@ -30,7 +30,9 @@ const formData = ref({
   username: '',
   email: '',
   description: '',
+  cv: '',
   portfolio: '',
+  profilePicture: null,
 });
 const errors = ref({
   firstName: '',
@@ -84,7 +86,12 @@ const validateFormData = () => {
   let isFormValid = true;
 
   for (const key in formData.value) {
-    if (key !== 'description' && key !== 'portfolio' && !formData.value[key]) {
+    if (
+      key !== 'description' &&
+      key !== 'cv' &&
+      key !== 'portfolio' &&
+      !formData.value[key]
+    ) {
       errors.value[key] = config.errors.form.required;
       isFormValid = false;
       continue;
@@ -201,6 +208,13 @@ onMounted(initPage);
           id="description"
           label="Deskripsi"
           v-model="formData.description"
+          textArea />
+      </div>
+      <div class="flex flex-col mt-8">
+        <InputBox
+          id="description"
+          label="Link CV"
+          v-model="formData.cv"
           textArea />
       </div>
       <div>

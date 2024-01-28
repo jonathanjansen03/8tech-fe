@@ -41,6 +41,10 @@ const statusOngoing = ref(false);
 const template = ref('');
 const freelancerRating = ref(1);
 
+const canRejectContract = computed(
+  () => isUpdating.value && !statusOngoing.value && !isContractCompleted.value
+);
+
 const initPage = async () => {
   NProgress.start();
   isUpdating.value = route.query.update === 'true';
@@ -63,8 +67,6 @@ const initPage = async () => {
   template.value = contractTemplate.default;
   NProgress.done();
 };
-
-const canRejectContract = computed(() => isUpdating.value && !statusOngoing.value && !isContractCompleted.value);
 
 const validateField = (field) => {
   if (!formData[field]) {
@@ -253,7 +255,10 @@ onMounted(initPage);
           <div class="flex flex-row w-full gap-x-5">
             <AppButton
               class="mt-12"
-              :class="{ 'w-1/2': canRejectContract, 'w-full': !canRejectContract }"
+              :class="{
+                'w-1/2': canRejectContract,
+                'w-full': !canRejectContract,
+              }"
               @click="doUpdateContract"
               v-if="!statusOngoing && !isContractCompleted">
               <p v-if="!isUpdating">Ajukan Kontrak</p>

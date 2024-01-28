@@ -14,6 +14,7 @@ import { userStore } from '@/data/stores';
 import { AppButton, AppCard } from '@/data/components';
 
 const NO_DESCRIPTION = 'Belum ada deskripsi.';
+const NO_CV = 'Belum ada CV.';
 const NO_PORTFOLIO = 'Belum ada portofolio.';
 const NO_RATING = 'Belum ada rating.';
 const GET_PROFILE_DATA = 'mendapatkan profil';
@@ -38,6 +39,7 @@ const publicUserProfile = reactive({
   username: '',
   email: '',
   description: '',
+  cv: '',
   portfolio: [],
   profilePicture: '',
 });
@@ -149,6 +151,15 @@ watch(route, () => {
           {{
             (isPrivateProfile ? currentUser : publicUserProfile).description ||
             NO_DESCRIPTION
+          }}
+        </p>
+      </div>
+      <div class="flex flex-col mt-5">
+        <h3>CV</h3>
+        <p>
+          {{
+            (isPrivateProfile ? currentUser : publicUserProfile).cv ||
+            NO_CV
           }}
         </p>
       </div>
