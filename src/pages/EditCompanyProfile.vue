@@ -139,7 +139,7 @@ onMounted(async () => {
   <div
     class="mt-8 px-3 min-[420px]:px-10 sm:px-20 md:px-32 lg:px-40 xl:px-52 2xl:px-72">
     <AppCard class="edit-profile px-8 py-8">
-      <h1>Edit Profil</h1>
+      <h1>Edit Profil Perusahaan</h1>
       <div class="flex justify-center mt-5">
         <ImageInput
           :defaultImage="defaultUserProfilePicture"
