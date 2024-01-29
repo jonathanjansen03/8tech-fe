@@ -150,7 +150,7 @@ watch(route, () => {
           }}
         </p>
       </div>
-      <div class="flex flex-col mt-5">
+      <div v-if="!isRecruiter" class="flex flex-col mt-5">
         <h3>CV</h3>
         <p>
           {{
@@ -159,7 +159,7 @@ watch(route, () => {
           }}
         </p>
       </div>
-      <div class="flex flex-col mt-5">
+      <div v-if="!isRecruiter" class="flex flex-col mt-5">
         <h3>Portofolio</h3>
         <p
           v-for="(i, index) in (isPrivateProfile

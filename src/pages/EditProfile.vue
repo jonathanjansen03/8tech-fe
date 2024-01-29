@@ -22,7 +22,7 @@ import {
 } from '@/data/components';
 
 const router = useRouter();
-const { currentUser } = storeToRefs(userStore);
+const { currentUser, isRecruiter } = storeToRefs(userStore);
 
 const formData = ref({
   firstName: '',
@@ -214,10 +214,10 @@ onMounted(initPage);
           v-model="formData.description"
           textArea />
       </div>
-      <div class="flex flex-col mt-8">
+      <div v-if="!isRecruiter" class="flex flex-col mt-8">
         <InputBox id="description" label="Link CV" v-model="formData.cv" />
       </div>
-      <div>
+      <div v-if="!isRecruiter">
         <div
           class="flex mt-8"
           v-for="(i, index) in formData.portfolio.length"
