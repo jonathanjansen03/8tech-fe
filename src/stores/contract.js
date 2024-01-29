@@ -85,7 +85,7 @@ export const useContractStore = defineStore('contract', () => {
   const statusMapping = (statusCode) => {
     switch (statusCode) {
       case config.constants.contractStatus.accepted:
-        return 'Menunggu konfirmasi Pekerja';
+        return 'Menunggu konfirmasi freelancer';
       case config.constants.contractStatus.completed:
         return 'Selesai';
       case config.constants.contractStatus.ongoing:
