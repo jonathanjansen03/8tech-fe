@@ -188,7 +188,7 @@ watch(
             @blur="validateField('description')" />
           <div class="flex flex-row justify-around w-full">
             <AppButton  class="mt-12 w-1/2 m-5" @click="doDeleteJob" type="danger">
-              <p>Hapus Lowongan</p>
+              <p>Hapus pekerjaan</p>
               <img
                 v-if="isLoadingDelete"
                 alt="loading"
