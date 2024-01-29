@@ -102,7 +102,7 @@ watch(route, () => {
     class="mt-8 px-3 min-[420px]:px-10 sm:px-20 md:px-32 lg:px-40 xl:px-52 2xl:px-72">
     <AppCard class="user-profile px-8 py-8">
       <div class="flex flex-row justify-between mb-2">
-        <h1 @click="console.log(currentUser.portfolio)">Profil</h1>
+        <h1>Profil</h1>
         <h3
           v-if="isPrivateProfile && isRecruiter"
           @click="goToCompanyProfile"
@@ -150,7 +150,7 @@ watch(route, () => {
           }}
         </p>
       </div>
-      <div v-if="!isRecruiter" class="flex flex-col mt-5">
+      <div v-if="!isPrivateProfile || !isRecruiter" class="flex flex-col mt-5">
         <h3>CV</h3>
         <p>
           {{
@@ -159,7 +159,7 @@ watch(route, () => {
           }}
         </p>
       </div>
-      <div v-if="!isRecruiter" class="flex flex-col mt-5">
+      <div v-if="!isPrivateProfile || !isRecruiter" class="flex flex-col mt-5">
         <h3>Portofolio</h3>
         <p
           v-for="(i, index) in (isPrivateProfile
@@ -173,7 +173,7 @@ watch(route, () => {
           {{ NO_PORTFOLIO }}
         </p>
       </div>
-      <div v-if="!isRecruiter" class="flex flex-col mt-5">
+      <div v-if="!isPrivateProfile || !isRecruiter" class="flex flex-col mt-5">
         <h3>Rata-Rata Rating</h3>
         <p v-if="userRating.count">
           {{ userRating.average }} dari 10 ({{ userRating.count }} orang memberi
