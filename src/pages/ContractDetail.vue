@@ -142,7 +142,7 @@ onBeforeMount(initPage);
             v-if="contract.status === config.constants.contractStatus.accepted"
             class="flex gap-x-5">
             <AppButton class="mt-12 w-1/2" @click="doAcceptContract">
-              Terima Kontrak
+              Terima kontrak
               <img
                 v-if="isLoading"
                 alt="loading"
@@ -153,7 +153,7 @@ onBeforeMount(initPage);
               type="danger"
               class="mt-12 w-1/2"
               @click="doRejectContract">
-              Tolak Kontrak
+              Tolak kontrak
               <img
                 v-if="isLoading"
                 alt="loading"
@@ -169,7 +169,7 @@ onBeforeMount(initPage);
             "
             class="mt-8"
             @click="goToPayoutLink">
-            Terima Pembayaran
+            Terima pembayaran
             <img
               v-if="isLoading"
               alt="loading"
@@ -177,7 +177,7 @@ onBeforeMount(initPage);
               src="@/assets/images/loading.svg" />
           </AppButton>
           <AppButton class="mt-8" outline @click="goToPdf(route.params.id)">
-            Unduh PDF Kontrak
+            Unduh PDF kontrak
             <img
               v-if="isLoading"
               alt="loading"
