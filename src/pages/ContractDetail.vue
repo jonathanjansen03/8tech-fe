@@ -136,7 +136,7 @@ onBeforeMount(initPage);
           </div>
           <div class="flex flex-col mt-8">
             <h3>Nominal Pembayaran</h3>
-            <p>{{ contract.paymentRate }}</p>
+            <p>Rp{{ contract.paymentRate }}</p>
           </div>
           <div
             v-if="contract.status === config.constants.contractStatus.accepted"

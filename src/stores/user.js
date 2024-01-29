@@ -19,7 +19,7 @@ export const useUserStore = defineStore('user', () => {
       return false;
     }
 
-    return currentUser.value?.roles.includes('RECRUITER');
+    return currentUser.value?.roles?.includes('RECRUITER');
   });
   const isUserPortfolioEmpty = computed(
     () =>
