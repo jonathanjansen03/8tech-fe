@@ -199,7 +199,7 @@ const toggleIsRecruiter = async () => {
           :class="{ 'max-[480px]:mt-[5.5rem]': errors.password }"
           @blur="validateConfirmPassword" />
         &nbsp;
-        <h2 v-if="isRecruiter">Profil perusahaan</h2>
+        <h2 v-if="isRecruiter" class="mt-8">Profil perusahaan</h2>
         <div v-if="isRecruiter">
           <InputBox
             id="company-name"
