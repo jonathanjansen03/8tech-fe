@@ -90,7 +90,7 @@ watch(route, () => {
       </div>
       <h3 class="mt-10">Lowongan pekerjaan saat ini:</h3>
       <div
-        class="home__job-cards md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-3 xl:grid-cols-3 2xl:grid-cols-3">
+        class="home__job-cards md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-3">
         <div v-for="i in companyJobList" :key="i">
           <JobCard :job="i" />
         </div>
