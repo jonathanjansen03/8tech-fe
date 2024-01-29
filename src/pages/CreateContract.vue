@@ -261,8 +261,8 @@ onMounted(initPage);
               }"
               @click="doUpdateContract"
               v-if="!statusOngoing && !isContractCompleted">
-              <p v-if="!isUpdating">Ajukan Kontrak</p>
-              <p v-else>Simpan Perubahan</p>
+              <p v-if="!isUpdating">Ajukan kontrak</p>
+              <p v-else>Simpan perubahan</p>
               <img
                 v-if="isLoading"
                 alt="loading"
@@ -286,7 +286,7 @@ onMounted(initPage);
             v-if="statusOngoing && !isContractCompleted"
             class="mt-12 w-full"
             @click="pay(route.params.id)">
-            <p>Bayar Jasa Freelancer</p>
+            <p>Bayar jasa freelancer</p>
             <img
               v-if="isPaying"
               alt="loading"
@@ -306,7 +306,7 @@ onMounted(initPage);
             v-if="isUpdating && isContractCompleted && !isContractRated"
             class="mt-5 w-full"
             @click="doRateFreelancer">
-            Kasih Penilaian Freelancer
+           Beri penilaian Freelancer
             <img
               v-if="isLoading"
               alt="loading"
@@ -318,7 +318,7 @@ onMounted(initPage);
             class="mt-12 w-full"
             outline
             @click="goToPdf(route.params.id)">
-            <p>Unduh PDF Kontrak</p>
+            <p>Unduh PDF kontrak</p>
             <img
               v-if="isLoading"
               alt="loading"
