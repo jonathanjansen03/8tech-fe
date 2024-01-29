@@ -141,10 +141,6 @@ watch(route, () => {
         <h3>Email</h3>
         <p>{{ (isPrivateProfile ? currentUser : publicUserProfile).email }}</p>
       </div>
-      <div class="flex flex-col mt-5" v-if="isPrivateProfile">
-        <h3>Password</h3>
-        <p>********</p>
-      </div>
       <div class="flex flex-col mt-5">
         <h3>Deskripsi</h3>
         <p>

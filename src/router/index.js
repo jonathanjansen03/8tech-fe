@@ -116,7 +116,7 @@ const router = createRouter({
       name: config.pages.createJob.name,
       component: CreateJob,
       meta: {
-        title: 'Buat Pekerjaan',
+        title: 'Buat Lowongan Pekerjaan',
         requiresAuth: true,
         recruiterRole: true,
       },
@@ -170,7 +170,7 @@ const router = createRouter({
       name: config.pages.editContract.name,
       component: CreateContract,
       meta: {
-        title: 'Buat Kontrak',
+        title: 'Edit Kontrak',
         requiresAuth: true,
         recruiterRole: true,
       },
