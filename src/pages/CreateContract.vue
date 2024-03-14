@@ -262,7 +262,7 @@ onMounted(initPage);
             :disabled="!isContractEditable" />
           <div class="flex flex-row w-full gap-x-5">
             <AppButton
-              class="mt-12"
+              class="mt-8"
               :class="{
                 'w-1/2': canRejectContract,
                 'w-full': !canRejectContract,
