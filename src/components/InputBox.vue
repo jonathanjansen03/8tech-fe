@@ -16,7 +16,7 @@ const props = defineProps({
   },
   label: String,
   modelValue: {
-    default: ''
+    default: '',
   },
   error: String,
   textAreaHeight: {
@@ -61,7 +61,7 @@ const labelClasses = computed(() => {
       }"
       :disabled="props.disabled"></textarea>
     <input
-      v-else
+      v-if="!textArea && props.type !== 'checkbox'"
       name="input"
       :id="props.id"
       :type="props.type"
@@ -78,11 +78,26 @@ const labelClasses = computed(() => {
       }"
       :disabled="props.disabled" />
     <label
+      v-if="props.type !== 'checkbox'"
       :for="props.id"
       class="absolute left-2 top-2 transition-input-box hover:cursor-text peer-focus:text-indigo-500 peer-focus:text-xs peer-focus:-top-2 peer-focus:bg-white"
       :class="labelClasses">
       {{ props.label }}
     </label>
+
+    <div v-if="props.type === 'checkbox'" class="items-center flex">
+      <input
+        name="input"
+        :id="props.id"
+        :type="props.type"
+        :value="props.modelValue"
+        :disabled="props.disabled"
+        @change="emit('update:modelValue', $event.target.checked)"
+        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500focus:ring-2" />
+      <label for="props.id" class="ms-2">
+        {{ props.label }}
+      </label>
+    </div>
     <div class="error-message relative">
       <p class="absolute text-red-500 text-sm" v-if="props.error">
         {{ props.error }}

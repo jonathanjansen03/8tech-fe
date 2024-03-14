@@ -40,6 +40,7 @@ const isPaying = ref(false);
 const statusOngoing = ref(false);
 const template = ref('');
 const freelancerRating = ref(1);
+const isRecruiterAgreeingToPayFreelancer = ref(false);
 
 const canRejectContract = computed(
   () => isUpdating.value && !statusOngoing.value && !isContractCompleted.value
@@ -252,6 +253,13 @@ onMounted(initPage);
             class="mt-8 w-full"
             :disabled="!isContractEditable"
             @blur="validateField('paymentRate')" />
+          <InputBox
+            id="create-contract-agreement"
+            v-model="isRecruiterAgreeingToPayFreelancer"
+            label="Saya setuju untuk membayar jasa freelancer melalui website 8Tech."
+            class="mt-8 w-full"
+            type="checkbox"
+            :disabled="!isContractEditable" />
           <div class="flex flex-row w-full gap-x-5">
             <AppButton
               class="mt-12"
@@ -260,9 +268,10 @@ onMounted(initPage);
                 'w-full': !canRejectContract,
               }"
               @click="doUpdateContract"
-              v-if="!statusOngoing && !isContractCompleted">
+              v-if="!statusOngoing && !isContractCompleted"
+              :disabled="!isRecruiterAgreeingToPayFreelancer">
               <p v-if="!isUpdating">Ajukan kontrak</p>
-              <p v-else>Simpan perubahan</p>
+              <p v-if="isUpdating">Simpan perubahan</p>
               <img
                 v-if="isLoading"
                 alt="loading"
@@ -306,7 +315,7 @@ onMounted(initPage);
             v-if="isUpdating && isContractCompleted && !isContractRated"
             class="mt-5 w-full"
             @click="doRateFreelancer">
-           Beri penilaian Freelancer
+            Beri penilaian Freelancer
             <img
               v-if="isLoading"
               alt="loading"
